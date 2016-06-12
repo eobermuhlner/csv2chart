@@ -5,7 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.regex.Pattern;
+import java.util.Collection;
+import java.util.List;
 
 public class CsvDataLoader {
 
@@ -30,18 +31,15 @@ public class CsvDataLoader {
 				else if (line.startsWith(comment)) {
 					parseComment(line, parameters);
 				} else {
-					String[] split = line.split(separator);
-					for (int i = 0; i < split.length; i++) {
-						split[i] = split[i].trim();
-					}
+					List<String> columns = parseRow(line);
 					if (headerMode) {
-						if (containsNoDoubles(split)) {
+						if (containsNoDoubles(columns)) {
 							headerRowCount++;
 						} else {
 							headerMode = false;
 						}
 					}
-					data.addRow(Arrays.asList(split));
+					data.addRow(columns);
 				}
 				
 				line = reader.readLine();
@@ -53,6 +51,14 @@ public class CsvDataLoader {
 		data.setHeaderRowCount(headerRowCount);
 		
 		return data;
+	}
+
+	private List<String> parseRow(String line) {
+		String[] split = line.split(separator);
+		for (int i = 0; i < split.length; i++) {
+			split[i] = split[i].trim();
+		}
+		return Arrays.asList(split);
 	}
 
 	private void parseComment(String line, Parameters parameters) {
@@ -79,9 +85,9 @@ public class CsvDataLoader {
 		}
 	}
 
-	private boolean containsNoDoubles(String[] columns) {
-		for (int i = 0; i < columns.length; i++) {
-			if (isDouble(columns[i])) {
+	private boolean containsNoDoubles(Collection<String> columns) {
+		for (String column : columns) {
+			if (isDouble(column)) {
 				return false;
 			}
 		}

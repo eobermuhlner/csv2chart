@@ -1,0 +1,7 @@
+# csv2chart.chart=bar
+#
+Section, Expenses, Revenue
+ Mobile,    4000,     6000
+    Web,    2000,     7000         
+ Stores,   12000,    14000
+  

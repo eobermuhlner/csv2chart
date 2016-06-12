@@ -1,0 +1,202 @@
+package ch.obermuhlner.csv2chart;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.ui.RectangleInsets;
+
+public class Application {
+
+	public static void main(String[] args) {
+		CsvDataLoader dataLoader = new CsvDataLoader();
+
+		Parameters parameters = new Parameters();
+		ChartFactory chartFactory = new AutoChartFactory(parameters);
+		
+		boolean parsingOptions = true;
+		List<Path> inputFiles = new ArrayList<>(); 
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			
+			if (parsingOptions) {
+				if (arg.startsWith("--")) {
+					String option = arg.substring(2);
+					switch (option) {
+					case "":
+						parsingOptions = false;
+						i++;
+						break;
+					case "chart":
+						String type = args[++i];
+						switch (type) {
+						case "auto":
+							chartFactory = new AutoChartFactory(parameters);
+							break;
+						case "line":
+							chartFactory = new LineChartFactory(parameters);
+							break;
+						case "xyline":
+							chartFactory = new XYLineChartFactory(parameters);
+							break;
+						default:
+							error("Unknown chart: " + type);
+						}
+						break;
+					case "dir":
+						parameters.directory = args[++i];
+						break;
+					case "pattern":
+						parameters.filePattern = args[++i];
+						break;
+					case "title":
+						parameters.title = args[++i];
+						break;
+					case "x-axis":
+						parameters.xAxisLabel = args[++i];
+						break;
+					case "y-axis":
+						parameters.yAxisLabel = args[++i];
+						break;
+					case "width":
+						parameters.imageWidth = Integer.parseInt(args[++i]);
+						break;
+					case "height":
+						parameters.imageHeight = Integer.parseInt(args[++i]);
+						break;
+					default:
+						error("Unknown option: " + option);
+					}
+				} else {
+					parsingOptions = false;
+				}
+			} 
+			
+			if (!parsingOptions) {
+				inputFiles.add(Paths.get(arg));
+			}
+		}
+		
+		if (inputFiles.isEmpty()) {
+			try (DirectoryStream<Path> directories = Files.newDirectoryStream(Paths.get(parameters.directory), parameters.filePattern)) {
+				for (Path path : directories) {
+					inputFiles.add(path);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		for (Path path : inputFiles) {
+			System.out.println("Processing: " + path);
+			String baseFilename = baseFilename(path.getFileName().toString());
+			Data data = dataLoader.load(path.toString());
+			JFreeChart chart = chartFactory.createChart(data);
+			modifyTheme(chart);
+			saveChartImage(chart, baseFilename, parameters.imageWidth, parameters.imageHeight);
+		}
+	}
+
+	private static void modifyTheme(JFreeChart chart) {
+		String fontName = "Lucida Sans";
+		
+		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
+
+		Color gray = Color.decode("#666666");
+		Color lightGray = Color.decode("#C0C0C0");
+		
+		chart.setTextAntiAlias(true);
+		chart.setAntiAlias(true);
+
+		theme.setTitlePaint(Color.decode("#4572a7"));
+		theme.setExtraLargeFont(new Font(fontName, Font.PLAIN, 16)); // title
+		theme.setLargeFont(new Font(fontName, Font.BOLD, 15)); // axis-title
+		theme.setRegularFont(new Font(fontName, Font.PLAIN, 11));
+		theme.setRangeGridlinePaint(lightGray);
+		theme.setPlotBackgroundPaint(Color.white);
+		theme.setChartBackgroundPaint(Color.white);
+		theme.setGridBandPaint(Color.red);
+		theme.setAxisOffset(new RectangleInsets(0, 0, 0, 0));
+		theme.setBarPainter(new StandardBarPainter());
+		theme.setAxisLabelPaint(gray);
+		theme.apply(chart);
+
+		Plot plot = chart.getPlot();
+		if (plot instanceof CategoryPlot) {
+			CategoryPlot categoryPlot = (CategoryPlot) plot;
+			categoryPlot.setOutlineVisible(false);
+			categoryPlot.getRangeAxis().setAxisLineVisible(false);
+			categoryPlot.getRangeAxis().setTickMarksVisible(false);
+			categoryPlot.setRangeGridlineStroke(new BasicStroke());
+			categoryPlot.getRangeAxis().setTickLabelPaint(gray);
+			categoryPlot.getDomainAxis().setTickLabelPaint(gray);
+			categoryPlot.getRenderer().setSeriesPaint(0, Color.decode("#4572a7"));
+
+			CategoryItemRenderer renderer = categoryPlot.getRenderer();
+			if (renderer instanceof BarRenderer) {
+				BarRenderer barRenderer = (BarRenderer) categoryPlot.getRenderer();
+				barRenderer.setShadowVisible(true);
+				barRenderer.setShadowXOffset(2);
+				barRenderer.setShadowYOffset(0);
+				barRenderer.setShadowPaint(lightGray);
+				barRenderer.setMaximumBarWidth(0.1);
+			}
+		} else if (plot instanceof XYPlot) {
+			XYPlot xyPlot = (XYPlot) plot;
+			xyPlot.setOutlineVisible(false);
+
+			for (int i = 0; i < xyPlot.getSeriesCount(); i++) {
+				xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
+			}
+		}
+	
+		LegendTitle legend = chart.getLegend();
+		legend.setFrame(BlockBorder.NONE);
+	}
+
+	private static void error(String message) {
+		System.err.println(message);
+		System.exit(1);
+	}
+
+	private static String baseFilename(String filename) {
+		String result = filename;
+		int lastIndexOfSeparator = filename.lastIndexOf(".");
+		if (lastIndexOfSeparator > 0) {
+			result = filename.substring(0, lastIndexOfSeparator);
+		}
+		return result;
+	}
+
+	private static void saveChartImage(JFreeChart chart, String baseFilename, int imageWidth, int imageHeight) {
+		try {
+			String filename = baseFilename + ".png";
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
+			ChartUtilities.writeChartAsPNG(out, chart, imageWidth, imageHeight);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

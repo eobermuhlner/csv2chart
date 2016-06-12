@@ -190,7 +190,7 @@ public class Application {
 			piePlot.setOutlineVisible(false);
 			piePlot.setShadowPaint(null);
 			
-			piePlot.setLabelBackgroundPaint(Color.white);
+			piePlot.setLabelBackgroundPaint(null);
 			piePlot.setLabelShadowPaint(null);
 			piePlot.setLabelOutlinePaint(null);
 			piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);

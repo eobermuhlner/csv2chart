@@ -32,7 +32,7 @@ public class Application {
 	public static void main(String[] args) {
 		CsvDataLoader dataLoader = new CsvDataLoader();
 
-		Parameters parameters = new Parameters();
+		Parameters globalParameters = new Parameters();
 		ChartFactory chartFactory = new AutoChartFactory();
 		
 		boolean parsingOptions = true;
@@ -65,25 +65,25 @@ public class Application {
 						}
 						break;
 					case "dir":
-						parameters.directory = args[++i];
+						globalParameters.directory = args[++i];
 						break;
 					case "pattern":
-						parameters.filePattern = args[++i];
+						globalParameters.filePattern = args[++i];
 						break;
 					case "title":
-						parameters.title = args[++i];
+						globalParameters.title = args[++i];
 						break;
 					case "x-axis":
-						parameters.xAxisLabel = args[++i];
+						globalParameters.xAxisLabel = args[++i];
 						break;
 					case "y-axis":
-						parameters.yAxisLabel = args[++i];
+						globalParameters.yAxisLabel = args[++i];
 						break;
 					case "width":
-						parameters.imageWidth = Integer.parseInt(args[++i]);
+						globalParameters.imageWidth = Integer.parseInt(args[++i]);
 						break;
 					case "height":
-						parameters.imageHeight = Integer.parseInt(args[++i]);
+						globalParameters.imageHeight = Integer.parseInt(args[++i]);
 						break;
 					default:
 						error("Unknown option: " + option);
@@ -99,7 +99,7 @@ public class Application {
 		}
 		
 		if (inputFiles.isEmpty()) {
-			try (DirectoryStream<Path> directories = Files.newDirectoryStream(Paths.get(parameters.directory), parameters.filePattern)) {
+			try (DirectoryStream<Path> directories = Files.newDirectoryStream(Paths.get(globalParameters.directory), globalParameters.filePattern)) {
 				for (Path path : directories) {
 					inputFiles.add(path);
 				}
@@ -110,16 +110,20 @@ public class Application {
 
 		for (Path path : inputFiles) {
 			System.out.println("Processing: " + path);
+			Parameters parameters = globalParameters.copy();
 			String baseFilename = baseFilename(path.getFileName().toString());
+			if (parameters.title == null) {
+				parameters.title = baseFilename;
+			}
 			Data data = dataLoader.load(path.toString());
-			JFreeChart chart = chartFactory.createChart(data, parameters.copy());
+			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart);
 			saveChartImage(chart, baseFilename, parameters.imageWidth, parameters.imageHeight);
 		}
 	}
 
 	private static void modifyTheme(JFreeChart chart) {
-		String fontName = "Lucida Sans";
+		String fontName = "Helevetica";
 		
 		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
 
@@ -129,10 +133,10 @@ public class Application {
 		chart.setTextAntiAlias(true);
 		chart.setAntiAlias(true);
 
-		theme.setTitlePaint(Color.decode("#4572a7"));
-		theme.setExtraLargeFont(new Font(fontName, Font.PLAIN, 16)); // title
-		theme.setLargeFont(new Font(fontName, Font.BOLD, 15)); // axis-title
-		theme.setRegularFont(new Font(fontName, Font.PLAIN, 11));
+		//theme.setTitlePaint(Color.decode("#4572a7"));
+		theme.setExtraLargeFont(new Font(fontName, Font.BOLD, 18)); // title
+		theme.setLargeFont(new Font(fontName, Font.BOLD, 14)); // axis-title
+		theme.setRegularFont(new Font(fontName, Font.PLAIN, 12));
 		theme.setRangeGridlinePaint(lightGray);
 		theme.setPlotBackgroundPaint(Color.white);
 		theme.setChartBackgroundPaint(Color.white);
@@ -151,6 +155,10 @@ public class Application {
 			categoryPlot.setRangeGridlineStroke(new BasicStroke());
 			categoryPlot.getRangeAxis().setTickLabelPaint(gray);
 			categoryPlot.getDomainAxis().setTickLabelPaint(gray);
+			
+			for (int i = 0; i < categoryPlot.getCategories().size(); i++) {
+				categoryPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
+			}
 			categoryPlot.getRenderer().setSeriesPaint(0, Color.decode("#4572a7"));
 
 			CategoryItemRenderer renderer = categoryPlot.getRenderer();
@@ -167,7 +175,7 @@ public class Application {
 			xyPlot.setOutlineVisible(false);
 
 			for (int i = 0; i < xyPlot.getSeriesCount(); i++) {
-				xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(2.0f));
+				xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
 			}
 		}
 	

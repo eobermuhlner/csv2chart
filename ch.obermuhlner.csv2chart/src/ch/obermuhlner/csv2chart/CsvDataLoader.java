@@ -24,7 +24,10 @@ public class CsvDataLoader {
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			String line = reader.readLine();
 			while (line != null) {
-				if (line.startsWith(comment)) {
+				if (line.trim().isEmpty()) {
+					// ignore
+				}
+				else if (line.startsWith(comment)) {
 					parseComment(line, parameters);
 				} else {
 					String[] split = line.split(separator);
@@ -85,6 +88,14 @@ public class CsvDataLoader {
 		return true;
 	}
 	
+	public static double toDouble(String string) {
+		try {
+			return Double.parseDouble(string);
+		} catch (NumberFormatException e) {
+			return Double.NaN;
+		}
+	}
+
 	public static boolean isDouble(String string) {
 		try {
 			Double.parseDouble(string);

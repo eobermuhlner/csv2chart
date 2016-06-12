@@ -1,5 +1,7 @@
 package ch.obermuhlner.csv2chart;
 
+import java.util.List;
+
 import org.jfree.chart.JFreeChart;
 
 public class AutoChartFactory extends AbstractChartFactory {
@@ -11,8 +13,13 @@ public class AutoChartFactory extends AbstractChartFactory {
 	}
 
 	private ChartFactory createChartFactory(Data data) {
-		return new XYLineChartFactory();
-//		return new LineChartFactory();
+		List<String> dataRow = data.getRows().get(data.getHeaderRowCount());
+		
+		if (CsvDataLoader.isDouble(dataRow.get(0))) {
+			return new XYLineChartFactory();
+		}
+
+		return new LineChartFactory();
 	}
 
 }

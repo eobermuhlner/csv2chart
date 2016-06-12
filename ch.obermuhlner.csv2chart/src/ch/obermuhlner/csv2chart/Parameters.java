@@ -5,6 +5,8 @@ public class Parameters {
 	public String directory = ".";
 	public String filePattern = "*.csv";
 	
+	public String chart = "auto";
+	
 	public String title = null;
 	
 	public String xAxisLabel = null;

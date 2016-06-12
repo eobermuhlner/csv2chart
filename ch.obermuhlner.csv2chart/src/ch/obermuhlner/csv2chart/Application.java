@@ -33,8 +33,7 @@ public class Application {
 		CsvDataLoader dataLoader = new CsvDataLoader();
 
 		Parameters globalParameters = new Parameters();
-		ChartFactory chartFactory = new AutoChartFactory();
-		
+
 		boolean parsingOptions = true;
 		List<Path> inputFiles = new ArrayList<>(); 
 		for (int i = 0; i < args.length; i++) {
@@ -49,20 +48,7 @@ public class Application {
 						i++;
 						break;
 					case "chart":
-						String type = args[++i];
-						switch (type) {
-						case "auto":
-							chartFactory = new AutoChartFactory();
-							break;
-						case "line":
-							chartFactory = new LineChartFactory();
-							break;
-						case "xyline":
-							chartFactory = new XYLineChartFactory();
-							break;
-						default:
-							error("Unknown chart: " + type);
-						}
+						globalParameters.chart = args[++i];
 						break;
 					case "dir":
 						globalParameters.directory = args[++i];
@@ -112,13 +98,30 @@ public class Application {
 			System.out.println("Processing: " + path);
 			Parameters parameters = globalParameters.copy();
 			String baseFilename = baseFilename(path.getFileName().toString());
+			Data data = dataLoader.load(path.toString(), parameters);
 			if (parameters.title == null) {
 				parameters.title = baseFilename;
 			}
-			Data data = dataLoader.load(path.toString());
+			ChartFactory chartFactory = createChartFactory(parameters);
 			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart);
 			saveChartImage(chart, baseFilename, parameters.imageWidth, parameters.imageHeight);
+		}
+	}
+
+	private static ChartFactory createChartFactory(Parameters parameters) {
+		String type = parameters.chart;
+		switch (type) {
+		case "auto":
+			return new AutoChartFactory();
+		case "line":
+			return new LineChartFactory();
+		case "bar":
+			return new BarChartFactory();
+		case "xyline":
+			return new XYLineChartFactory();
+		default:
+			throw new IllegalArgumentException("Unknown chart: " + type);
 		}
 	}
 

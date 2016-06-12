@@ -22,8 +22,12 @@ public class CsvDataLoader {
 				for (int i = 0; i < split.length; i++) {
 					split[i] = split[i].trim();
 				}
-				if (headerMode && containsNoDoubles(split)) {
-					headerRowCount++;
+				if (headerMode) {
+					if (containsNoDoubles(split)) {
+						headerRowCount++;
+					} else {
+						headerMode = false;
+					}
 				}
 				data.addRow(Arrays.asList(split));
 				
@@ -40,13 +44,19 @@ public class CsvDataLoader {
 
 	private boolean containsNoDoubles(String[] columns) {
 		for (int i = 0; i < columns.length; i++) {
-			try {
-				Double.parseDouble(columns[i]);
+			if (isDouble(columns[i])) {
 				return false;
-			} catch (NumberFormatException e) {
-				// ignore
 			}
 		}
 		return true;
+	}
+	
+	public static boolean isDouble(String string) {
+		try {
+			Double.parseDouble(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 }

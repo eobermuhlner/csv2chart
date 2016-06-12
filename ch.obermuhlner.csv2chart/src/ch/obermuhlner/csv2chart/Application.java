@@ -167,7 +167,6 @@ public class Application {
 			for (int i = 0; i < categoryPlot.getCategories().size(); i++) {
 				categoryPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
 			}
-			categoryPlot.getRenderer().setSeriesPaint(0, Color.decode("#4572a7"));
 
 			CategoryItemRenderer renderer = categoryPlot.getRenderer();
 			if (renderer instanceof BarRenderer) {

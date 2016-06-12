@@ -120,6 +120,8 @@ public class Application {
 			return new BarChartFactory();
 		case "xyline":
 			return new XYLineChartFactory();
+		case "pie":
+			return new PieChartFactory();
 		default:
 			throw new IllegalArgumentException("Unknown chart: " + type);
 		}

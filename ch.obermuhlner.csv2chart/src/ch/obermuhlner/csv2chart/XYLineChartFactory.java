@@ -49,9 +49,9 @@ public class XYLineChartFactory extends AbstractChartFactory {
 				}
 			}
 
-			double xValue = parseDouble(columns.get(0));
+			double xValue = CsvDataLoader.toDouble(columns.get(0));
 			for (int columnIndex = 1; columnIndex < columns.size(); columnIndex++) {
-				double yValue = parseDouble(columns.get(columnIndex));
+				double yValue = CsvDataLoader.toDouble(columns.get(columnIndex));
 				xySeries.get(columnIndex - 1).add(xValue, yValue);
 			}
 		}
@@ -61,13 +61,5 @@ public class XYLineChartFactory extends AbstractChartFactory {
 			dataset.addSeries(series);
 		}
 		return dataset;
-	}
-
-	private static double parseDouble(String string) {
-		try {
-			return Double.parseDouble(string);
-		} catch (NumberFormatException e) {
-			return Double.NaN;
-		}
 	}
 }

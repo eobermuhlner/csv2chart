@@ -1,0 +1,8 @@
+# csv2chart.title=Sales - Sections
+# csv2chart.chart=pie
+#
+Section, Revenue
+ Mobile,   12000
+    Web,    7000
+ Stores,    9000
+  

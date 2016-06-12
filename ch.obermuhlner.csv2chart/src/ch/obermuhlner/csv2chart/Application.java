@@ -3,6 +3,7 @@ package ch.obermuhlner.csv2chart;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Stroke;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PieLabelLinkStyle;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -182,6 +185,16 @@ public class Application {
 			for (int i = 0; i < xyPlot.getSeriesCount(); i++) {
 				xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
 			}
+		} else if (plot instanceof PiePlot) {
+			PiePlot piePlot = (PiePlot) plot;
+			piePlot.setOutlineVisible(false);
+			piePlot.setShadowPaint(null);
+			
+			piePlot.setLabelBackgroundPaint(Color.white);
+			piePlot.setLabelShadowPaint(null);
+			piePlot.setLabelOutlinePaint(null);
+			piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);
+			piePlot.setLabelLinkPaint(gray);
 		}
 	
 		LegendTitle legend = chart.getLegend();

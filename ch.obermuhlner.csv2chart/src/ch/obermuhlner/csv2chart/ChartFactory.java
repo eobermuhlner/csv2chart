@@ -4,5 +4,5 @@ import org.jfree.chart.JFreeChart;
 
 public interface ChartFactory {
 
-	JFreeChart createChart(Data data);
+	JFreeChart createChart(Data data, Parameters parameters);
 }

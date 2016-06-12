@@ -11,11 +11,21 @@ public class CsvDataLoader {
 	
 	public Data load(String file) {
 		Data data = new Data();
+
+		boolean headerMode = true;
+		int headerRowCount = 0;
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			String line = reader.readLine();
 			while (line != null) {
-				data.addRow(Arrays.asList(line.split(separator)));
+				String[] split = line.split(separator);
+				for (int i = 0; i < split.length; i++) {
+					split[i] = split[i].trim();
+				}
+				if (headerMode && containsNoDoubles(split)) {
+					headerRowCount++;
+				}
+				data.addRow(Arrays.asList(split));
 				
 				line = reader.readLine();
 			}
@@ -23,6 +33,20 @@ public class CsvDataLoader {
 			e.printStackTrace();
 		}
 		
+		data.setHeaderRowCount(headerRowCount);
+		
 		return data;
+	}
+
+	private boolean containsNoDoubles(String[] columns) {
+		for (int i = 0; i < columns.length; i++) {
+			try {
+				Double.parseDouble(columns[i]);
+				return false;
+			} catch (NumberFormatException e) {
+				// ignore
+			}
+		}
+		return true;
 	}
 }

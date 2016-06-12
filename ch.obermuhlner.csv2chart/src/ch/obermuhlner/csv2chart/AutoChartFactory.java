@@ -4,19 +4,15 @@ import org.jfree.chart.JFreeChart;
 
 public class AutoChartFactory extends AbstractChartFactory {
 
-	public AutoChartFactory(Parameters parameters) {
-		super(parameters);
-	}
-
 	@Override
-	public JFreeChart createChart(Data data) {
+	public JFreeChart createChart(Data data, Parameters parameters) {
 		ChartFactory chartFactory = createChartFactory(data);
-		return chartFactory.createChart(data);
+		return chartFactory.createChart(data, parameters);
 	}
 
 	private ChartFactory createChartFactory(Data data) {
-		return new XYLineChartFactory(parameters);
-//		return new LineChartFactory(parameters);
+		return new XYLineChartFactory();
+//		return new LineChartFactory();
 	}
 
 }

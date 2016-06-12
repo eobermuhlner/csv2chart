@@ -12,5 +12,19 @@ public class Parameters {
 	
 	public int imageWidth = 800;
 	public int imageHeight = 600;
+	
+	public Parameters copy() {
+		Parameters result = new Parameters();
+		
+		result.directory = directory;
+		result.filePattern = filePattern;
+		result.title = title;
+		result.xAxisLabel = xAxisLabel;
+		result.yAxisLabel = yAxisLabel;
+		result.imageWidth = imageWidth;
+		result.imageHeight = imageHeight;
+		
+		return result;
+	}
 
 }

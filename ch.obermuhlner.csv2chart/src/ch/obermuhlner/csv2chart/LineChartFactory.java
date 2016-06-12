@@ -10,19 +10,14 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class LineChartFactory extends AbstractChartFactory {
 
 	private boolean headerLine = true;
-	private boolean typeLine = true;
 	private boolean firstColumnAreLabels = true;
 
-	public LineChartFactory(Parameters parameters) {
-		super(parameters);
-	}
-
 	@Override
-	public JFreeChart createChart(Data data) {
+	public JFreeChart createChart(Data data, Parameters parameters) {
 		CategoryDataset categoryDatset = createCategoryDataset(data);
 
 		if (parameters.xAxisLabel == null && headerLine && firstColumnAreLabels) {
-			parameters.xAxisLabel = data.getData().get(0).get(0);
+			parameters.xAxisLabel = data.getRows().get(0).get(0);
 		}
 		
 		JFreeChart chart = org.jfree.chart.ChartFactory.createLineChart(parameters.title, parameters.xAxisLabel, parameters.yAxisLabel, categoryDatset);
@@ -32,17 +27,16 @@ public class LineChartFactory extends AbstractChartFactory {
 	private CategoryDataset createCategoryDataset(Data data) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		List<List<String>> rows = data.getData();
+		List<List<String>> rows = data.getRows();
 		int rowIndex = 0;
 		
-		
 		List<String> columnLabels = null;
-		List<String> columnTypes = null;
-		if (headerLine) {
-			columnLabels = rows.get(rowIndex++);
-		}
-		if (typeLine) {
-			columnTypes = rows.get(rowIndex++);
+		int headerRowCount = data.getHeaderRowCount();
+		for (int headerRowIndex = 0; headerRowIndex < headerRowCount; headerRowIndex++) {
+			List<String> headerColumns = rows.get(rowIndex++);
+			if (headerLine && headerRowIndex == 0) {
+				columnLabels = headerColumns;
+			}
 		}
 		
 		int dataRowCount = 0;

@@ -33,7 +33,7 @@ public class Application {
 		CsvDataLoader dataLoader = new CsvDataLoader();
 
 		Parameters parameters = new Parameters();
-		ChartFactory chartFactory = new AutoChartFactory(parameters);
+		ChartFactory chartFactory = new AutoChartFactory();
 		
 		boolean parsingOptions = true;
 		List<Path> inputFiles = new ArrayList<>(); 
@@ -52,13 +52,13 @@ public class Application {
 						String type = args[++i];
 						switch (type) {
 						case "auto":
-							chartFactory = new AutoChartFactory(parameters);
+							chartFactory = new AutoChartFactory();
 							break;
 						case "line":
-							chartFactory = new LineChartFactory(parameters);
+							chartFactory = new LineChartFactory();
 							break;
 						case "xyline":
-							chartFactory = new XYLineChartFactory(parameters);
+							chartFactory = new XYLineChartFactory();
 							break;
 						default:
 							error("Unknown chart: " + type);
@@ -112,7 +112,7 @@ public class Application {
 			System.out.println("Processing: " + path);
 			String baseFilename = baseFilename(path.getFileName().toString());
 			Data data = dataLoader.load(path.toString());
-			JFreeChart chart = chartFactory.createChart(data);
+			JFreeChart chart = chartFactory.createChart(data, parameters.copy());
 			modifyTheme(chart);
 			saveChartImage(chart, baseFilename, parameters.imageWidth, parameters.imageHeight);
 		}

@@ -11,18 +11,13 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class XYLineChartFactory extends AbstractChartFactory {
 
 	private boolean headerLine = true;
-	private boolean typeLine = true;
-
-	public XYLineChartFactory(Parameters parameters) {
-		super(parameters);
-	}
 
 	@Override
-	public JFreeChart createChart(Data data) {
+	public JFreeChart createChart(Data data, Parameters parameters) {
 		XYDataset categoryDatset = createCategoryDataset(data);
 
 		if (parameters.xAxisLabel == null && headerLine) {
-			parameters.xAxisLabel = data.getData().get(0).get(0);
+			parameters.xAxisLabel = data.getRows().get(0).get(0);
 		}
 		
 		JFreeChart chart = org.jfree.chart.ChartFactory.createXYLineChart(parameters.title, parameters.xAxisLabel, parameters.yAxisLabel, categoryDatset);
@@ -30,19 +25,18 @@ public class XYLineChartFactory extends AbstractChartFactory {
 	}
 
 	private XYDataset createCategoryDataset(Data data) {
-		List<List<String>> rows = data.getData();
+		List<List<String>> rows = data.getRows();
 		int rowIndex = 0;
 		
 		List<XYSeries> xySeries = new ArrayList<>();
-		List<String> columnTypes = null;
-		if (headerLine) {
-			List<String> columnLabels = rows.get(rowIndex++);
-			for (int columnIndex = 1; columnIndex < columnLabels.size(); columnIndex++) {
-				xySeries.add(new XYSeries(columnLabels.get(columnIndex)));
+		int headerRowCount = data.getHeaderRowCount();
+		for (int headerRowIndex = 0; headerRowIndex < headerRowCount; headerRowIndex++) {
+			List<String> headerColumns = rows.get(rowIndex++);
+			if (headerLine && headerRowIndex == 0) {
+				for (int columnIndex = 1; columnIndex < headerColumns.size(); columnIndex++) {
+					xySeries.add(new XYSeries(headerColumns.get(columnIndex)));
+				}
 			}
-		}
-		if (typeLine) {
-			columnTypes = rows.get(rowIndex++);
 		}
 		
 		while (rowIndex < rows.size()) {

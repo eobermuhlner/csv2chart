@@ -26,3 +26,7 @@ It parses the csv file and decides on which chart to render based on the data, c
 [SalesPie.csv](https://raw.githubusercontent.com/eobermuhlner/csv2chart/master/ch.obermuhlner.csv2chart.example/data/SalesPie.csv)
 ![Pie Chart](https://raw.githubusercontent.com/eobermuhlner/csv2chart/master/ch.obermuhlner.csv2chart.example/data/SalesPie.png)
 
+### Bubble Chart
+
+[Crime2005.csv](https://raw.githubusercontent.com/eobermuhlner/csv2chart/master/ch.obermuhlner.csv2chart.example/data/Crime2005.csv)
+![Bubble Chart](https://raw.githubusercontent.com/eobermuhlner/csv2chart/master/ch.obermuhlner.csv2chart.example/data/Crime2005.png)

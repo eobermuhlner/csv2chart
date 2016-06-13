@@ -18,6 +18,10 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.labels.BubbleXYItemLabelGenerator;
+import org.jfree.chart.labels.StandardXYItemLabelGenerator;
+import org.jfree.chart.labels.SymbolicXYItemLabelGenerator;
+import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PieLabelLinkStyle;
 import org.jfree.chart.plot.PiePlot;
@@ -26,7 +30,11 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.chart.renderer.xy.XYBubbleRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.xy.DefaultXYZDataset;
+import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 
 public class Application {
@@ -112,7 +120,7 @@ public class Application {
 			}
 			ChartFactory chartFactory = createChartFactory(parameters);
 			JFreeChart chart = chartFactory.createChart(data, parameters);
-			modifyTheme(chart);
+			modifyTheme(chart, parameters);
 			saveChartImage(chart, baseFilename, parameters.width, parameters.height);
 		}
 	}
@@ -137,7 +145,7 @@ public class Application {
 		}
 	}
 
-	private static void modifyTheme(JFreeChart chart) {
+	private static void modifyTheme(JFreeChart chart, Parameters parameters) {
 		String fontName = "Helevetica";
 		
 		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
@@ -190,6 +198,23 @@ public class Application {
 
 			for (int i = 0; i < xyPlot.getSeriesCount(); i++) {
 				xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
+				
+				XYItemRenderer renderer = xyPlot.getRenderer();
+				if (renderer instanceof XYBubbleRenderer) {
+					XYBubbleRenderer xyBubbleRenderer = (XYBubbleRenderer) renderer;
+
+					if (parameters.crowdedLegend) {
+						xyBubbleRenderer.setItemLabelGenerator(new BubbleXYItemLabelGenerator() {
+							@Override
+							public String generateLabel(XYDataset dataset, int series, int item) {
+								DefaultXYZDataset xyzDataset = (DefaultXYZDataset) dataset;
+								return String.valueOf(xyzDataset.getSeriesKey(series));
+							}
+						});
+						xyBubbleRenderer.setItemLabelsVisible(true);
+						xyBubbleRenderer.setItemLabelPaint(gray);
+					}
+				}
 			}
 		} else if (plot instanceof PiePlot) {
 			PiePlot piePlot = (PiePlot) plot;
@@ -204,7 +229,9 @@ public class Application {
 		}
 	
 		LegendTitle legend = chart.getLegend();
-		legend.setFrame(BlockBorder.NONE);
+		if (legend != null) {
+			legend.setFrame(BlockBorder.NONE);
+		}
 	}
 
 	private static void error(String message) {

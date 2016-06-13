@@ -12,8 +12,10 @@ public class Parameters {
 	public boolean headerRow = true;
 	public boolean headerColumn = true;
 	
-	public String xAxisLabel = null;
-	public String yAxisLabel = null;
+	public String xAxisLabel;
+	public String yAxisLabel;
+	
+	public Boolean crowdedLegend;
 	
 	public int width = 800;
 	public int height = 600;
@@ -28,6 +30,7 @@ public class Parameters {
 		result.headerColumn = headerColumn;
 		result.xAxisLabel = xAxisLabel;
 		result.yAxisLabel = yAxisLabel;
+		result.crowdedLegend = crowdedLegend;
 		result.width = width;
 		result.height = height;
 		

@@ -61,6 +61,12 @@ public class Application {
 					case "title":
 						globalParameters.title = args[++i];
 						break;
+					case "header-column":
+						globalParameters.headerColumn = Boolean.parseBoolean(args[++i]);
+						break;
+					case "header-row":
+						globalParameters.headerRow = Boolean.parseBoolean(args[++i]);
+						break;
 					case "x-axis":
 						globalParameters.xAxisLabel = args[++i];
 						break;

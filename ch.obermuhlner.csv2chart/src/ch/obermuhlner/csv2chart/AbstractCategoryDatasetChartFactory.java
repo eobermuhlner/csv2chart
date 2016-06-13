@@ -8,10 +8,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public abstract class AbstractCategoryDatasetChartFactory extends AbstractChartFactory {
 
-	protected boolean headerLine = true;
-	protected boolean firstColumnAreLabels = true;
-
-	protected CategoryDataset createCategoryDataset(Data data) {
+	protected CategoryDataset createCategoryDataset(Data data, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		List<List<String>> rows = data.getRows();
@@ -21,7 +18,7 @@ public abstract class AbstractCategoryDatasetChartFactory extends AbstractChartF
 		int headerRowCount = data.getHeaderRowCount();
 		for (int headerRowIndex = 0; headerRowIndex < headerRowCount; headerRowIndex++) {
 			List<String> headerColumns = rows.get(rowIndex++);
-			if (headerLine && headerRowIndex == 0) {
+			if (parameters.headerRow && headerRowIndex == 0) {
 				columnLabels = headerColumns;
 			}
 		}
@@ -34,7 +31,7 @@ public abstract class AbstractCategoryDatasetChartFactory extends AbstractChartF
 			List<String> columns = rows.get(rowIndex++);
 			
 			String rowLabel = String.valueOf(dataRowCount);
-			if (firstColumnAreLabels) {
+			if (parameters.headerColumn) {
 				rowLabel = columns.get(0);
 			}
 			
@@ -45,15 +42,14 @@ public abstract class AbstractCategoryDatasetChartFactory extends AbstractChartF
 				}
 			}
 
-			int startColumnIndex = firstColumnAreLabels ? 1 : 0;
+			int startColumnIndex = parameters.headerColumn ? 1 : 0;
 			for (int columnIndex = startColumnIndex; columnIndex < columns.size(); columnIndex++) {
-				double value;
-				try {
-					value = Double.parseDouble(columns.get(columnIndex));
-				} catch (NumberFormatException e) {
-					value = Double.NaN;
+				double value = CsvDataLoader.toDouble(columns.get(columnIndex));
+				if (columnLabels.size() - startColumnIndex > 1) {
+					dataset.addValue(value, columnLabels.get(columnIndex), rowLabel);
+				} else {
+					dataset.addValue(value, rowLabel, columnLabels.get(columnIndex));
 				}
-				dataset.addValue(value, columnLabels.get(columnIndex), rowLabel);
 			}
 		}
 				

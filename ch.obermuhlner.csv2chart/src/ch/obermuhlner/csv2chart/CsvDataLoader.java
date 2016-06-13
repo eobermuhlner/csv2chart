@@ -76,6 +76,8 @@ public class CsvDataLoader {
 					Class<?> fieldType = field.getType();
 					if (fieldType == int.class) {
 						value = Integer.parseInt(String.valueOf(value));
+					} else if (fieldType == boolean.class) {
+						value = Boolean.parseBoolean(String.valueOf(value));
 					}
 					field.set(parameters, value);
 				} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

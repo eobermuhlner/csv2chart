@@ -7,9 +7,9 @@ public class LineChartFactory extends AbstractCategoryDatasetChartFactory {
 
 	@Override
 	public JFreeChart createChart(Data data, Parameters parameters) {
-		CategoryDataset categoryDatset = createCategoryDataset(data);
+		CategoryDataset categoryDatset = createCategoryDataset(data, parameters);
 
-		if (parameters.xAxisLabel == null && headerLine && firstColumnAreLabels) {
+		if (parameters.xAxisLabel == null && parameters.headerRow && parameters.headerColumn) {
 			parameters.xAxisLabel = data.getRows().get(0).get(0);
 		}
 		

@@ -9,11 +9,14 @@ public class Parameters {
 	
 	public String title = null;
 	
+	public boolean headerRow = true;
+	public boolean headerColumn = true;
+	
 	public String xAxisLabel = null;
 	public String yAxisLabel = null;
 	
-	public int imageWidth = 800;
-	public int imageHeight = 600;
+	public int width = 800;
+	public int height = 600;
 	
 	public Parameters copy() {
 		Parameters result = new Parameters();
@@ -21,10 +24,12 @@ public class Parameters {
 		result.directory = directory;
 		result.filePattern = filePattern;
 		result.title = title;
+		result.headerRow = headerRow;
+		result.headerColumn = headerColumn;
 		result.xAxisLabel = xAxisLabel;
 		result.yAxisLabel = yAxisLabel;
-		result.imageWidth = imageWidth;
-		result.imageHeight = imageHeight;
+		result.width = width;
+		result.height = height;
 		
 		return result;
 	}

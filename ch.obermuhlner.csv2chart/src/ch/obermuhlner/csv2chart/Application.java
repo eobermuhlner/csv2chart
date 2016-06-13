@@ -3,7 +3,6 @@ package ch.obermuhlner.csv2chart;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Stroke;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -69,10 +68,10 @@ public class Application {
 						globalParameters.yAxisLabel = args[++i];
 						break;
 					case "width":
-						globalParameters.imageWidth = Integer.parseInt(args[++i]);
+						globalParameters.width = Integer.parseInt(args[++i]);
 						break;
 					case "height":
-						globalParameters.imageHeight = Integer.parseInt(args[++i]);
+						globalParameters.height = Integer.parseInt(args[++i]);
 						break;
 					default:
 						error("Unknown option: " + option);
@@ -108,7 +107,7 @@ public class Application {
 			ChartFactory chartFactory = createChartFactory(parameters);
 			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart);
-			saveChartImage(chart, baseFilename, parameters.imageWidth, parameters.imageHeight);
+			saveChartImage(chart, baseFilename, parameters.width, parameters.height);
 		}
 	}
 

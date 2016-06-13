@@ -130,6 +130,8 @@ public class Application {
 			return new XYLineChartFactory();
 		case "pie":
 			return new PieChartFactory();
+		case "bubble":
+			return new BubbleChartFactory();
 		default:
 			throw new IllegalArgumentException("Unknown chart: " + type);
 		}

@@ -14,7 +14,7 @@ public class XYLineChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(Data data, Parameters parameters) {
-		XYDataset categoryDatset = createCategoryDataset(data);
+		XYDataset categoryDatset = createXYDataset(data);
 
 		if (parameters.xAxisLabel == null && headerLine) {
 			parameters.xAxisLabel = data.getRows().get(0).get(0);
@@ -24,7 +24,7 @@ public class XYLineChartFactory extends AbstractChartFactory {
 		return chart;
 	}
 
-	private XYDataset createCategoryDataset(Data data) {
+	private XYDataset createXYDataset(Data data) {
 		List<List<String>> rows = data.getRows();
 		int rowIndex = 0;
 		

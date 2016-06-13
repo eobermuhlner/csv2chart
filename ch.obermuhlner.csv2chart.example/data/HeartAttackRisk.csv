@@ -1,0 +1,18 @@
+# csv2chart.chart=bubble
+#
+Sex,   Age, Weight, Risk
+Male,   20,     50,    2
+Male,   20,     60,    4
+Male,   30,     70,   10
+Male,   30,     90,   20
+Male,   30,    110,   40
+Male,   40,     80,    8
+Male,   40,    100,   12
+Female, 20,     50,    2
+Female, 20,     60,    3
+Female, 30,     60,    6
+Female, 30,     70,   14
+Female, 30,     90,   19
+Female, 40,     70,    3
+Female, 40,     90,    7
+ 

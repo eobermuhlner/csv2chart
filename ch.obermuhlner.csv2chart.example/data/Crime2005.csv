@@ -1,0 +1,53 @@
+# csv2chart.chart=bubble
+#
+State,Murder,Robbery,Population
+Alabama ,8.2,141.4,4627851
+Alaska ,4.8,80.9,686293
+Arizona ,7.5,144.4,6500180
+Arkansas,6.7,91.1,2855390
+California ,6.9,176.1,36756666
+Colorado ,3.7,84.6,4861515
+Connecticut ,2.9,113,3501252
+Delaware ,4.4,154.8,873092
+Florida ,5,169.4,18328340
+Georgia ,6.2,154.8,9685744
+Hawaii ,1.9,78.5,1288198
+Idaho ,2.4,18.6,1523816
+Illinois ,6,181.7,12901563
+Indiana ,5.7,108.6,6376792
+Iowa ,1.3,38.9,3002555
+Kansas  ,3.7,65.3,2802134
+Kentucky  ,4.6,88.4,4269245
+Louisiana ,9.9,118,4410796
+Maine ,1.4,24.4,1316456
+Maryland ,9.9,256.7,5633597
+Massachusetts,2.7,119,6497967
+Michigan,6.1,131.8,10003422
+Minnesota ,2.2,92,5220393
+Mississippi ,7.3,82.3,2938618
+Missouri ,6.9,124.1,5911605
+Montana  ,1.9,18.9,967440
+Nebraska ,2.5,59.1,1783432
+Nevada ,8.5,194.7,2600167
+New Hampshire ,1.4,27.4,1315809
+New Jersey,4.8,151.6,8682661
+New Mexico ,7.4,98.7,1984356
+New York,4.5,182.7,19490297
+North Carolina ,6.7,145.5,9222414
+North Dakota ,1.1,7.4,641481
+Ohio ,5.1,163.1,11485910
+Oklahoma ,5.3,91,3642361
+Oregon ,2.2,68.1,3790060
+Pennsylvania,6.1,154.6,12448279
+Rhode Island ,3.2,72.1,1050788
+South Carolina ,7.4,132.1,4479800
+South Dakota ,2.3,18.6,804194
+Tennessee ,7.2,167.3,6214888
+Texas ,6.2,156.6,24326974
+Utah,2.3,44.3,2736424
+Vermont ,1.3,11.7,621270
+Virginia ,6.1,99.2,7769089
+Washington ,3.3,92.1,6549224
+West Virginia ,4.4,44.6,1814468
+Wisconsin ,3.5,82.2,5627967
+Wyoming ,2.7,15.3,532668

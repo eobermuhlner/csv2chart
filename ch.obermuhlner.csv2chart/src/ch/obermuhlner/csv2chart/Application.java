@@ -196,23 +196,23 @@ public class Application {
 			XYPlot xyPlot = (XYPlot) plot;
 			xyPlot.setOutlineVisible(false);
 
-			for (int i = 0; i < xyPlot.getSeriesCount(); i++) {
-				xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
+			for (int seriesIndex = 0; seriesIndex < xyPlot.getSeriesCount(); seriesIndex++) {
+				xyPlot.getRenderer().setSeriesStroke(seriesIndex, new BasicStroke(3.0f));
 				
 				XYItemRenderer renderer = xyPlot.getRenderer();
 				if (renderer instanceof XYBubbleRenderer) {
 					XYBubbleRenderer xyBubbleRenderer = (XYBubbleRenderer) renderer;
 
 					if (parameters.crowdedLegend) {
-						xyBubbleRenderer.setItemLabelGenerator(new BubbleXYItemLabelGenerator() {
+						xyBubbleRenderer.setSeriesItemLabelGenerator(seriesIndex, new BubbleXYItemLabelGenerator() {
 							@Override
 							public String generateLabel(XYDataset dataset, int series, int item) {
 								DefaultXYZDataset xyzDataset = (DefaultXYZDataset) dataset;
 								return String.valueOf(xyzDataset.getSeriesKey(series));
 							}
 						});
-						xyBubbleRenderer.setItemLabelsVisible(true);
-						xyBubbleRenderer.setItemLabelPaint(gray);
+						xyBubbleRenderer.setSeriesItemLabelsVisible(seriesIndex, true);
+						xyBubbleRenderer.setSeriesItemLabelPaint(seriesIndex, gray);
 					}
 				}
 			}

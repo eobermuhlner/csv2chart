@@ -4,15 +4,21 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -114,6 +120,7 @@ public class Application {
 			System.out.println("Processing: " + path);
 			Parameters parameters = globalParameters.copy();
 			String baseFilename = baseFilename(path.getFileName().toString());
+			loadProperties(baseFilename + ".properties", parameters);
 			Data data = dataLoader.load(path.toString(), parameters);
 			if (parameters.title == null) {
 				parameters.title = baseFilename;
@@ -122,6 +129,18 @@ public class Application {
 			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart, parameters);
 			saveChartImage(chart, baseFilename, parameters.width, parameters.height);
+		}
+	}
+
+	private static void loadProperties(String string, Parameters parameters) {
+		Properties properties = new Properties();
+		try (Reader reader = new BufferedReader(new FileReader(string))) {
+			properties.load(reader);
+			for (Entry<Object, Object> entry : properties.entrySet()) {
+				CsvDataLoader.setParameter(parameters, String.valueOf(entry.getKey()), entry.getValue());
+			}
+		} catch (IOException e) {
+			// ignore
 		}
 	}
 

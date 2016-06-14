@@ -137,7 +137,7 @@ public class Application {
 		try (Reader reader = new BufferedReader(new FileReader(string))) {
 			properties.load(reader);
 			for (Entry<Object, Object> entry : properties.entrySet()) {
-				CsvDataLoader.setParameter(parameters, String.valueOf(entry.getKey()), entry.getValue());
+				parameters.setParameter(String.valueOf(entry.getKey()), entry.getValue());
 			}
 		} catch (IOException e) {
 			// ignore

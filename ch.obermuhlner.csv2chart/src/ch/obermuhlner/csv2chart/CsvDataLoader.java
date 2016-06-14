@@ -71,26 +71,11 @@ public class CsvDataLoader {
 				String name = line.substring(indexOfMarker, indexOfAssignment).trim();
 				String value = line.substring(indexOfAssignment + 1).trim();
 
-				setParameter(parameters, name, value);
+				parameters.setParameter(name, value);
 			}
 		}
 	}
 	
-	public static void setParameter(Parameters parameters, String name, Object value) {
-		try {
-			Field field = Parameters.class.getField(name);
-			Class<?> fieldType = field.getType();
-			if (fieldType == int.class) {
-				value = Integer.parseInt(String.valueOf(value));
-			} else if (fieldType == boolean.class) {
-				value = Boolean.parseBoolean(String.valueOf(value));
-			}
-			field.set(parameters, value);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private boolean containsNoDoubles(Collection<String> columns) {
 		for (String column : columns) {
 			if (isDouble(column)) {

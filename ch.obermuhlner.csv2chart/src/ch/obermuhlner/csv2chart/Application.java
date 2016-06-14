@@ -63,6 +63,12 @@ public class Application {
 						parsingOptions = false;
 						i++;
 						break;
+					case "parameter":
+						globalParameters.setParameter(args[++i], args[++i]);
+						break;
+					case "properties":
+						loadProperties(args[++i], globalParameters);
+						break;
 					case "chart":
 						globalParameters.chart = args[++i];
 						break;

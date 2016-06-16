@@ -18,16 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.BubbleXYItemLabelGenerator;
-import org.jfree.chart.labels.StandardXYItemLabelGenerator;
-import org.jfree.chart.labels.SymbolicXYItemLabelGenerator;
-import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PieLabelLinkStyle;
 import org.jfree.chart.plot.PiePlot;
@@ -51,6 +47,9 @@ public class Application {
 		argumentHandler.addOption("parameter", 2, (args, parameters) -> {
 			parameters.setParameter(args.get(0), args.get(1));
 		});
+		argumentHandler.addOption("properties", 2, (args, parameters) -> {
+			loadProperties(args.get(0), parameters);
+		});
 		argumentHandler.addOption("chart", 1, (args, parameters) -> {
 			parameters.chart = args.get(0);
 		});
@@ -59,6 +58,12 @@ public class Application {
 		});
 		argumentHandler.addOption("pattern", 1, (args, parameters) -> {
 			parameters.filePattern = args.get(0);
+		});
+		argumentHandler.addOption("out-prefix", 1, (args, parameters) -> {
+			parameters.outPrefix = args.get(0);
+		});
+		argumentHandler.addOption("out-postfix", 1, (args, parameters) -> {
+			parameters.outPostfix = args.get(0);
 		});
 		argumentHandler.addOption("title", 1, (args, parameters) -> {
 			parameters.title = args.get(0);
@@ -117,7 +122,9 @@ public class Application {
 			ChartFactory chartFactory = createChartFactory(parameters);
 			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart, parameters);
-			saveChartImage(chart, baseFilename, parameters.width, parameters.height);
+			
+			String outBaseFilename = parameters.outPrefix + baseFilename + parameters.outPostfix;
+			saveChartImage(chart, outBaseFilename, parameters.width, parameters.height);
 		}		
 	}
 	

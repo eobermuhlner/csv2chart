@@ -11,7 +11,9 @@ public class ArgumentHandler<T> {
 	private static final String OPTION_MARKER = "--";
 	
 	private static final String END_OF_OPTIONS_MARKER = OPTION_MARKER;
-	
+
+	private static final String ASSIGN_MARKER = "=";
+
 	Map<String, Option<T>> options = new HashMap<>();
 	
 	public void addOption(String name, int argumentCount, BiConsumer<List<String>, T> optionHandler) {
@@ -36,14 +38,31 @@ public class ArgumentHandler<T> {
 					argumentIndex++;
 				} else if (arg.startsWith(OPTION_MARKER)) {
 					String optionName = arg.substring(OPTION_MARKER.length());
+					String firstOptionArgument = null;
+					
+					int indexOfAssign = optionName.indexOf(ASSIGN_MARKER);
+					if (indexOfAssign >= 0) {
+						firstOptionArgument = optionName.substring(indexOfAssign + 1);
+						optionName = optionName.substring(0, indexOfAssign);
+					}
+					
 					Option<T> option = options.get(optionName);
 					if (option != null) {
-						if (argumentIndex + option.argumentCount > args.length) {
+						int optionArgumentCount = option.argumentCount;
+						List<String> optionArguments = new ArrayList<>();
+						if (firstOptionArgument != null) {
+							if (optionArgumentCount == 0) {
+								error("Option " + optionName + " does not allow arguments");
+							}
+							optionArgumentCount--;
+							optionArguments.add(firstOptionArgument);
+						}
+
+						if (argumentIndex + optionArgumentCount > args.length) {
 							error("Not enough arguments for option: " + option.name);
 						}
 						
-						List<String> optionArguments = new ArrayList<>();
-						for (int optionArgumentIndex = 0; optionArgumentIndex < option.argumentCount; optionArgumentIndex++) {
+						for (int optionArgumentIndex = 0; optionArgumentIndex < optionArgumentCount; optionArgumentIndex++) {
 							optionArguments.add(args[++argumentIndex]);
 						}
 						option.optionHandler.accept(optionArguments, target);

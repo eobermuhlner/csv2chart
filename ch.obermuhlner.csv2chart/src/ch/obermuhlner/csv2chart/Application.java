@@ -45,71 +45,54 @@ import org.jfree.ui.RectangleInsets;
 
 public class Application {
 
+	private static final ArgumentHandler<Parameters> argumentHandler = new ArgumentHandler<>();
+	
+	static {
+		argumentHandler.addOption("parameter", 2, (args, parameters) -> {
+			parameters.setParameter(args.get(0), args.get(1));
+		});
+		argumentHandler.addOption("chart", 1, (args, parameters) -> {
+			parameters.chart = args.get(0);
+		});
+		argumentHandler.addOption("dir", 1, (args, parameters) -> {
+			parameters.directory = args.get(0);
+		});
+		argumentHandler.addOption("pattern", 1, (args, parameters) -> {
+			parameters.filePattern = args.get(0);
+		});
+		argumentHandler.addOption("title", 1, (args, parameters) -> {
+			parameters.title = args.get(0);
+		});
+		argumentHandler.addOption("header-column", 0, (args, parameters) -> {
+			parameters.headerColumn = true;
+		});
+		argumentHandler.addOption("row-column", 0, (args, parameters) -> {
+			parameters.headerRow = true;
+		});
+		argumentHandler.addOption("x-axis", 1, (args, parameters) -> {
+			parameters.xAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("y-axis", 1, (args, parameters) -> {
+			parameters.yAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("width", 1, (args, parameters) -> {
+			parameters.width = Integer.parseInt(args.get(0));
+		});
+		argumentHandler.addOption("height", 1, (args, parameters) -> {
+			parameters.width = Integer.parseInt(args.get(0));
+		});
+	}
+	
 	public static void main(String[] args) {
 		CsvDataLoader dataLoader = new CsvDataLoader();
 
 		Parameters globalParameters = new Parameters();
 
-		boolean parsingOptions = true;
 		List<Path> inputFiles = new ArrayList<>(); 
-		for (int i = 0; i < args.length; i++) {
-			String arg = args[i];
-			
-			if (parsingOptions) {
-				if (arg.startsWith("--")) {
-					String option = arg.substring(2);
-					switch (option) {
-					case "":
-						parsingOptions = false;
-						i++;
-						break;
-					case "parameter":
-						globalParameters.setParameter(args[++i], args[++i]);
-						break;
-					case "properties":
-						loadProperties(args[++i], globalParameters);
-						break;
-					case "chart":
-						globalParameters.chart = args[++i];
-						break;
-					case "dir":
-						globalParameters.directory = args[++i];
-						break;
-					case "pattern":
-						globalParameters.filePattern = args[++i];
-						break;
-					case "title":
-						globalParameters.title = args[++i];
-						break;
-					case "header-column":
-						globalParameters.headerColumn = Boolean.parseBoolean(args[++i]);
-						break;
-					case "header-row":
-						globalParameters.headerRow = Boolean.parseBoolean(args[++i]);
-						break;
-					case "x-axis":
-						globalParameters.xAxisLabel = args[++i];
-						break;
-					case "y-axis":
-						globalParameters.yAxisLabel = args[++i];
-						break;
-					case "width":
-						globalParameters.width = Integer.parseInt(args[++i]);
-						break;
-					case "height":
-						globalParameters.height = Integer.parseInt(args[++i]);
-						break;
-					default:
-						error("Unknown option: " + option);
-					}
-				} else {
-					parsingOptions = false;
-				}
-			} 
-			
-			if (!parsingOptions) {
-				inputFiles.add(Paths.get(arg));
-			}
+		
+		List<String> arguments = argumentHandler.parseOptions(args, globalParameters);
+		for (String argument : arguments) {
+			inputFiles.add(Paths.get(argument));
 		}
 		
 		if (inputFiles.isEmpty()) {
@@ -135,9 +118,9 @@ public class Application {
 			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart, parameters);
 			saveChartImage(chart, baseFilename, parameters.width, parameters.height);
-		}
+		}		
 	}
-
+	
 	private static void loadProperties(String string, Parameters parameters) {
 		Properties properties = new Properties();
 		try (Reader reader = new BufferedReader(new FileReader(string))) {

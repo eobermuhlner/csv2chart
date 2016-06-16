@@ -2,7 +2,7 @@ package ch.obermuhlner.csv2chart;
 
 import java.lang.reflect.Field;
 
-public class Parameters {
+public class Parameters implements Cloneable {
 
 	public String directory = ".";
 	public String filePattern = "*.csv";
@@ -36,22 +36,13 @@ public class Parameters {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Parameters copy() {
-		Parameters result = new Parameters();
-		
-		result.directory = directory;
-		result.filePattern = filePattern;
-		result.title = title;
-		result.headerRow = headerRow;
-		result.headerColumn = headerColumn;
-		result.xAxisLabel = xAxisLabel;
-		result.yAxisLabel = yAxisLabel;
-		result.crowdedLegend = crowdedLegend;
-		result.width = width;
-		result.height = height;
-		
-		return result;
+		try {
+			return (Parameters) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// never happens
+		}
+		return null;
 	}
-
 }

@@ -258,6 +258,8 @@ public class Application {
 
 					if (parameters.crowdedLegend) {
 						xyBubbleRenderer.setSeriesItemLabelGenerator(seriesIndex, new BubbleXYItemLabelGenerator() {
+							private static final long serialVersionUID = 1L;
+
 							@Override
 							public String generateLabel(XYDataset dataset, int series, int item) {
 								DefaultXYZDataset xyzDataset = (DefaultXYZDataset) dataset;

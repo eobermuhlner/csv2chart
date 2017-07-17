@@ -45,7 +45,6 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		List<String> columnLabels = null;
 		
 		int headerRowCount = data.getHeaderRowCount();
-		int dataRowCount = rows.size() - headerRowCount;
 
 		int columnIndex1 = 1;
 		int columnIndex2 = 2;

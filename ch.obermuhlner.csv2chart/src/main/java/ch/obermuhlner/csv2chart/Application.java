@@ -287,11 +287,6 @@ public class Application {
 		}
 	}
 
-	private static void error(String message) {
-		System.err.println(message);
-		System.exit(1);
-	}
-
 	private static String baseFilename(String filename) {
 		String result = filename;
 		int lastIndexOfSeparator = filename.lastIndexOf(".");

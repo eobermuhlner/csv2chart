@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 
 public class Parameters implements Cloneable {
 
-	public String directory = ".";
-	public String filePattern = "*.csv";
 	public String outPrefix = "";
 	public String outPostfix = "";
 	

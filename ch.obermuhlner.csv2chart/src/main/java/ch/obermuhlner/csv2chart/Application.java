@@ -10,8 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -44,47 +42,72 @@ public class Application {
 	private static final ArgumentHandler<Parameters> argumentHandler = new ArgumentHandler<>();
 	
 	static {
-		argumentHandler.addOption("parameter", 2, (args, parameters) -> {
-			parameters.setParameter(args.get(0), args.get(1));
-		});
-		argumentHandler.addOption("properties", 2, (args, parameters) -> {
+		argumentHandler.addOption("properties",
+				"filename",
+				"Loads the specified properties file.",
+				1, (args, parameters) -> {
 			loadProperties(args.get(0), parameters);
 		});
-		argumentHandler.addOption("chart", 1, (args, parameters) -> {
-			parameters.chart = args.get(0);
-		});
-		argumentHandler.addOption("dir", 1, (args, parameters) -> {
-			parameters.directory = args.get(0);
-		});
-		argumentHandler.addOption("pattern", 1, (args, parameters) -> {
-			parameters.filePattern = args.get(0);
-		});
-		argumentHandler.addOption("out-prefix", 1, (args, parameters) -> {
+		argumentHandler.addOption("out-prefix",
+				"fileprefix",
+				"Prefix for output chart files",
+				1, (args, parameters) -> {
 			parameters.outPrefix = args.get(0);
 		});
-		argumentHandler.addOption("out-postfix", 1, (args, parameters) -> {
+		argumentHandler.addOption("out-postfix",
+				"filepostfix",
+				"Postfix for output chart files",
+				1, (args, parameters) -> {
 			parameters.outPostfix = args.get(0);
 		});
-		argumentHandler.addOption("title", 1, (args, parameters) -> {
+		argumentHandler.addOption("chart", 
+				"charttype",
+				"The chart type to generate.\n"
+				+ "Supported types: auto, line, bar, xyline, pie, bubble\n"
+				+ "Default: 'auto'",
+				1, (args, parameters) -> {
+			parameters.chart = args.get(0);
+		});
+		argumentHandler.addOption("title",
+				"text",
+				"Text to appear as title in the chart.", 1, (args, parameters) -> {
 			parameters.title = args.get(0);
 		});
-		argumentHandler.addOption("header-column", 0, (args, parameters) -> {
+		argumentHandler.addOption("header-column",
+				"",
+				"When specified the first column is interpreted as headers", 0, (args, parameters) -> {
 			parameters.headerColumn = true;
 		});
-		argumentHandler.addOption("row-column", 0, (args, parameters) -> {
+		argumentHandler.addOption("row-column",
+				"",
+				"When specified the first row is interpreted as headers", 0, (args, parameters) -> {
 			parameters.headerRow = true;
 		});
-		argumentHandler.addOption("x-axis", 1, (args, parameters) -> {
+		argumentHandler.addOption("x-axis",
+				"text",
+				"Text to appear as x-axis label.",
+				1, (args, parameters) -> {
 			parameters.xAxisLabel = args.get(0);
 		});
-		argumentHandler.addOption("y-axis", 1, (args, parameters) -> {
+		argumentHandler.addOption("y-axis",
+				"text",
+				"Text to appear as y-axis label.",
+				1, (args, parameters) -> {
 			parameters.yAxisLabel = args.get(0);
 		});
-		argumentHandler.addOption("width", 1, (args, parameters) -> {
+		argumentHandler.addOption("width",
+				"pixels",
+				"The width of the generated charts in pixels.\n"
+				+ "Default: 800",
+				1, (args, parameters) -> {
 			parameters.width = Integer.parseInt(args.get(0));
 		});
-		argumentHandler.addOption("height", 1, (args, parameters) -> {
-			parameters.width = Integer.parseInt(args.get(0));
+		argumentHandler.addOption("height",
+				"pixels",
+				"The height of the generated charts in pixels.\n"
+				+ "Default: 600",
+				1, (args, parameters) -> {
+			parameters.height = Integer.parseInt(args.get(0));
 		});
 	}
 	
@@ -101,13 +124,7 @@ public class Application {
 		}
 		
 		if (inputFiles.isEmpty()) {
-			try (DirectoryStream<Path> directories = Files.newDirectoryStream(Paths.get(globalParameters.directory), globalParameters.filePattern)) {
-				for (Path path : directories) {
-					inputFiles.add(path);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			printHelp();
 		}
 
 		for (Path path : inputFiles) {
@@ -126,6 +143,27 @@ public class Application {
 			String outBaseFilename = parameters.outPrefix + baseFilename + parameters.outPostfix;
 			saveChartImage(chart, outBaseFilename, parameters.width, parameters.height);
 		}		
+	}
+	
+	private static void printHelp() {
+		System.out.println("NAME");
+		System.out.println("    csv2chart - create chart from csv file");
+		System.out.println();
+		System.out.println("SYNOPSIS");
+		System.out.println("    csv2chart [options] [csv-files]");
+		System.out.println();
+		System.out.println("DESCRIPTION");
+		System.out.println("   Options may be set in the command line, as comments in the csv file or in a property file with the same basename as the csv file.");
+		System.out.println();
+		for (String option : argumentHandler.getOptions()) {
+			System.out.println("    --" + option + " " + argumentHandler.getOptionArgumentDescription(option));
+			String description = argumentHandler.getOptionDescription(option);
+			String[] lines = description.split("\n");
+			for (String line : lines) {
+				System.out.println("        " + line);
+			}
+			System.out.println();
+		}
 	}
 	
 	private static void loadProperties(String string, Parameters parameters) {
@@ -161,7 +199,7 @@ public class Application {
 	}
 
 	private static void modifyTheme(JFreeChart chart, Parameters parameters) {
-		String fontName = "Helevetica";
+		String fontName = "Helvetica";
 		
 		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
 

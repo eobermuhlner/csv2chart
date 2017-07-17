@@ -14,14 +14,36 @@ public class ArgumentHandler<T> {
 
 	private static final String ASSIGN_MARKER = "=";
 
-	Map<String, Option<T>> options = new HashMap<>();
+	private List<String> options = new ArrayList<>();
+
+	private Map<String, String> optionArgumentDescriptions = new HashMap<>();
+	private Map<String, String> optionDescriptions = new HashMap<>();
 	
-	public void addOption(String name, int argumentCount, BiConsumer<List<String>, T> optionHandler) {
+	private Map<String, Option<T>> optionHandlers = new HashMap<>();
+	
+	public void addOption(String name, String argumentDescription, String description, int argumentCount, BiConsumer<List<String>, T> optionHandler) {
+		options.add(name);
+		
+		optionArgumentDescriptions.put(name, argumentDescription);
+		optionDescriptions.put(name, description);
+		
 		Option<T> option = new Option<T>();
 		option.name = name;
 		option.argumentCount = argumentCount;
 		option.optionHandler = optionHandler;
-		options.put(name, option);
+		optionHandlers.put(name, option);
+	}
+
+	public List<String> getOptions() {
+		return options;
+	}
+
+	public String getOptionArgumentDescription(String option) {
+		return optionArgumentDescriptions.get(option);
+	}
+
+	public String getOptionDescription(String option) {
+		return optionDescriptions.get(option);
 	}
 	
 	public List<String> parseOptions(String[] args, T target) {
@@ -46,7 +68,7 @@ public class ArgumentHandler<T> {
 						optionName = optionName.substring(0, indexOfAssign);
 					}
 					
-					Option<T> option = options.get(optionName);
+					Option<T> option = optionHandlers.get(optionName);
 					if (option != null) {
 						int optionArgumentCount = option.argumentCount;
 						List<String> optionArguments = new ArrayList<>();

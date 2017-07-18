@@ -73,15 +73,15 @@ public class Application {
 				"Text to appear as title in the chart.", 1, (args, parameters) -> {
 			parameters.title = args.get(0);
 		});
-		argumentHandler.addOption("header-column",
+		argumentHandler.addOption("no-header-column",
 				"",
-				"When specified the first column is interpreted as headers", 0, (args, parameters) -> {
-			parameters.headerColumn = true;
+				"When specified the first column is not interpreted as headers", 0, (args, parameters) -> {
+			parameters.headerColumn = false;
 		});
-		argumentHandler.addOption("row-column",
+		argumentHandler.addOption("no-header-row",
 				"",
-				"When specified the first row is interpreted as headers", 0, (args, parameters) -> {
-			parameters.headerRow = true;
+				"When specified the first row is not interpreted as headers", 0, (args, parameters) -> {
+			parameters.headerRow = false;
 		});
 		argumentHandler.addOption("x-axis",
 				"text",

@@ -153,8 +153,18 @@ public class Application {
 		System.out.println("    csv2chart [options] [csv-files]");
 		System.out.println();
 		System.out.println("DESCRIPTION");
-		System.out.println("   Options may be set in the command line, as comments in the csv file or in a property file with the same basename as the csv file.");
+		System.out.println("   Options may be set in the command line, as comments in the csv file or in a properties file with the same basename as the csv file.");
+		System.out.println("   Command line options are prefixed with --.");
+		System.out.println("   Options in the csv file can be specified in comments at the top of the file, prefixed with 'csv2chart.'.");
+		System.out.println("   Example: ");
+		System.out.println("       # csv2chart.title=Sales - Sections");
+		System.out.println("       # csv2chart.chart=pie");
+		System.out.println("   Options in properties files are specified without prefix.");
+		System.out.println("   Example: ");
+		System.out.println("       title=Sales - Sections");
+		System.out.println("       chart=pie");
 		System.out.println();
+
 		for (String option : argumentHandler.getOptions()) {
 			System.out.println("    --" + option + " " + argumentHandler.getOptionArgumentDescription(option));
 			String description = argumentHandler.getOptionDescription(option);

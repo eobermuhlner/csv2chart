@@ -19,6 +19,9 @@ public class Parameters implements Cloneable {
 	
 	public Boolean crowdedLegend;
 	
+	public Double colorScaleMinValue = null;
+	public Double colorScaleMaxValue = null;
+	
 	public int width = 800;
 	public int height = 600;
 

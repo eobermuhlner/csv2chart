@@ -83,6 +83,16 @@ public class Application {
 				"When specified the first row is not interpreted as headers", 0, (args, parameters) -> {
 			parameters.headerRow = false;
 		});
+		argumentHandler.addOption("header-column",
+				"",
+				"When specified the first column is interpreted as headers", 0, (args, parameters) -> {
+			parameters.headerColumn = true;
+		});
+		argumentHandler.addOption("header-row",
+				"",
+				"When specified the first row is interpreted as headers", 0, (args, parameters) -> {
+			parameters.headerRow = true;
+		});
 		argumentHandler.addOption("x-axis",
 				"text",
 				"Text to appear as x-axis label.",
@@ -203,6 +213,8 @@ public class Application {
 			return new PieChartFactory();
 		case "bubble":
 			return new BubbleChartFactory();
+		case "heat":
+			return new HeatChartFactory();
 		default:
 			throw new IllegalArgumentException("Unknown chart: " + type);
 		}

@@ -9,7 +9,6 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.GrayPaintScale;
 import org.jfree.chart.renderer.PaintScale;
 import org.jfree.chart.renderer.xy.XYBlockRenderer;
 import org.jfree.chart.title.PaintScaleLegend;
@@ -33,7 +32,12 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 		XYBlockRenderer renderer = new XYBlockRenderer();
 
-		PaintScale paintScale = createPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue);
+		PaintScale paintScale;
+		if (parameters.colorScaleMinValue < 0 && parameters.colorScaleMaxValue > 0) {
+			paintScale = new ThreeColorPaintScale(parameters.colorScaleMinValue, 0.0, parameters.colorScaleMaxValue, Color.BLUE, Color.YELLOW, Color.RED, Color.LIGHT_GRAY);
+		} else {
+			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, Color.BLUE, Color.RED, Color.LIGHT_GRAY);
+		}
 		
 		renderer.setPaintScale(paintScale);
 		plot.setRenderer(renderer);
@@ -61,10 +65,6 @@ public class HeatChartFactory extends AbstractChartFactory {
 		
 		return chart;
 	}
-	
-	private PaintScale createPaintScale(double minValue, double maxValue) {
-		return new GrayPaintScale(minValue, maxValue);
-	}
 
 	private XYZDataset createXYZDataset(Data data, Parameters parameters) {
 		List<List<String>> rows = data.getRows();
@@ -77,35 +77,8 @@ public class HeatChartFactory extends AbstractChartFactory {
 		if (headerRowCount == 0 && parameters.headerRow) {
 			headerRowCount = 1;
 		}
-
-		double[] columnHeaders = new double[rows.get(0).size() - headerColumnCount]; 
-		if (headerRowCount > 0) {
-			List<String> row = rows.get(0);
-			System.out.println("header row : " + row.size() + " cols");
-			for (int columnIndex = headerColumnCount; columnIndex < row.size(); columnIndex++) {
-				double value = CsvDataLoader.toDouble(row.get(columnIndex));
-				columnHeaders[columnIndex - headerColumnCount] = value;
-			}			
-		} else {
-			for (int i = 0; i < columnHeaders.length; i++) {
-				columnHeaders[i] = i;
-			}
-		}
 		
-		double[] rowHeaders = new double[rows.size() - headerRowCount];
-		if (headerColumnCount > 0) {
-			for (int rowIndex = headerRowCount; rowIndex < rows.size(); rowIndex++) {
-				List<String> row = rows.get(rowIndex);
-				double value = CsvDataLoader.toDouble(row.get(0));
-				rowHeaders[rowIndex - headerRowCount] = value;
-			}			
-		} else {
-			for (int i = 0; i < rowHeaders.length; i++) {
-				rowHeaders[i] = i;
-			}
-		}
-		
-		int n = rowHeaders.length * columnHeaders.length;
+		int n = (rows.size() - headerRowCount) * (rows.get(0).size() - headerColumnCount);
 		double[] xValues = new double[n];
 		double[] yValues = new double[n];
 		double[] zValues = new double[n];
@@ -114,13 +87,13 @@ public class HeatChartFactory extends AbstractChartFactory {
 		double maxValue = -Double.MAX_VALUE;
 		
 		int index = 0;
-		for (int rowIndex = 0; rowIndex < rowHeaders.length; rowIndex++) {
-			List<String> row = rows.get(rowIndex + headerRowCount);
-			for (int columnIndex = 0; columnIndex < columnHeaders.length; columnIndex++) {
-				double value = CsvDataLoader.toDouble(row.get(columnIndex + headerColumnCount));
+		for (int rowIndex = headerRowCount; rowIndex < rows.size(); rowIndex++) {
+			List<String> row = rows.get(rowIndex);
+			for (int columnIndex = headerColumnCount; columnIndex < row.size(); columnIndex++) {
+				double value = CsvDataLoader.toDouble(row.get(columnIndex));
 				
-				xValues[index] = rowHeaders[rowIndex];
-				yValues[index] = columnHeaders[columnIndex];
+				xValues[index] = rowIndex;
+				yValues[index] = columnIndex;
 				zValues[index] = value;
 				
 				minValue = Math.min(minValue, value);

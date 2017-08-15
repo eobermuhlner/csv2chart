@@ -9,7 +9,7 @@ import org.jfree.chart.axis.AxisLocation;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.GrayPaintScale;
+import org.jfree.chart.renderer.PaintScale;
 import org.jfree.chart.renderer.xy.XYBlockRenderer;
 import org.jfree.chart.title.PaintScaleLegend;
 import org.jfree.data.xy.DefaultXYZDataset;
@@ -32,7 +32,12 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 		XYBlockRenderer renderer = new XYBlockRenderer();
 
-		GrayPaintScale paintScale = new GrayPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue);
+		PaintScale paintScale;
+		if (parameters.colorScaleMinValue < 0 && parameters.colorScaleMaxValue > 0) {
+			paintScale = new ThreeColorPaintScale(parameters.colorScaleMinValue, 0.0, parameters.colorScaleMaxValue, Color.BLUE, Color.YELLOW, Color.RED, Color.LIGHT_GRAY);
+		} else {
+			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, Color.BLUE, Color.RED, Color.LIGHT_GRAY);
+		}
 		
 		renderer.setPaintScale(paintScale);
 		plot.setRenderer(renderer);

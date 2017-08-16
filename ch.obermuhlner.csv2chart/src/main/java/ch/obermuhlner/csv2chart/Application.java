@@ -213,7 +213,7 @@ public class Application {
 			return new PieChartFactory();
 		case "bubble":
 			return new BubbleChartFactory();
-		case "heat":
+		case "heatmap":
 			return new HeatChartFactory();
 		default:
 			throw new IllegalArgumentException("Unknown chart: " + type);

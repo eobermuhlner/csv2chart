@@ -37,27 +37,6 @@ public class TwoColorPaintScale implements PaintScale {
 			return defaultColor;
 		}
 		
-		double level = (value - lowerBound) / (upperBound - lowerBound);
-		
-		int r = (int) ((upperColor.getRed() - lowerColor.getRed()) * level + lowerColor.getRed());
-		int g = (int) ((upperColor.getGreen() - lowerColor.getGreen()) * level + lowerColor.getGreen());
-		int b = (int) ((upperColor.getBlue() - lowerColor.getBlue()) * level + lowerColor.getBlue());
-		
-		r = clamp(r, 0, 255);
-		g = clamp(g, 0, 255);
-		b = clamp(b, 0, 255);
-
-		return new Color(r, g, b);
-	}
-
-	private int clamp(int value, int minValue, int maxValue) {
-		if (value < minValue) {
-			return minValue;
-		}
-		if (value > maxValue) {
-			return maxValue;
-		}
-		
-		return value;
+		return ColorUtil.interpolateColor(value, lowerBound, upperBound, lowerColor, upperColor);
 	}
 }

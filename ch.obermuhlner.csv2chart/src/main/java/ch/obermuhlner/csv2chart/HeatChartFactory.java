@@ -19,6 +19,12 @@ import org.jfree.ui.RectangleInsets;
 
 public class HeatChartFactory extends AbstractChartFactory {
 
+	private static final Color PASTEL_BLUE = new Color(0x2166ac);
+	private static final Color PASTEL_WHITE = new Color(0xf7f7f7);
+	private static final Color PASTEL_YELLOW = new Color(0xffffbf);
+	private static final Color PASTEL_RED = new Color(0xb2182b);
+	
+
 	@Override
 	public JFreeChart createChart(Data data, Parameters parameters) {
 		XYZDataset dataset = createXYZDataset(data, parameters);
@@ -33,12 +39,18 @@ public class HeatChartFactory extends AbstractChartFactory {
 		XYBlockRenderer renderer = new XYBlockRenderer();
 
 		PaintScale paintScale;
-		if (parameters.colorScaleMinValue < 0 && parameters.colorScaleMaxValue > 0) {
-			paintScale = new ThreeColorPaintScale(parameters.colorScaleMinValue, 0.0, parameters.colorScaleMaxValue, Color.BLUE, Color.YELLOW, Color.RED, Color.LIGHT_GRAY);
-		} else {
-			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, Color.BLUE, Color.RED, Color.LIGHT_GRAY);
+		if (parameters.colorScaleMidValue == null) {
+			parameters.colorScaleMidValue = 0.0;
 		}
-		
+
+		if (parameters.colorScaleMinValue < parameters.colorScaleMidValue && parameters.colorScaleMaxValue > parameters.colorScaleMidValue) {
+			paintScale = new ThreeColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMidValue, parameters.colorScaleMaxValue, PASTEL_BLUE, PASTEL_YELLOW, PASTEL_RED, Color.LIGHT_GRAY);
+		} else if (parameters.colorScaleMinValue < parameters.colorScaleMidValue) {
+			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, PASTEL_BLUE, PASTEL_YELLOW, Color.LIGHT_GRAY);
+		} else {
+			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, PASTEL_YELLOW, PASTEL_RED, Color.LIGHT_GRAY);
+		}
+
 		renderer.setPaintScale(paintScale);
 		plot.setRenderer(renderer);
 		plot.setOrientation(PlotOrientation.HORIZONTAL);

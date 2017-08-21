@@ -11,11 +11,17 @@ public class Parameters implements Cloneable {
 	
 	public String title = null;
 	
+	@Option(name = "header-row")
 	public boolean headerRow = true;
+	@Option(name = "header-column")
 	public boolean headerColumn = true;
 	
+	@Option(name = "x-axis")
 	public String xAxisLabel;
+	@Option(name = "y-axis")
 	public String yAxisLabel;
+	@Option(name = "z-axis")
+	public String zAxisLabel;
 	
 	public Boolean crowdedLegend;
 	
@@ -28,7 +34,7 @@ public class Parameters implements Cloneable {
 
 	public void setParameter(String name, Object value) {
 		try {
-			Field field = Parameters.class.getField(name);
+			Field field = findField(name);
 			Class<?> fieldType = field.getType();
 			if (fieldType == int.class) {
 				value = Integer.parseInt(String.valueOf(value));
@@ -39,6 +45,17 @@ public class Parameters implements Cloneable {
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private Field findField(String name) throws NoSuchFieldException, SecurityException {
+		for (Field field : Parameters.class.getFields()) {
+			Option option = field.getAnnotation(Option.class);
+			if (option != null && name.equals(option.name())) {
+				return field;
+			}
+		}
+		
+		return Parameters.class.getField(name);
 	}
 	
 	public Parameters copy() {

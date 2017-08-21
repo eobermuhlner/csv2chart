@@ -1,5 +1,6 @@
 package ch.obermuhlner.csv2chart;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 
 public class Parameters implements Cloneable {
@@ -25,10 +26,22 @@ public class Parameters implements Cloneable {
 	
 	public Boolean crowdedLegend;
 	
+	@Option(name = "scale-min-value")
 	public Double colorScaleMinValue = null;
+	@Option(name = "scale-mid-value")
 	public Double colorScaleMidValue = null;
+	@Option(name = "scale-max-value")
 	public Double colorScaleMaxValue = null;
-	
+
+	@Option(name = "scale-min-color")
+	public Color colorScaleMinColor = null;
+	@Option(name = "scale-mid-color")
+	public Color colorScaleMidColor = null;
+	@Option(name = "scale-max-color")
+	public Color colorScaleMaxColor = null;
+	@Option(name = "scale-default-color")
+	public Color colorScaleDefaultColor = null;
+
 	public int width = 800;
 	public int height = 600;
 
@@ -40,6 +53,8 @@ public class Parameters implements Cloneable {
 				value = Integer.parseInt(String.valueOf(value));
 			} else if (fieldType == boolean.class) {
 				value = Boolean.parseBoolean(String.valueOf(value));
+			} else if (fieldType == Color.class) {
+				value = new Color(Integer.parseInt(String.valueOf(value), 16));
 			}
 			field.set(this, value);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

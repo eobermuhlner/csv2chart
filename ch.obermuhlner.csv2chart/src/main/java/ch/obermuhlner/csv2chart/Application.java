@@ -111,6 +111,42 @@ public class Application {
 				1, (args, parameters) -> {
 			parameters.zAxisLabel = args.get(0);
 		});
+		argumentHandler.addOption("scale-min-value",
+				"numeric",
+				"Minimum value of the color scale.",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("scale-mid-value",
+				"numeric",
+				"Mid value of the color scale.",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("scale-max-value",
+				"numeric",
+				"Maximum value of the color scale.",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("scale-min-color",
+				"color",
+				"Minimum color of the color scale as a hex value (RRGGBB).",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("scale-mid-color",
+				"color",
+				"Mid color of the color scale as a hex value (RRGGBB).",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
+		argumentHandler.addOption("scale-max-color",
+				"color",
+				"Maximum color of the color scale as a hex value (RRGGBB).",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
 		argumentHandler.addOption("width",
 				"pixels",
 				"The width of the generated charts in pixels.\n"

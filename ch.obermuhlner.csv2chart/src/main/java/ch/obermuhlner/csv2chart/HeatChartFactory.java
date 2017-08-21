@@ -20,7 +20,6 @@ import org.jfree.ui.RectangleInsets;
 public class HeatChartFactory extends AbstractChartFactory {
 
 	private static final Color PASTEL_BLUE = new Color(0x2166ac);
-	private static final Color PASTEL_WHITE = new Color(0xf7f7f7);
 	private static final Color PASTEL_YELLOW = new Color(0xffffbf);
 	private static final Color PASTEL_RED = new Color(0xb2182b);
 	
@@ -42,13 +41,43 @@ public class HeatChartFactory extends AbstractChartFactory {
 		if (parameters.colorScaleMidValue == null) {
 			parameters.colorScaleMidValue = 0.0;
 		}
+		
+		if (parameters.colorScaleMinColor == null) {
+			parameters.colorScaleMinColor = PASTEL_BLUE;
+		}
+		if (parameters.colorScaleMidColor == null) {
+			parameters.colorScaleMidColor = PASTEL_YELLOW;
+		}
+		if (parameters.colorScaleMaxColor == null) {
+			parameters.colorScaleMaxColor = PASTEL_RED;
+		}
+		if (parameters.colorScaleDefaultColor == null) {
+			parameters.colorScaleDefaultColor = Color.LIGHT_GRAY;
+		}
 
 		if (parameters.colorScaleMinValue < parameters.colorScaleMidValue && parameters.colorScaleMaxValue > parameters.colorScaleMidValue) {
-			paintScale = new ThreeColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMidValue, parameters.colorScaleMaxValue, PASTEL_BLUE, PASTEL_YELLOW, PASTEL_RED, Color.LIGHT_GRAY);
+			paintScale = new ThreeColorPaintScale(
+					parameters.colorScaleMinValue,
+					parameters.colorScaleMidValue,
+					parameters.colorScaleMaxValue,
+					parameters.colorScaleMinColor,
+					parameters.colorScaleMidColor,
+					parameters.colorScaleMaxColor,
+					parameters.colorScaleDefaultColor);
 		} else if (parameters.colorScaleMinValue < parameters.colorScaleMidValue) {
-			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, PASTEL_BLUE, PASTEL_YELLOW, Color.LIGHT_GRAY);
+			paintScale = new TwoColorPaintScale(
+					parameters.colorScaleMinValue,
+					parameters.colorScaleMaxValue,
+					parameters.colorScaleMidColor,
+					parameters.colorScaleMinColor,
+					parameters.colorScaleDefaultColor);
 		} else {
-			paintScale = new TwoColorPaintScale(parameters.colorScaleMinValue, parameters.colorScaleMaxValue, PASTEL_YELLOW, PASTEL_RED, Color.LIGHT_GRAY);
+			paintScale = new TwoColorPaintScale(
+					parameters.colorScaleMinValue,
+					parameters.colorScaleMaxValue,
+					parameters.colorScaleMidColor,
+					parameters.colorScaleMaxColor,
+					parameters.colorScaleDefaultColor);
 		}
 
 		renderer.setPaintScale(paintScale);

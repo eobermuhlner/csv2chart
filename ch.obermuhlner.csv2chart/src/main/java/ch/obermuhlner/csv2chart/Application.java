@@ -105,6 +105,12 @@ public class Application {
 				1, (args, parameters) -> {
 			parameters.yAxisLabel = args.get(0);
 		});
+		argumentHandler.addOption("z-axis",
+				"text",
+				"Text to appear as z-axis label.",
+				1, (args, parameters) -> {
+			parameters.zAxisLabel = args.get(0);
+		});
 		argumentHandler.addOption("width",
 				"pixels",
 				"The width of the generated charts in pixels.\n"

@@ -34,7 +34,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 		NumberAxis yAxis = new NumberAxis(parameters.yAxisLabel);
 		yAxis.setAutoRangeIncludesZero(false);
 
-		XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
+		XYPlot plot = new XYPlot(dataset, yAxis, xAxis, null);
 
 		XYBlockRenderer renderer = new XYBlockRenderer();
 
@@ -57,9 +57,9 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 		JFreeChart chart = new JFreeChart(parameters.title, JFreeChart.DEFAULT_TITLE_FONT, plot, false);
 
-		boolean legend = !Boolean.TRUE.equals(parameters.crowdedLegend);
+		boolean legend = true;
 		if (legend) {
-			NumberAxis scaleAxis = new NumberAxis("Scale");
+			NumberAxis scaleAxis = new NumberAxis(parameters.zAxisLabel);
 	        scaleAxis.setAxisLinePaint(Color.WHITE);
 	        scaleAxis.setTickMarkPaint(Color.WHITE);
 	        scaleAxis.setTickLabelFont(new Font("Dialog", Font.PLAIN, 7));

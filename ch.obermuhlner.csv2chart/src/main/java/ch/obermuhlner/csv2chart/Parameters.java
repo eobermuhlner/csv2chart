@@ -49,12 +49,14 @@ public class Parameters implements Cloneable {
 		try {
 			Field field = findField(name);
 			Class<?> fieldType = field.getType();
-			if (fieldType == int.class) {
+			if (fieldType == Integer.class || fieldType == int.class) {
 				value = Integer.parseInt(String.valueOf(value));
-			} else if (fieldType == boolean.class) {
+			} else if (fieldType == Boolean.class || fieldType == boolean.class) {
 				value = Boolean.parseBoolean(String.valueOf(value));
 			} else if (fieldType == Color.class) {
 				value = new Color(Integer.parseInt(String.valueOf(value), 16));
+			} else if (fieldType == Double.class || fieldType == double.class) {
+				value = Double.parseDouble(String.valueOf(value));
 			}
 			field.set(this, value);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

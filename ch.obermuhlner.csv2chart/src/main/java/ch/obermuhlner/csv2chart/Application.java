@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class Application {
 				"filename",
 				"Loads the specified properties file.",
 				1, (args, parameters) -> {
-			loadProperties(args.get(0), parameters);
+			loadProperties(new File(args.get(0)), parameters);
 		});
 		argumentHandler.addOption("out-prefix",
 				"fileprefix",
@@ -182,8 +183,9 @@ public class Application {
 		for (Path path : inputFiles) {
 			System.out.println("Processing: " + path);
 			Parameters parameters = globalParameters.copy();
+			Path baseParent = path.getParent();
 			String baseFilename = baseFilename(path.getFileName().toString());
-			loadProperties(baseFilename + ".properties", parameters);
+			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
 			Data data = dataLoader.load(path.toString(), parameters);
 			if (parameters.title == null) {
 				parameters.title = baseFilename;
@@ -228,9 +230,9 @@ public class Application {
 		}
 	}
 	
-	private static void loadProperties(String string, Parameters parameters) {
+	private static void loadProperties(File file, Parameters parameters) {
 		Properties properties = new Properties();
-		try (Reader reader = new BufferedReader(new FileReader(string))) {
+		try (Reader reader = new BufferedReader(new FileReader(file))) {
 			properties.load(reader);
 			for (Entry<Object, Object> entry : properties.entrySet()) {
 				parameters.setParameter(String.valueOf(entry.getKey()), entry.getValue());
@@ -255,7 +257,7 @@ public class Application {
 			return new PieChartFactory();
 		case "bubble":
 			return new BubbleChartFactory();
-		case "heatmap":
+		case "heat":
 			return new HeatChartFactory();
 		default:
 			throw new IllegalArgumentException("Unknown chart: " + type);

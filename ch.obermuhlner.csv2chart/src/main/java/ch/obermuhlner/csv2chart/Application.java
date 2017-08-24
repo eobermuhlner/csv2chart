@@ -259,6 +259,8 @@ public class Application {
 			return new XYLineChartFactory();
 		case "pie":
 			return new PieChartFactory();
+		case "scatter":
+			return new ScatterChartFactory();
 		case "bubble":
 			return new BubbleChartFactory();
 		case "heat":

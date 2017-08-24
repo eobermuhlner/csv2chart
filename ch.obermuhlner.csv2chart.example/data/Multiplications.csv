@@ -1,8 +1,10 @@
-# csv2chart.chart=heatmap
+# csv2chart.chart=heat
 # csv2chart.header-column
 # csv2chart.header-row
 #
  ,0,1,2,3,4
+-2,0,-2,-4,-6,-8
+-1,0,-1,-2,-3,-4
 0,0,0,0,0,0
 1,0,1,2,3,4
 2,0,2,4,6,8

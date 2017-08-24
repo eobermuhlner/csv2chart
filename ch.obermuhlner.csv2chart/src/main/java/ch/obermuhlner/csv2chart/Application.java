@@ -184,7 +184,11 @@ public class Application {
 			System.out.println("Processing: " + path);
 			Parameters parameters = globalParameters.copy();
 			Path baseParent = path.getParent();
+			if (baseParent == null) {
+				baseParent = new File(".").toPath();
+			}
 			String baseFilename = baseFilename(path.getFileName().toString());
+			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
 			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
 			Data data = dataLoader.load(path.toString(), parameters);
 			if (parameters.title == null) {

@@ -23,7 +23,12 @@ public class Parameters implements Cloneable {
 	public String yAxisLabel;
 	@Option(name = "z-axis")
 	public String zAxisLabel;
-	
+
+	@Option(name = "x-axis-column")
+	public Integer xAxisColumn;
+	@Option(name = "y-axis-column")
+	public Integer yAxisColumn;
+
 	public Boolean crowdedLegend;
 	
 	@Option(name = "scale-min-value")

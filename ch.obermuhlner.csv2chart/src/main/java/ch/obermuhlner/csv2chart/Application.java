@@ -112,6 +112,18 @@ public class Application {
 				1, (args, parameters) -> {
 			parameters.zAxisLabel = args.get(0);
 		});
+		argumentHandler.addOption("x-axis-column",
+				"numeric",
+				"Index of the column used as x-axis.",
+				1, (args, parameters) -> {
+			parameters.xAxisColumn = Integer.parseInt(args.get(0));
+		});
+		argumentHandler.addOption("y-axis-column",
+				"numeric",
+				"Index of the column used as y-axis.",
+				1, (args, parameters) -> {
+			parameters.yAxisColumn = Integer.parseInt(args.get(0));
+		});
 		argumentHandler.addOption("scale-min-value",
 				"numeric",
 				"Minimum value of the color scale.",

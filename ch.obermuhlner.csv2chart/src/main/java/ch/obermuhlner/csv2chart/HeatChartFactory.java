@@ -39,7 +39,11 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 		PaintScale paintScale;
 		if (parameters.colorScaleMidValue == null) {
-			parameters.colorScaleMidValue = 0.0;
+			if (parameters.colorScaleMidColor != null && parameters.colorScaleMinValue >= 0) {
+				parameters.colorScaleMidValue = (parameters.colorScaleMaxValue - parameters.colorScaleMinValue) / 2 + parameters.colorScaleMinValue;
+			} else {
+				parameters.colorScaleMidValue = 0.0;
+			}
 		}
 		
 		if (parameters.colorScaleMinColor == null) {

@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 
 public class Parameters implements Cloneable {
 
+	public String outDir = null;
+	
 	public String outPrefix = "";
 	public String outPostfix = "";
 	

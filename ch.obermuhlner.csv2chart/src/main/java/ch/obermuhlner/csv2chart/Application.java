@@ -49,6 +49,12 @@ public class Application {
 				1, (args, parameters) -> {
 			loadProperties(new File(args.get(0)), parameters);
 		});
+		argumentHandler.addOption("out-dir",
+				"directory",
+				"Output directory.",
+				1, (args, parameters) -> {
+			parameters.outDir= args.get(0);
+		});
 		argumentHandler.addOption("out-prefix",
 				"fileprefix",
 				"Prefix for output chart files",
@@ -210,8 +216,12 @@ public class Application {
 			JFreeChart chart = chartFactory.createChart(data, parameters);
 			modifyTheme(chart, parameters);
 			
-			String outBaseFilename = parameters.outPrefix + baseFilename + parameters.outPostfix;
-			saveChartImage(chart, outBaseFilename, parameters.width, parameters.height);
+			if (parameters.outDir == null) {
+				parameters.outDir = ".";
+			}
+			String outFilename = parameters.outPrefix + baseFilename + parameters.outPostfix + ".png";
+			File outFile = Paths.get(parameters.outDir).resolve(outFilename).toFile();
+			saveChartImage(chart, outFile, parameters.width, parameters.height);
 		}		
 	}
 	
@@ -382,10 +392,9 @@ public class Application {
 		return result;
 	}
 
-	private static void saveChartImage(JFreeChart chart, String baseFilename, int imageWidth, int imageHeight) {
+	private static void saveChartImage(JFreeChart chart, File outputFile, int imageWidth, int imageHeight) {
 		try {
-			String filename = baseFilename + ".png";
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(filename));
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
 			ChartUtilities.writeChartAsPNG(out, chart, imageWidth, imageHeight);
 			out.close();
 		} catch (IOException e) {

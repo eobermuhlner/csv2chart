@@ -1,7 +1,9 @@
 package ch.obermuhlner.csv2chart;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -50,10 +52,28 @@ public class ApplicationTest {
 		assertEquals("width", expectedImage.getWidth(), actualImage.getWidth());
 		assertEquals("height", expectedImage.getHeight(), actualImage.getHeight());
 		
+		BufferedImage diffImage = new BufferedImage(actualImage.getWidth(), actualImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+		
+		int diffCount = 0;
 		for (int y = 0; y < expectedImage.getHeight(); y++) {
 			for (int x = 0; x < expectedImage.getWidth(); x++) {
-				assertEquals("pixel(" + x + "," + y + ")", expectedImage.getRGB(x, y), actualImage.getRGB(x, y)); 
+				int expectedPixel = expectedImage.getRGB(x, y);
+				int actualPixel = actualImage.getRGB(x, y);
+				
+				if (expectedPixel == actualPixel) {
+					diffImage.setRGB(x,  y,  Color.LIGHT_GRAY.getRGB());
+				} else {
+					diffImage.setRGB(x, y, actualPixel);
+					diffCount++;
+				}
 			}
+		}
+		
+		if (diffCount > 0) {
+			File parentFile = actualImageFile.getParentFile();
+			File diffFile = new File(parentFile, "DIFF_" + actualImageFile.getName());
+			ImageIO.write(diffImage, "png", diffFile);
+			fail("Difference in image: " + diffCount + " pixels: " + actualImageFile + "\nSee difference in: " + diffFile);
 		}
 	}
 

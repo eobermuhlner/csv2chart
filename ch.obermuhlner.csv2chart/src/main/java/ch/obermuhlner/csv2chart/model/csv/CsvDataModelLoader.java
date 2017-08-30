@@ -29,9 +29,7 @@ public class CsvDataModelLoader {
 		this.comment = comment;
 	}
 	
-	public DataModel load(File file) {
-		Parameters parameters = new Parameters();
-		
+	public DataModel load(File file, Parameters parameters) {
 		Matrix<String> matrix = loadMatrix(file, parameters);
 		return load(matrix, parameters);
 	}

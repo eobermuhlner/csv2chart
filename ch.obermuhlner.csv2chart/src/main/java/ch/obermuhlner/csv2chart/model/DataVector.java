@@ -27,6 +27,9 @@ public class DataVector {
 	}
 	
 	public String getHeader(int index) {
+		if (index < 0 || index >= headers.size()) {
+			return null;
+		}
 		return headers.get(index);
 	}
 	
@@ -35,6 +38,9 @@ public class DataVector {
 	}
 	
 	public String getStringValue(int index) {
+		if (index < 0 || index >= values.size()) {
+			return null;
+		}
 		return values.get(index);
 	}
 	

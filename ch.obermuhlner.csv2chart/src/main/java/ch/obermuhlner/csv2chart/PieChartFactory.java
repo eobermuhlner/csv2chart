@@ -1,20 +1,29 @@
 package ch.obermuhlner.csv2chart;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+import org.jfree.util.TableOrder;
 
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
 
-public class PieChartFactory extends AbstractChartFactory {
+public class PieChartFactory extends AbstractCategoryDatasetChartFactory {
 
 	@Override
 	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
-		PieDataset pieDatset = createPieDataset(dataModel, parameters);
-		
-		JFreeChart chart = org.jfree.chart.ChartFactory.createPieChart(parameters.title, pieDatset);
-		return chart;
+		if (dataModel.getValues().size() == 1) {
+			PieDataset pieDatset = createPieDataset(dataModel, parameters);
+			
+			JFreeChart chart = org.jfree.chart.ChartFactory.createPieChart(parameters.title, pieDatset);
+			return chart;
+		} else {
+			CategoryDataset categoryDataset = createCategoryDataset(dataModel, parameters);
+
+			JFreeChart chart = org.jfree.chart.ChartFactory.createMultiplePieChart(parameters.title, categoryDataset, TableOrder.BY_COLUMN, false, false, false);
+			return chart;
+		}
 	}
 
 	private PieDataset createPieDataset(DataModel data, Parameters parameters) {

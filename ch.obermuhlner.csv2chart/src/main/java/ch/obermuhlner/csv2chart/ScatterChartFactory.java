@@ -12,10 +12,12 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import ch.obermuhlner.csv2chart.model.DataModel;
+
 public class ScatterChartFactory extends AbstractChartFactory {
 
 	@Override
-	public JFreeChart createChart(Data data, Parameters parameters) {
+	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
 
 		XYDataset dataset = createXYDataset(data, parameters);
 

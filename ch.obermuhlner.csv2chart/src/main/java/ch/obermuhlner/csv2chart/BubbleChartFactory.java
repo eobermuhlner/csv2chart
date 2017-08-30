@@ -14,12 +14,14 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYZDataset;
 
+import ch.obermuhlner.csv2chart.model.DataModel;
+
 public class BubbleChartFactory extends AbstractChartFactory {
 
 	private boolean headerLine = true;
 
 	@Override
-	public JFreeChart createChart(Data data, Parameters parameters) {
+	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
 		XYZDataset dataset = createXYZDataset(data, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);

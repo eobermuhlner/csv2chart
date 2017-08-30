@@ -16,6 +16,15 @@ public class DataVector {
 	public int getHeaderCount() {
 		return headers.size();
 	}
+
+	public String getFirstHeader() {
+		for (int i = 0; i < headers.size(); i++) {
+			if (headers.get(i) != null) {
+				return headers.get(i);
+			}
+		}
+		return null;
+	}
 	
 	public String getHeader(int index) {
 		return headers.get(index);

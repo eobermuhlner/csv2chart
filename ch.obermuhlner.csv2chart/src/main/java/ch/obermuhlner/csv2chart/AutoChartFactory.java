@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.jfree.chart.JFreeChart;
 
+import ch.obermuhlner.csv2chart.model.DataModel;
+
 public class AutoChartFactory extends AbstractChartFactory {
 
 	@Override
-	public JFreeChart createChart(Data data, Parameters parameters) {
+	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
 		ChartFactory chartFactory = createChartFactory(data);
-		return chartFactory.createChart(data, parameters);
+		return chartFactory.createChart(data, dataModel, parameters);
 	}
 
 	private ChartFactory createChartFactory(Data data) {

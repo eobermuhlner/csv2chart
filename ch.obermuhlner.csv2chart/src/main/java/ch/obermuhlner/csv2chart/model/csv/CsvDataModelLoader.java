@@ -95,9 +95,9 @@ public class CsvDataModelLoader {
 					for (int x = 0; x < rowValues.size(); x++) {
 						matrix.set(x, y, rowValues.get(x));
 					}
+					y++;
 				}
 				
-				y++;
 				line = reader.readLine();
 			}
 		} catch (FileNotFoundException e) {

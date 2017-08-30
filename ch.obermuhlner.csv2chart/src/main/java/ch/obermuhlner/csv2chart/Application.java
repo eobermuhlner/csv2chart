@@ -38,6 +38,9 @@ import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 
+import ch.obermuhlner.csv2chart.model.DataModel;
+import ch.obermuhlner.csv2chart.model.csv.CsvDataModelLoader;
+
 public class Application {
 
 	private static final ArgumentHandler<Parameters> argumentHandler = new ArgumentHandler<>();
@@ -184,6 +187,7 @@ public class Application {
 	
 	public static void main(String[] args) {
 		CsvDataLoader dataLoader = new CsvDataLoader();
+		CsvDataModelLoader dataModelLoader = new CsvDataModelLoader();
 
 		Parameters globalParameters = new Parameters();
 
@@ -206,14 +210,15 @@ public class Application {
 				baseParent = new File(".").toPath();
 			}
 			String baseFilename = baseFilename(path.getFileName().toString());
+			parameters.title = baseFilename;
 			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
 			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
+			
 			Data data = dataLoader.load(path.toString(), parameters);
-			if (parameters.title == null) {
-				parameters.title = baseFilename;
-			}
+			DataModel dataModel = dataModelLoader.load(path.toFile(), parameters);
+			
 			ChartFactory chartFactory = createChartFactory(parameters);
-			JFreeChart chart = chartFactory.createChart(data, parameters);
+			JFreeChart chart = chartFactory.createChart(data, dataModel, parameters);
 			modifyTheme(chart, parameters);
 			
 			if (parameters.outDir == null) {

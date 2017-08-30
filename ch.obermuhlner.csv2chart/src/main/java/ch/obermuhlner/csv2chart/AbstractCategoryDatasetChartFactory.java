@@ -6,8 +6,36 @@ import java.util.List;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import ch.obermuhlner.csv2chart.model.DataModel;
+import ch.obermuhlner.csv2chart.model.DataVector;
+
 public abstract class AbstractCategoryDatasetChartFactory extends AbstractChartFactory {
 
+	protected CategoryDataset createCategoryDataset(DataModel dataModel, Parameters parameters) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		
+		DataVector categoryVector = dataModel.getCategory();
+		if (categoryVector != null) {
+			List<DataVector> values = dataModel.getValues();
+			for (DataVector valueVector : values) {
+				String valueName = valueVector.getHeader(0);
+				for (int i = 0; i < valueVector.getValueCount(); i++) {
+					String categoryName = categoryVector.getStringValue(i);
+					Double value = valueVector.getDoubleValue(i);
+					if (value != null) {
+						if (categoryVector.getValueCount() > 1) {
+							dataset.addValue(value, valueName, categoryName);
+						} else {
+							dataset.addValue(value, categoryName, valueName);
+						}
+					}
+				}
+			}
+		}
+		
+		return dataset;
+	}
+	
 	protected CategoryDataset createCategoryDataset(Data data, Parameters parameters) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

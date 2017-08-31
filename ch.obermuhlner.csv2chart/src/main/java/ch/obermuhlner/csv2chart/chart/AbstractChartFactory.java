@@ -9,8 +9,6 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import ch.obermuhlner.csv2chart.CsvDataLoader;
-import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
@@ -42,54 +40,6 @@ public abstract class AbstractChartFactory implements ChartFactory {
 		return dataset;
 	}
 	
-	protected CategoryDataset createCategoryDataset(Data data, Parameters parameters) {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		List<List<String>> rows = data.getRows();
-		int rowIndex = 0;
-		
-		List<String> columnLabels = null;
-		int headerRowCount = data.getHeaderRowCount();
-		for (int headerRowIndex = 0; headerRowIndex < headerRowCount; headerRowIndex++) {
-			List<String> headerColumns = rows.get(rowIndex++);
-			if (parameters.headerRow && headerRowIndex == 0) {
-				columnLabels = headerColumns;
-			}
-		}
-		
-		int dataRowCount = 0;
-			
-		while (rowIndex < rows.size()) {
-			dataRowCount++;
-			
-			List<String> columns = rows.get(rowIndex++);
-			
-			String rowLabel = String.valueOf(dataRowCount);
-			if (parameters.headerColumn) {
-				rowLabel = columns.get(0);
-			}
-			
-			if (columnLabels == null) {
-				columnLabels = new ArrayList<>();
-				for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-					columnLabels.add(String.valueOf(columnIndex + 1));
-				}
-			}
-
-			int startColumnIndex = parameters.headerColumn ? 1 : 0;
-			for (int columnIndex = startColumnIndex; columnIndex < columns.size(); columnIndex++) {
-				double value = CsvDataLoader.toDouble(columns.get(columnIndex));
-				if (columnLabels.size() - startColumnIndex > 1) {
-					dataset.addValue(value, columnLabels.get(columnIndex), rowLabel);
-				} else {
-					dataset.addValue(value, rowLabel, columnLabels.get(columnIndex));
-				}
-			}
-		}
-				
-		return dataset;
-	}
-
 	protected XYDataset createXYDataset(DataModel data, Parameters parameters) {
 		List<XYSeries> xySeries = new ArrayList<>();
 		

@@ -195,7 +195,6 @@ public class Application {
 	}
 	
 	public static void main(String[] args) {
-		CsvDataLoader dataLoader = new CsvDataLoader();
 		CsvDataModelLoader dataModelLoader = new CsvDataModelLoader();
 
 		Parameters globalParameters = new Parameters();
@@ -223,11 +222,10 @@ public class Application {
 			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
 			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
 			
-			Data data = dataLoader.load(path.toString(), parameters);
 			DataModel dataModel = dataModelLoader.load(path.toFile(), parameters);
 			
 			ChartFactory chartFactory = createChartFactory(parameters);
-			JFreeChart chart = chartFactory.createChart(data, dataModel, parameters);
+			JFreeChart chart = chartFactory.createChart(dataModel, parameters);
 			modifyTheme(chart, parameters);
 			
 			if (parameters.outDir == null) {

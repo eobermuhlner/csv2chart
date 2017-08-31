@@ -17,7 +17,6 @@ import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 
-import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.chart.color.ThreeColorPaintScale;
 import ch.obermuhlner.csv2chart.chart.color.TwoColorPaintScale;
@@ -32,7 +31,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 	
 
 	@Override
-	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
+	public JFreeChart createChart(DataModel dataModel, Parameters parameters) {
 		XYZDataset dataset = createXYZDataset(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);

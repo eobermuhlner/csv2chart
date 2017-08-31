@@ -14,7 +14,6 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYZDataset;
 
-import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
@@ -22,7 +21,7 @@ import ch.obermuhlner.csv2chart.model.DataVector;
 public class BubbleChartFactory extends AbstractChartFactory {
 
 	@Override
-	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
+	public JFreeChart createChart(DataModel dataModel, Parameters parameters) {
 		XYZDataset dataset = createXYZDataset(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);

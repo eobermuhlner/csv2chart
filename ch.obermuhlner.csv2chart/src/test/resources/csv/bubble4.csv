@@ -1,0 +1,7 @@
+# csv2chart.chart=bubble
+#
+Rows,X,Y,Radius
+Row1,1,1000,100
+Row2,2,2000,200
+Row3,3,3000,300
+Row4,5,5000,500

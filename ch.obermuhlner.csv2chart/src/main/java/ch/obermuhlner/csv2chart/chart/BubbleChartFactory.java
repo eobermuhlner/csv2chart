@@ -31,7 +31,7 @@ public class BubbleChartFactory extends AbstractChartFactory {
 
 		XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
 
-		XYItemRenderer renderer = new XYBubbleRenderer(XYBubbleRenderer.SCALE_ON_RANGE_AXIS);
+		XYItemRenderer renderer = new XYBubbleRenderer(XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS);
 		plot.setRenderer(renderer);
 		plot.setOrientation(PlotOrientation.HORIZONTAL);
 
@@ -51,10 +51,15 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		
 		double xMinValue = xValues.getMinDoubleValue();
 		double xMaxValue = xValues.getMaxDoubleValue();
-		double radiusMinValue = radiusValues.getMinDoubleValue();
-		double radiusMaxValue = radiusValues.getMaxDoubleValue();
 		double xRangeValue = xMaxValue - xMinValue;
-		double radiusRangeValue = radiusMaxValue - radiusMinValue;
+//
+//		double yMinValue = yValues.getMinDoubleValue();
+//		double yMaxValue = yValues.getMaxDoubleValue();
+//		double yRangeValue = yMaxValue - yMinValue;
+//
+//		double xyMinRangeValue = Math.min(xRangeValue, yRangeValue);
+//		
+		double radiusMaxValue = radiusValues.getMaxDoubleValue();
 		
 		Map<String, Values> mapSeriesToValues = new HashMap<>();
 
@@ -62,17 +67,17 @@ public class BubbleChartFactory extends AbstractChartFactory {
 			String seriesName = categoryVector.getStringValue(i);
 			Values values = mapSeriesToValues.computeIfAbsent(seriesName, (key) -> new Values());
 
-			values.values1.add(xValues.getDoubleValue(i));
-			values.values2.add(yValues.getDoubleValue(i));
-			double value3 = radiusValues.getDoubleValue(i);
-			value3 = value3 / radiusRangeValue * xRangeValue;
-			value3 *= 4;
-			values.values3.add(value3);
+			values.xValues.add(xValues.getDoubleValue(i));
+			values.yValues.add(yValues.getDoubleValue(i));
+			double z = radiusValues.getDoubleValue(i);
+			z = z / radiusMaxValue * xRangeValue;
+			z = z * 0.2;
+			values.zValues.add(z);
 		}
 
 		for(String series : mapSeriesToValues.keySet()) {
 			Values values = mapSeriesToValues.get(series);
-			double[][] dataValues = { toDoubleArray(values.values1), toDoubleArray(values.values2), toDoubleArray(values.values3) }; 
+			double[][] dataValues = { toDoubleArray(values.xValues), toDoubleArray(values.yValues), toDoubleArray(values.zValues) }; 
 			dataset.addSeries(series, dataValues);
 		}
 
@@ -90,9 +95,9 @@ public class BubbleChartFactory extends AbstractChartFactory {
 	}
 
 	private static class Values {
-		List<Double> values1 = new ArrayList<>();
-		List<Double> values2 = new ArrayList<>();
-		List<Double> values3 = new ArrayList<>();
+		List<Double> xValues = new ArrayList<>();
+		List<Double> yValues = new ArrayList<>();
+		List<Double> zValues = new ArrayList<>();
 	}
 
 	private static double[] toDoubleArray(List<Double> values) {

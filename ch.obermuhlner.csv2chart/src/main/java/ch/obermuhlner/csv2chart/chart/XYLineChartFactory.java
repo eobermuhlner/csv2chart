@@ -8,56 +8,48 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import ch.obermuhlner.csv2chart.CsvDataLoader;
 import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
+import ch.obermuhlner.csv2chart.model.DataVector;
 
 public class XYLineChartFactory extends AbstractChartFactory {
 
-	private boolean headerLine = true;
-
 	@Override
 	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
-		XYDataset categoryDatset = createXYDataset(data);
+		XYDataset categoryDatset = createXYDataset(dataModel, parameters);
 
-		if (parameters.xAxisLabel == null && headerLine) {
-			parameters.xAxisLabel = data.getRows().get(0).get(0);
-		}
-		
 		JFreeChart chart = org.jfree.chart.ChartFactory.createXYLineChart(parameters.title, parameters.xAxisLabel, parameters.yAxisLabel, categoryDatset);
 		return chart;
 	}
 
-	private XYDataset createXYDataset(Data data) {
-		List<List<String>> rows = data.getRows();
-		int rowIndex = 0;
-		
+	private XYDataset createXYDataset(DataModel data, Parameters parameters) {
 		List<XYSeries> xySeries = new ArrayList<>();
-		int headerRowCount = data.getHeaderRowCount();
-		for (int headerRowIndex = 0; headerRowIndex < headerRowCount; headerRowIndex++) {
-			List<String> headerColumns = rows.get(rowIndex++);
-			if (headerLine && headerRowIndex == 0) {
-				for (int columnIndex = 1; columnIndex < headerColumns.size(); columnIndex++) {
-					xySeries.add(new XYSeries(headerColumns.get(columnIndex)));
-				}
-			}
+		
+		List<DataVector> valueVectors = data.getValues();
+
+		DataVector xValueVector = valueVectors.get(0);
+		
+		if (parameters.xAxisLabel == null) {
+			parameters.xAxisLabel = xValueVector.getFirstHeader();
 		}
 		
-		while (rowIndex < rows.size()) {
-			List<String> columns = rows.get(rowIndex++);
-			
-			if (xySeries.size() == 0) {
-				List<String> columnLabels = columns;
-				for (int columnIndex = 1; columnIndex < columnLabels.size(); columnIndex++) {
-					xySeries.add(new XYSeries(columnLabels.get(columnIndex)));
-				}
+		for (int i = 1; i < valueVectors.size(); i++) {
+			DataVector yValueVector = valueVectors.get(i);
+			String seriesName = yValueVector.getFirstHeader();
+			if (seriesName == null) {
+				seriesName = "#" + i;
 			}
-
-			double xValue = CsvDataLoader.toDouble(columns.get(0));
-			for (int columnIndex = 1; columnIndex < columns.size(); columnIndex++) {
-				double yValue = CsvDataLoader.toDouble(columns.get(columnIndex));
-				xySeries.get(columnIndex - 1).add(xValue, yValue);
+			
+			XYSeries series = new XYSeries(seriesName);
+			xySeries.add(series);
+			
+			for (int valueIndex = 0; valueIndex < yValueVector.getValueCount(); valueIndex++) {
+				Double x = xValueVector.getDoubleValue(valueIndex);
+				Double y = yValueVector.getDoubleValue(valueIndex);
+				if (x != null && y != null) {
+					series.add(x, y);
+				}
 			}
 		}
 				

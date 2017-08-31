@@ -2,6 +2,7 @@ package ch.obermuhlner.csv2chart.model;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
 public class DataVector {
 
@@ -51,6 +52,33 @@ public class DataVector {
 		}
 		
 		return Double.parseDouble(string);
+	}
+	
+	public Double getMinDoubleValue() {
+		return getAggregatedDoubleValue(Math::min);
+	}
+
+	public Double getMaxDoubleValue() {
+		return getAggregatedDoubleValue(Math::max);
+	}
+
+	public Double getSumDoubleValue() {
+		return getAggregatedDoubleValue((x, y) -> x+y);
+	}
+
+	public Double getAggregatedDoubleValue(BiFunction<Double, Double, Double> aggregator) {
+		Double aggregated = null; 
+		for (int i = 0; i < values.size(); i++) {
+			Double value = getDoubleValue(i);
+			if (value != null) {
+				if (aggregated == null) {
+					aggregated = value;
+				} else {
+					aggregated = aggregator.apply(aggregated, value);
+				}
+			}
+		}
+		return aggregated;
 	}
 
 	@Override

@@ -15,14 +15,13 @@ import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYZDataset;
 
 import ch.obermuhlner.csv2chart.model.DataModel;
+import ch.obermuhlner.csv2chart.model.DataVector;
 
 public class BubbleChartFactory extends AbstractChartFactory {
 
-	private boolean headerLine = true;
-
 	@Override
 	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
-		XYZDataset dataset = createXYZDataset(data, parameters);
+		XYZDataset dataset = createXYZDataset(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);
 		xAxis.setAutoRangeIncludesZero(false);
@@ -40,65 +39,36 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		return chart;
 	}
 
-	private XYZDataset createXYZDataset(Data data, Parameters parameters) {
-		List<List<String>> rows = data.getRows();
-		
+	private XYZDataset createXYZDataset(DataModel dataModel, Parameters parameters) {
 		DefaultXYZDataset dataset = new DefaultXYZDataset();
-		List<String> columnLabels = null;
+
+		DataVector categoryVector = dataModel.getCategory();
 		
-		int headerRowCount = data.getHeaderRowCount();
-
-		int columnIndex1 = 1;
-		int columnIndex2 = 2;
-		int columnIndex3 = 3;
-
-		double minValue1 = Double.MAX_VALUE;
-		double maxValue1 = Double.MIN_VALUE;
-		double minValue3 = Double.MAX_VALUE;
-		double maxValue3 = Double.MIN_VALUE;
-		for (int rowIndex = headerRowCount; rowIndex < rows.size(); rowIndex++) {
-			List<String> row = rows.get(rowIndex);
-			double value1 = CsvDataLoader.toDouble(row.get(columnIndex1));
-			double value3 = CsvDataLoader.toDouble(row.get(columnIndex3));
-			minValue1 = Math.min(minValue1, value1);
-			maxValue1 = Math.max(maxValue1, value1);
-			minValue3 = Math.min(minValue3, value3);
-			maxValue3 = Math.max(maxValue3, value3);
-		}
-		double rangeValue1 = maxValue1 - minValue1;
-		double rangeValue3 = maxValue3 - minValue3;
+		DataVector xValues = dataModel.getValues().get(0);
+		DataVector yValues = dataModel.getValues().get(1);
+		DataVector radiusValues = dataModel.getValues().get(2);
 		
-		int rowIndex = 0;
-
-		for (int headerRowIndex = 0; headerRowIndex < headerRowCount; headerRowIndex++) {
-			List<String> headerColumns = rows.get(rowIndex++);
-			if (headerLine && headerRowIndex == 0) {
-				columnLabels = headerColumns;
-			}
-		}
-
+		double xMinValue = xValues.getMinDoubleValue();
+		double xMaxValue = xValues.getMaxDoubleValue();
+		double radiusMinValue = radiusValues.getMinDoubleValue();
+		double radiusMaxValue = radiusValues.getMaxDoubleValue();
+		double xRangeValue = xMaxValue - xMinValue;
+		double radiusRangeValue = radiusMaxValue - radiusMinValue;
+		
 		Map<String, Values> mapSeriesToValues = new HashMap<>();
-		
-		while (rowIndex < rows.size()) {
-			List<String> columns = rows.get(rowIndex++);
-			
-			if (columnLabels == null) {
-				columnLabels = new ArrayList<>();
-				for (int columnIndex = 0; columnIndex < columns.size(); columnIndex++) {
-					columnLabels.add(String.valueOf(columnIndex + 1));
-				}
-			}
 
-			String series = columns.get(0);
-			Values values = mapSeriesToValues.computeIfAbsent(series, (key) -> new Values());
-			values.values1.add(CsvDataLoader.toDouble(columns.get(columnIndex1)));
-			values.values2.add(CsvDataLoader.toDouble(columns.get(columnIndex2)));
-			double value3 = CsvDataLoader.toDouble(columns.get(columnIndex3));
-			value3 = value3 / rangeValue3 * rangeValue1;
+		for (int i = 0; i < xValues.getValueCount(); i++) {
+			String seriesName = categoryVector.getStringValue(i);
+			Values values = mapSeriesToValues.computeIfAbsent(seriesName, (key) -> new Values());
+
+			values.values1.add(xValues.getDoubleValue(i));
+			values.values2.add(yValues.getDoubleValue(i));
+			double value3 = radiusValues.getDoubleValue(i);
+			value3 = value3 / radiusRangeValue * xRangeValue;
 			value3 *= 4;
 			values.values3.add(value3);
 		}
-		
+
 		for(String series : mapSeriesToValues.keySet()) {
 			Values values = mapSeriesToValues.get(series);
 			double[][] dataValues = { toDoubleArray(values.values1), toDoubleArray(values.values2), toDoubleArray(values.values3) }; 
@@ -106,18 +76,18 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		}
 
 		if (parameters.xAxisLabel == null) {
-			parameters.xAxisLabel = columnLabels.get(columnIndex1);
+			parameters.xAxisLabel = xValues.getFirstHeader();
 		}
 		if (parameters.yAxisLabel == null) {
-			parameters.yAxisLabel = columnLabels.get(columnIndex2);
+			parameters.yAxisLabel = yValues.getFirstHeader();
 		}
 		if (parameters.crowdedLegend == null) {
 			parameters.crowdedLegend = mapSeriesToValues.size() > 10;
 		}
-		
+
 		return dataset;
 	}
-	
+
 	private static class Values {
 		List<Double> values1 = new ArrayList<>();
 		List<Double> values2 = new ArrayList<>();

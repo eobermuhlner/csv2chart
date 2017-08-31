@@ -17,12 +17,12 @@ import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 
-import ch.obermuhlner.csv2chart.CsvDataLoader;
 import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.chart.color.ThreeColorPaintScale;
 import ch.obermuhlner.csv2chart.chart.color.TwoColorPaintScale;
 import ch.obermuhlner.csv2chart.model.DataModel;
+import ch.obermuhlner.csv2chart.model.DataVector;
 
 public class HeatChartFactory extends AbstractChartFactory {
 
@@ -33,7 +33,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {
-		XYZDataset dataset = createXYZDataset(data, parameters);
+		XYZDataset dataset = createXYZDataset(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);
 		xAxis.setAutoRangeIncludesZero(false);
@@ -118,45 +118,38 @@ public class HeatChartFactory extends AbstractChartFactory {
 		return chart;
 	}
 
-	private XYZDataset createXYZDataset(Data data, Parameters parameters) {
-		List<List<String>> rows = data.getRows();
-		
+	private XYZDataset createXYZDataset(DataModel data, Parameters parameters) {
 		DefaultXYZDataset dataset = new DefaultXYZDataset();
 		
-		int headerColumnCount = parameters.headerColumn ? 1 : 0;
+		List<DataVector> valuesVector = data.getValues();
 		
-		int headerRowCount = data.getHeaderRowCount();
-		if (headerRowCount == 0 && parameters.headerRow) {
-			headerRowCount = 1;
-		}
-
-		double[] columnHeaders = new double[rows.get(0).size() - headerColumnCount]; 
-		if (headerRowCount > 0) {
-			List<String> row = rows.get(0);
-			for (int columnIndex = headerColumnCount; columnIndex < row.size(); columnIndex++) {
-				double value = CsvDataLoader.toDouble(row.get(columnIndex));
-				columnHeaders[columnIndex - headerColumnCount] = value;
-			}			
+		boolean useXAxisValues = parameters.headerColumn;
+		boolean useYAxisValues = parameters.headerRow;
+		
+		double[] xAxisValues = new double[valuesVector.size() - 1]; 
+		if (useXAxisValues) {
+			for (int i = 0; i < xAxisValues.length; i++) {
+				xAxisValues[i] = valuesVector.get(i + 1).getDoubleValue(0);
+			}
 		} else {
-			for (int i = 0; i < columnHeaders.length; i++) {
-				columnHeaders[i] = i;
+			for (int i = 0; i < xAxisValues.length; i++) {
+				xAxisValues[i] = i;
 			}
 		}
 		
-		double[] rowHeaders = new double[rows.size() - headerRowCount];
-		if (headerColumnCount > 0) {
-			for (int rowIndex = headerRowCount; rowIndex < rows.size(); rowIndex++) {
-				List<String> row = rows.get(rowIndex);
-				double value = CsvDataLoader.toDouble(row.get(0));
-				rowHeaders[rowIndex - headerRowCount] = value;
-			}			
+		double[] yAxisValues = new double[valuesVector.get(0).getValueCount() - 1];
+		if (useYAxisValues) {
+			DataVector yAxisVector = valuesVector.get(0);
+			for (int i = 0; i < yAxisValues.length; i++) {
+				yAxisValues[i] = yAxisVector.getDoubleValue(i + 1);
+			}
 		} else {
-			for (int i = 0; i < rowHeaders.length; i++) {
-				rowHeaders[i] = i;
+			for (int i = 0; i < yAxisValues.length; i++) {
+				yAxisValues[i] = i;
 			}
 		}
 		
-		int n = rowHeaders.length * columnHeaders.length;
+		int n = xAxisValues.length * yAxisValues.length;
 		double[] xValues = new double[n];
 		double[] yValues = new double[n];
 		double[] zValues = new double[n];
@@ -165,13 +158,12 @@ public class HeatChartFactory extends AbstractChartFactory {
 		double maxValue = -Double.MAX_VALUE;
 		
 		int index = 0;
-		for (int rowIndex = 0; rowIndex < rowHeaders.length; rowIndex++) {
-			List<String> row = rows.get(rowIndex + headerRowCount);
-			for (int columnIndex = 0; columnIndex < columnHeaders.length; columnIndex++) {
-				double value = CsvDataLoader.toDouble(row.get(columnIndex + headerColumnCount));
+		for (int xIndex = 0; xIndex < xAxisValues.length; xIndex++) {
+			for (int yIndex = 0; yIndex < yAxisValues.length; yIndex++) {
+				double value = valuesVector.get(xIndex + 1).getDoubleValue(yIndex + 1); 
 				
-				xValues[index] = rowHeaders[rowIndex];
-				yValues[index] = columnHeaders[columnIndex];
+				xValues[index] = xAxisValues[xIndex];
+				yValues[index] = yAxisValues[yIndex];
 				zValues[index] = value;
 				
 				minValue = Math.min(minValue, value);
@@ -181,7 +173,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 			}
 		}
 		
-		dataset.addSeries("series", new double[][] { xValues, yValues, zValues });
+		dataset.addSeries("series", new double[][] { yValues, xValues, zValues });
 		
 		if (parameters.colorScaleMinValue == null) {
 			parameters.colorScaleMinValue = minValue;

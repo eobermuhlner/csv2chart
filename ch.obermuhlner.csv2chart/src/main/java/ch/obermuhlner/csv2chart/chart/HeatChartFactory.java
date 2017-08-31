@@ -2,7 +2,6 @@ package ch.obermuhlner.csv2chart.chart;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.List;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisLocation;
@@ -12,7 +11,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.PaintScale;
 import org.jfree.chart.renderer.xy.XYBlockRenderer;
 import org.jfree.chart.title.PaintScaleLegend;
-import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
@@ -21,7 +19,6 @@ import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.chart.color.ThreeColorPaintScale;
 import ch.obermuhlner.csv2chart.chart.color.TwoColorPaintScale;
 import ch.obermuhlner.csv2chart.model.DataModel;
-import ch.obermuhlner.csv2chart.model.DataVector;
 
 public class HeatChartFactory extends AbstractChartFactory {
 
@@ -32,7 +29,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(DataModel dataModel, Parameters parameters) {
-		XYZDataset dataset = createXYZDataset(dataModel, parameters);
+		XYZDataset dataset = createXYZDatasetFromMatrix(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);
 		xAxis.setAutoRangeIncludesZero(false);
@@ -115,72 +112,5 @@ public class HeatChartFactory extends AbstractChartFactory {
 		}
 		
 		return chart;
-	}
-
-	private XYZDataset createXYZDataset(DataModel data, Parameters parameters) {
-		DefaultXYZDataset dataset = new DefaultXYZDataset();
-		
-		List<DataVector> valuesVector = data.getValues();
-		
-		boolean useXAxisValues = parameters.headerColumn;
-		boolean useYAxisValues = parameters.headerRow;
-		
-		double[] xAxisValues = new double[valuesVector.size() - 1]; 
-		if (useXAxisValues) {
-			for (int i = 0; i < xAxisValues.length; i++) {
-				xAxisValues[i] = valuesVector.get(i + 1).getDoubleValue(0);
-			}
-		} else {
-			for (int i = 0; i < xAxisValues.length; i++) {
-				xAxisValues[i] = i;
-			}
-		}
-		
-		double[] yAxisValues = new double[valuesVector.get(0).getValueCount() - 1];
-		if (useYAxisValues) {
-			DataVector yAxisVector = valuesVector.get(0);
-			for (int i = 0; i < yAxisValues.length; i++) {
-				yAxisValues[i] = yAxisVector.getDoubleValue(i + 1);
-			}
-		} else {
-			for (int i = 0; i < yAxisValues.length; i++) {
-				yAxisValues[i] = i;
-			}
-		}
-		
-		int n = xAxisValues.length * yAxisValues.length;
-		double[] xValues = new double[n];
-		double[] yValues = new double[n];
-		double[] zValues = new double[n];
-		
-		double minValue = Double.MAX_VALUE;
-		double maxValue = -Double.MAX_VALUE;
-		
-		int index = 0;
-		for (int xIndex = 0; xIndex < xAxisValues.length; xIndex++) {
-			for (int yIndex = 0; yIndex < yAxisValues.length; yIndex++) {
-				double value = valuesVector.get(xIndex + 1).getDoubleValue(yIndex + 1); 
-				
-				xValues[index] = xAxisValues[xIndex];
-				yValues[index] = yAxisValues[yIndex];
-				zValues[index] = value;
-				
-				minValue = Math.min(minValue, value);
-				maxValue = Math.max(maxValue, value);
-				
-				index++;
-			}
-		}
-		
-		dataset.addSeries("series", new double[][] { yValues, xValues, zValues });
-		
-		if (parameters.colorScaleMinValue == null) {
-			parameters.colorScaleMinValue = minValue;
-		}
-		if (parameters.colorScaleMaxValue == null) {
-			parameters.colorScaleMaxValue = maxValue;
-		}
-
-		return dataset;
 	}
 }

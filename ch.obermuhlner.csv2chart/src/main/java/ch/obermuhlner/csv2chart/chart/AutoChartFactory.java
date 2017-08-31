@@ -20,7 +20,7 @@ public class AutoChartFactory extends AbstractChartFactory {
 			return new XYLineChartFactory();
 		}
 
-		return new LineChartFactory();
+		return new BarChartFactory();
 	}
 
 }

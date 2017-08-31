@@ -1,4 +1,4 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,6 +17,11 @@ import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 
+import ch.obermuhlner.csv2chart.CsvDataLoader;
+import ch.obermuhlner.csv2chart.Data;
+import ch.obermuhlner.csv2chart.Parameters;
+import ch.obermuhlner.csv2chart.chart.color.ThreeColorPaintScale;
+import ch.obermuhlner.csv2chart.chart.color.TwoColorPaintScale;
 import ch.obermuhlner.csv2chart.model.DataModel;
 
 public class HeatChartFactory extends AbstractChartFactory {

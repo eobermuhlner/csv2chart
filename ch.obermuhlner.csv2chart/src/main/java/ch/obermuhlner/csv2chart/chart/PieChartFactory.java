@@ -1,4 +1,4 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
@@ -6,6 +6,9 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.TableOrder;
 
+import ch.obermuhlner.csv2chart.AbstractCategoryDatasetChartFactory;
+import ch.obermuhlner.csv2chart.Data;
+import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
 

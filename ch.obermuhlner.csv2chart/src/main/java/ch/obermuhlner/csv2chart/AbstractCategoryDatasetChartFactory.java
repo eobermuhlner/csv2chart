@@ -6,6 +6,7 @@ import java.util.List;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import ch.obermuhlner.csv2chart.chart.AbstractChartFactory;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
 

@@ -1,4 +1,4 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart.color;
 
 import java.awt.Color;
 

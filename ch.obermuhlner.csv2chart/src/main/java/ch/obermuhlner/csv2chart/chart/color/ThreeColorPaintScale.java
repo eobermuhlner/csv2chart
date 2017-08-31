@@ -1,22 +1,26 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart.color;
 
 import java.awt.Color;
 import java.awt.Paint;
 
 import org.jfree.chart.renderer.PaintScale;
 
-public class TwoColorPaintScale implements PaintScale {
+public class ThreeColorPaintScale implements PaintScale {
 
 	private double lowerBound;
+	private double midPoint;
 	private double upperBound;
 	private Color lowerColor;
+	private Color midColor;
 	private Color upperColor;
 	private Color defaultColor;
 
-	public TwoColorPaintScale(double lowerBound, double upperBound, Color lowerColor, Color upperColor, Color defaultColor) {
+	public ThreeColorPaintScale(double lowerBound, double midPoint, double upperBound, Color lowerColor, Color midColor, Color upperColor, Color defaultColor) {
 		this.lowerBound = lowerBound;
+		this.midPoint = midPoint;
 		this.upperBound = upperBound;
 		this.lowerColor = lowerColor;
+		this.midColor = midColor;
 		this.upperColor = upperColor;
 		this.defaultColor = defaultColor;
 	}
@@ -37,6 +41,10 @@ public class TwoColorPaintScale implements PaintScale {
 			return defaultColor;
 		}
 		
-		return ColorUtil.interpolateColor(value, lowerBound, upperBound, lowerColor, upperColor);
+		if (value < midPoint) {
+			return ColorUtil.interpolateColor(value, lowerBound, midPoint, lowerColor, midColor);
+		}
+		
+		return ColorUtil.interpolateColor(value, midPoint, upperBound, midColor, upperColor);
 	}
 }

@@ -1,4 +1,4 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,9 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import ch.obermuhlner.csv2chart.CsvDataLoader;
+import ch.obermuhlner.csv2chart.Data;
+import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 
 public class XYLineChartFactory extends AbstractChartFactory {

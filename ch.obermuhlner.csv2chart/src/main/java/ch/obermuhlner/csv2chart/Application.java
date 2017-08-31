@@ -38,6 +38,15 @@ import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.RectangleInsets;
 
+import ch.obermuhlner.csv2chart.chart.AutoChartFactory;
+import ch.obermuhlner.csv2chart.chart.BarChartFactory;
+import ch.obermuhlner.csv2chart.chart.BubbleChartFactory;
+import ch.obermuhlner.csv2chart.chart.ChartFactory;
+import ch.obermuhlner.csv2chart.chart.HeatChartFactory;
+import ch.obermuhlner.csv2chart.chart.LineChartFactory;
+import ch.obermuhlner.csv2chart.chart.PieChartFactory;
+import ch.obermuhlner.csv2chart.chart.ScatterChartFactory;
+import ch.obermuhlner.csv2chart.chart.XYLineChartFactory;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.csv.CsvDataModelLoader;
 

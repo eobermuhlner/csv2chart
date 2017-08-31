@@ -1,9 +1,12 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart;
 
 import java.util.List;
 
 import org.jfree.chart.JFreeChart;
 
+import ch.obermuhlner.csv2chart.CsvDataLoader;
+import ch.obermuhlner.csv2chart.Data;
+import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 
 public class AutoChartFactory extends AbstractChartFactory {

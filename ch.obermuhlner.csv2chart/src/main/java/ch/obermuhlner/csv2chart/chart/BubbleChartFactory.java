@@ -1,4 +1,4 @@
-package ch.obermuhlner.csv2chart;
+package ch.obermuhlner.csv2chart.chart;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +14,8 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYZDataset;
 
+import ch.obermuhlner.csv2chart.Data;
+import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
 

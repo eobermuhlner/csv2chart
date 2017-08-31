@@ -52,13 +52,7 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		double xMinValue = xValues.getMinDoubleValue();
 		double xMaxValue = xValues.getMaxDoubleValue();
 		double xRangeValue = xMaxValue - xMinValue;
-//
-//		double yMinValue = yValues.getMinDoubleValue();
-//		double yMaxValue = yValues.getMaxDoubleValue();
-//		double yRangeValue = yMaxValue - yMinValue;
-//
-//		double xyMinRangeValue = Math.min(xRangeValue, yRangeValue);
-//		
+
 		double radiusMaxValue = radiusValues.getMaxDoubleValue();
 		
 		Map<String, Values> mapSeriesToValues = new HashMap<>();

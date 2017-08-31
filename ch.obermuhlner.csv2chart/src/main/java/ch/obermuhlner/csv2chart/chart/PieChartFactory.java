@@ -17,7 +17,7 @@ public class PieChartFactory extends AbstractChartFactory {
 		if (dataModel.getValues().size() == 1) {
 			PieDataset pieDatset = createPieDataset(dataModel, parameters);
 			
-			JFreeChart chart = org.jfree.chart.ChartFactory.createPieChart(parameters.title, pieDatset);
+			JFreeChart chart = org.jfree.chart.ChartFactory.createPieChart(parameters.title, pieDatset, false, false, false);
 			return chart;
 		} else {
 			CategoryDataset categoryDataset = createCategoryDataset(dataModel, parameters);

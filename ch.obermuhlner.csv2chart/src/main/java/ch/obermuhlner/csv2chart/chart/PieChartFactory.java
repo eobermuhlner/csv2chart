@@ -6,13 +6,12 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.TableOrder;
 
-import ch.obermuhlner.csv2chart.AbstractCategoryDatasetChartFactory;
 import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.DataVector;
 
-public class PieChartFactory extends AbstractCategoryDatasetChartFactory {
+public class PieChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {

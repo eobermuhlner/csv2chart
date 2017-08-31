@@ -3,12 +3,11 @@ package ch.obermuhlner.csv2chart.chart;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 
-import ch.obermuhlner.csv2chart.AbstractCategoryDatasetChartFactory;
 import ch.obermuhlner.csv2chart.Data;
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
 
-public class BarChartFactory extends AbstractCategoryDatasetChartFactory {
+public class BarChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(Data data, DataModel dataModel, Parameters parameters) {

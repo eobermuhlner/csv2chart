@@ -24,6 +24,7 @@ import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.BubbleXYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.chart.plot.PieLabelLinkStyle;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.Plot;
@@ -51,6 +52,9 @@ import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.csv.CsvDataModelLoader;
 
 public class Application {
+
+	private static Color gray = Color.decode("#666666");
+	private static Color lightGray = Color.decode("#C0C0C0");
 
 	private static final ArgumentHandler<Parameters> argumentHandler = new ArgumentHandler<>();
 	
@@ -309,9 +313,6 @@ public class Application {
 		
 		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
 
-		Color gray = Color.decode("#666666");
-		Color lightGray = Color.decode("#C0C0C0");
-		
 		chart.setTextAntiAlias(true);
 		chart.setAntiAlias(true);
 
@@ -379,20 +380,27 @@ public class Application {
 			}
 		} else if (plot instanceof PiePlot) {
 			PiePlot piePlot = (PiePlot) plot;
-			piePlot.setOutlineVisible(false);
-			piePlot.setShadowPaint(null);
-			
-			piePlot.setLabelBackgroundPaint(null);
-			piePlot.setLabelShadowPaint(null);
-			piePlot.setLabelOutlinePaint(null);
-			piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);
-			piePlot.setLabelLinkPaint(gray);
+			setPiePlotStyle(piePlot);
+		} else if (plot instanceof MultiplePiePlot) {
+			MultiplePiePlot multiplePiePlot = (MultiplePiePlot) plot;
+			setPiePlotStyle((PiePlot) multiplePiePlot.getPieChart().getPlot());
 		}
 	
 		LegendTitle legend = chart.getLegend();
 		if (legend != null) {
 			legend.setFrame(BlockBorder.NONE);
 		}
+	}
+
+	private static void setPiePlotStyle(PiePlot piePlot) {
+		piePlot.setOutlineVisible(false);
+		piePlot.setShadowPaint(null);
+		
+		piePlot.setLabelBackgroundPaint(null);
+		piePlot.setLabelShadowPaint(null);
+		piePlot.setLabelOutlinePaint(null);
+		piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);
+		piePlot.setLabelLinkPaint(gray);
 	}
 
 	private static String baseFilename(String filename) {

@@ -80,6 +80,19 @@ public class DataVector {
 		}
 		return aggregated;
 	}
+	
+	public double[] toDoubleArray() {
+		double[] array = new double[getValueCount()];
+		
+		for (int i = 0; i < array.length; i++) {
+			Double value = getDoubleValue(i);
+			if (value != null) {
+				array[i] = value; 
+			}
+		}
+		
+		return array;
+	}
 
 	@Override
 	public int hashCode() {

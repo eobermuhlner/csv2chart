@@ -29,7 +29,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(DataModel dataModel, Parameters parameters) {
-		XYZDataset dataset = createXYZDatasetFromMatrix(dataModel, parameters);
+		XYZDataset dataset = createXYZDataset(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);
 		xAxis.setAutoRangeIncludesZero(false);

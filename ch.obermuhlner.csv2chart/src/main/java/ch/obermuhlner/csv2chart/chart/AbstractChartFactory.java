@@ -59,7 +59,11 @@ public abstract class AbstractChartFactory implements ChartFactory {
 			if (seriesName == null) {
 				seriesName = "#" + i;
 			}
-			
+
+			if (parameters.yAxisLabel == null) {
+				parameters.yAxisLabel = yValueVector.getFirstHeader();
+			}
+
 			XYSeries series = new XYSeries(seriesName);
 			xySeries.add(series);
 			
@@ -79,7 +83,72 @@ public abstract class AbstractChartFactory implements ChartFactory {
 		return dataset;
 	}
 
-	protected XYZDataset createXYZDatasetFromMatrix(DataModel data, Parameters parameters) {
+	protected XYZDataset createXYZDataset(DataModel data, Parameters parameters) {
+		if (data.getValues().size() > 0 && data.getValues().get(0).getHeaderCount() > 0) {
+			return createXYZDatasetFromColumns(data, parameters);
+		}
+		
+		return createXYZDatasetFromMatrix(data, parameters);
+	}
+	
+	private XYZDataset createXYZDatasetFromColumns(DataModel data, Parameters parameters) {
+		DefaultXYZDataset dataset = new DefaultXYZDataset();
+
+		List<DataVector> valueVectors = data.getValues();
+				
+		DataVector xVector = valueVectors.get(0);
+		DataVector yVector = valueVectors.get(1);
+		double[] xVectorArray = xVector.toDoubleArray();
+		double[] yVectorArray = yVector.toDoubleArray();
+
+		double zMinValue = Double.MAX_VALUE;
+		double zMaxValue = -Double.MAX_VALUE;
+
+		String zAxisName = null;
+		
+		for (int i = 2; i < valueVectors.size(); i++) {
+			DataVector zVector = valueVectors.get(i);
+			zMinValue = Math.min(zMinValue, zVector.getMinDoubleValue());
+			zMaxValue = Math.max(zMaxValue, zVector.getMaxDoubleValue());
+
+			String seriesName = zVector.getFirstHeader();
+			if (seriesName == null) {
+				seriesName = "#" + (i - 1);
+			}
+			if (zAxisName == null) {
+				zAxisName = seriesName;
+			}
+			
+			dataset.addSeries(seriesName, new double[][] {
+				xVectorArray,
+				yVectorArray,
+				zVector.toDoubleArray() });
+		}
+		
+		if (parameters.colorScaleMinValue == null) {
+			parameters.colorScaleMinValue = zMinValue;
+		}
+		if (parameters.colorScaleMaxValue == null) {
+			parameters.colorScaleMaxValue = zMaxValue;
+		}
+
+		if (parameters.xAxisLabel == null) {
+			parameters.xAxisLabel = xVector.getFirstHeader();
+		}
+		if (parameters.yAxisLabel == null) {
+			parameters.yAxisLabel = yVector.getFirstHeader();
+		}
+		if (parameters.zAxisLabel == null) {
+			parameters.zAxisLabel = zAxisName;
+		}
+		if (parameters.crowdedLegend == null) {
+			parameters.crowdedLegend = valueVectors.size() > 10 + 2;
+		}
+
+		return dataset;
+	}
+
+	private XYZDataset createXYZDatasetFromMatrix(DataModel data, Parameters parameters) {
 		DefaultXYZDataset dataset = new DefaultXYZDataset();
 		
 		List<DataVector> valuesVector = data.getValues();

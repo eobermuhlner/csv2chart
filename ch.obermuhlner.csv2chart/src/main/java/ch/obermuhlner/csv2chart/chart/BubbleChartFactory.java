@@ -22,7 +22,7 @@ public class BubbleChartFactory extends AbstractChartFactory {
 
 	@Override
 	public JFreeChart createChart(DataModel dataModel, Parameters parameters) {
-		XYZDataset dataset = createXYZDataset(dataModel, parameters);
+		XYZDataset dataset = createXYZDatasetFromColumnsWithRadius(dataModel, parameters);
 
 		NumberAxis xAxis = new NumberAxis(parameters.xAxisLabel);
 		xAxis.setAutoRangeIncludesZero(false);
@@ -40,7 +40,7 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		return chart;
 	}
 
-	private XYZDataset createXYZDataset(DataModel dataModel, Parameters parameters) {
+	private XYZDataset createXYZDatasetFromColumnsWithRadius(DataModel dataModel, Parameters parameters) {
 		DefaultXYZDataset dataset = new DefaultXYZDataset();
 
 		DataVector categoryVector = dataModel.getCategory();

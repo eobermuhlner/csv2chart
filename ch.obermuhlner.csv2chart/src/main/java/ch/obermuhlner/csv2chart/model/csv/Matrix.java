@@ -18,7 +18,8 @@ public class Matrix<T> {
 		map.put(new Coord(x, y), value);
 	}
 	
-	public void setRow(int y, @SuppressWarnings("unchecked") T... values) {
+	@SafeVarargs
+	public final void setRow(int y,  T... values) {
 		for (int x = 0; x < values.length; x++) {
 			set(x, y, values[x]);
 		}

@@ -9,9 +9,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -52,6 +54,7 @@ import ch.obermuhlner.csv2chart.chart.LineChartFactory;
 import ch.obermuhlner.csv2chart.chart.PieChartFactory;
 import ch.obermuhlner.csv2chart.chart.ScatterChartFactory;
 import ch.obermuhlner.csv2chart.chart.XYLineChartFactory;
+import ch.obermuhlner.csv2chart.graphics.LogGraphics2D;
 import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.csv.CsvDataModelLoader;
 
@@ -436,8 +439,17 @@ public class Application {
 			saveChartSvgImage(chart, outputFile, imageWidth, imageHeight);
 			return;
 		}
-		
-		
+
+		if (imageFormat.equals(ImageFormat.LOG)) {
+			try (Writer writer = new FileWriter(outputFile)) {
+				LogGraphics2D graphics = new LogGraphics2D(imageWidth, imageHeight, writer);
+				chart.draw(graphics, new Rectangle(imageWidth, imageHeight));
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			return;
+		}
+
 		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
 			switch(imageFormat) {
 			case PNG:

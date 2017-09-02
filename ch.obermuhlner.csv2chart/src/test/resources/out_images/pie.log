@@ -1,0 +1,17 @@
+clip java.awt.Rectangle[x=0,y=0,width=800,height=600]
+fill java.awt.Rectangle[x=0,y=0,width=800,height=600]
+drawString 'pie' 386.5 19.09668
+fill java.awt.geom.Rectangle2D$Double 5.0 24.640625 790.0 570.359375
+clip java.awt.geom.Rectangle2D$Double[x=5.0,y=24.640625,w=790.0,h=570.359375]
+fill java.awt.geom.Arc2D$Double@5edccde8
+draw java.awt.geom.Arc2D$Double@5edccde8
+fill java.awt.geom.Arc2D$Double@579a0de8
+draw java.awt.geom.Arc2D$Double@579a0de8
+draw java.awt.geom.Line2D$Double 255.1731810443027 454.6471314556973 230.6119076541552 479.2084048458448
+draw java.awt.geom.Line2D$Double 160.4490625 479.2084048458448 230.6119076541552 479.2084048458448
+draw java.awt.geom.Line2D$Double 160.4490625 479.2084048458448 143.59138303578283 479.2084048458448
+drawString 'Row2' 109.591385 483.72598
+draw java.awt.geom.Line2D$Double 544.8268189556973 164.9934935443027 569.3880923458448 140.4322201541552
+draw java.awt.geom.Line2D$Double 639.5509375 140.4322201541552 569.3880923458448 140.4322201541552
+draw java.awt.geom.Line2D$Double 639.5509375 140.4322201541552 656.4086169642172 140.4322201541552
+drawString 'Row1' 658.4086 144.9498

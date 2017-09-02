@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class ApplicationTest {
 
-	private static final ImageFormat IMAGE_FORMAT = ImageFormat.SVG;
+	private static final ImageFormat IMAGE_FORMAT = ImageFormat.LOG;
 	
 	@Test
 	public void testReferenceCharts() throws IOException {
@@ -52,6 +52,8 @@ public class ApplicationTest {
 	private void assertImageEquals(ImageFormat imageFormat, File expectedImageFile, File actualImageFile) throws IOException {
 		if (imageFormat.equals(ImageFormat.SVG)) {
 			assertSvgImageEquals(expectedImageFile, actualImageFile);
+		} if (imageFormat.equals(ImageFormat.LOG)) {
+			assertLogImageEquals(expectedImageFile, actualImageFile);
 		} else {
 			assertBitmapImageEquals(expectedImageFile, actualImageFile);
 		}
@@ -63,7 +65,14 @@ public class ApplicationTest {
 
 		assertEquals("SVG file content: " + expectedImageFile + " != " + actualImageFile, expectedSvg, actualSvg);
 	}
-	
+
+	private void assertLogImageEquals(File expectedImageFile, File actualImageFile) throws IOException {
+		String expectedContent = new String(Files.readAllBytes(expectedImageFile.toPath()));
+		String actualContent = new String(Files.readAllBytes(actualImageFile.toPath()));
+
+		assertEquals("LOG file content: " + expectedImageFile + " != " + actualImageFile, expectedContent, actualContent);
+	}
+
 	private String cleanupSvg(String svg) {
 		// Example for random string in generated svg: 1704036023229044clip-0
 		

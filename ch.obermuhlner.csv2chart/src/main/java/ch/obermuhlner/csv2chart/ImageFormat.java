@@ -3,7 +3,8 @@ package ch.obermuhlner.csv2chart;
 public enum ImageFormat {
 	PNG("png"),
 	JPG("jpg"),
-	SVG("svg");
+	SVG("svg"),
+	LOG("log");
 	
 	private String extension;
 

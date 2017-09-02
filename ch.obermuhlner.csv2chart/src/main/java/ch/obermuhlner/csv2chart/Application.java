@@ -3,6 +3,7 @@ package ch.obermuhlner.csv2chart;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +38,9 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUnits;
+import org.jfree.graphics2d.svg.SVGUtils;
 import org.jfree.ui.RectangleInsets;
 
 import ch.obermuhlner.csv2chart.chart.AutoChartFactory;
@@ -196,6 +200,14 @@ public class Application {
 				1, (args, parameters) -> {
 			parameters.height = Integer.parseInt(args.get(0));
 		});
+		argumentHandler.addOption("format",
+				"image-format",
+				"The image file format of the generated image.\n"
+				+ "Supported: svg, png, jpg\n"
+				+ "Default: svg",
+				1, (args, parameters) -> {
+			parameters.imageFormat = ImageFormat.valueOf(args.get(0));
+		});
 	}
 	
 	public static void main(String[] args) {
@@ -232,12 +244,7 @@ public class Application {
 			JFreeChart chart = chartFactory.createChart(dataModel, parameters);
 			modifyTheme(chart, parameters);
 			
-			if (parameters.outDir == null) {
-				parameters.outDir = ".";
-			}
-			String outFilename = parameters.outPrefix + baseFilename + parameters.outPostfix + ".png";
-			File outFile = Paths.get(parameters.outDir).resolve(outFilename).toFile();
-			saveChartImage(chart, outFile, parameters.width, parameters.height);
+			saveChartImage(chart, baseFilename, parameters);
 		}		
 	}
 	
@@ -412,13 +419,50 @@ public class Application {
 		return result;
 	}
 
-	private static void saveChartImage(JFreeChart chart, File outputFile, int imageWidth, int imageHeight) {
-		try {
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
-			ChartUtilities.writeChartAsPNG(out, chart, imageWidth, imageHeight);
-			out.close();
+	private static void saveChartImage(JFreeChart chart, String baseFilename, Parameters parameters) {
+		if (parameters.outDir == null) {
+			parameters.outDir = ".";
+		}
+		
+		String outFilename = parameters.outPrefix + baseFilename + parameters.outPostfix + "." + parameters.imageFormat.getExtension();
+		File outFile = Paths.get(parameters.outDir).resolve(outFilename).toFile();
+		
+		saveChartImage(chart, outFile, parameters.width, parameters.height, parameters.imageFormat);
+	}
+	
+
+	private static void saveChartImage(JFreeChart chart, File outputFile, int imageWidth, int imageHeight, ImageFormat imageFormat) {
+		if (imageFormat.equals(ImageFormat.SVG)) {
+			saveChartSvgImage(chart, outputFile, imageWidth, imageHeight);
+			return;
+		}
+		
+		
+		try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+			switch(imageFormat) {
+			case PNG:
+				ChartUtilities.writeChartAsPNG(out, chart, imageWidth, imageHeight);
+				break;
+			case JPG:
+				ChartUtilities.writeChartAsJPEG(out, chart, imageWidth, imageHeight);
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported image format: " + imageFormat);
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void saveChartSvgImage(JFreeChart chart, File outputFile, int imageWidth, int imageHeight) {
+		SVGGraphics2D graphics = new SVGGraphics2D(imageWidth, imageHeight, SVGUnits.PX);
+		Rectangle area = new Rectangle(imageWidth, imageHeight);
+		chart.draw(graphics, area);
+		
+		try {
+			SVGUtils.writeToSVG(outputFile, graphics.getSVGElement());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

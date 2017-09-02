@@ -51,6 +51,9 @@ public class Parameters implements Cloneable {
 
 	public int width = 800;
 	public int height = 600;
+	
+	@Option(name = "format")
+	ImageFormat imageFormat = ImageFormat.SVG;
 
 	public void setParameter(String name, Object value) {
 		try {
@@ -64,6 +67,8 @@ public class Parameters implements Cloneable {
 				value = new Color(Integer.parseInt(String.valueOf(value), 16));
 			} else if (fieldType == Double.class || fieldType == double.class) {
 				value = Double.parseDouble(String.valueOf(value));
+			} else if (fieldType == ImageFormat.class) {
+				value = ImageFormat.valueOf(String.valueOf(value).toUpperCase());
 			}
 			field.set(this, value);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

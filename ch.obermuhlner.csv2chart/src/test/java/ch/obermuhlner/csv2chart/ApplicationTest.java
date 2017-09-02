@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -67,10 +68,21 @@ public class ApplicationTest {
 	}
 
 	private void assertLogImageEquals(File expectedImageFile, File actualImageFile) throws IOException {
-		String expectedContent = new String(Files.readAllBytes(expectedImageFile.toPath()));
-		String actualContent = new String(Files.readAllBytes(actualImageFile.toPath()));
+		List<String> expectedContent = Files.readAllLines(expectedImageFile.toPath());
+		List<String> actualContent = Files.readAllLines(actualImageFile.toPath());
 
-		assertEquals("LOG file content: " + expectedImageFile + " != " + actualImageFile, expectedContent, actualContent);
+		assertAllLines("File content: " + expectedImageFile + " != " + actualImageFile, expectedContent, actualContent);
+	}
+
+	private void assertAllLines(String message, List<String> expectedContent, List<String> actualContent) {
+		int n = Math.min(expectedContent.size(), actualContent.size());
+		
+		for (int i = 0; i < n; i++) {
+			assertEquals(message + " Line: " + (i+1), expectedContent.get(i), actualContent.get(i));
+		}
+
+		assertEquals("Expected file too long" , n, expectedContent.size());
+		assertEquals("Actual file too long" , n, actualContent.size());
 	}
 
 	private String cleanupSvg(String svg) {

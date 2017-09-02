@@ -9,11 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.jfree.graphics2d.svg.SVGUtils;
 import org.junit.Test;
 
 public class ApplicationTest {
@@ -60,11 +58,20 @@ public class ApplicationTest {
 	}
 
 	private void assertSvgImageEquals(File expectedImageFile, File actualImageFile) throws IOException {
-		String expectedString = new String(Files.readAllBytes(expectedImageFile.toPath()));
-		String actualString = new String(Files.readAllBytes(expectedImageFile.toPath()));
-		assertEquals("SVG file content", expectedString, actualString);
+		String expectedSvg = cleanupSvg(new String(Files.readAllBytes(expectedImageFile.toPath())));
+		String actualSvg = cleanupSvg(new String(Files.readAllBytes(actualImageFile.toPath())));
+
+		assertEquals("SVG file content: " + expectedImageFile + " != " + actualImageFile, expectedSvg, actualSvg);
 	}
 	
+	private String cleanupSvg(String svg) {
+		// Example for random string in generated svg: 1704036023229044clip-0
+		
+		svg = svg.replaceAll("[0-9]*clip-[0-9]*", "randomclip");
+		
+		return svg;
+	}
+
 	private void assertBitmapImageEquals(File expectedImageFile, File actualImageFile) throws IOException {
 		BufferedImage expectedImage = ImageIO.read(expectedImageFile);
 		BufferedImage actualImage = ImageIO.read(actualImageFile);

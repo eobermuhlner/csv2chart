@@ -1,163 +1,163 @@
-clip java.awt.Rectangle[x=0,y=0,width=800,height=600]
-fill java.awt.Rectangle[x=0,y=0,width=800,height=600]
-drawString 'bubble4' 365.0 19.09668
-fill java.awt.geom.Rectangle2D$Double 300.0 577.90625 200.0 21.09375
-fill java.awt.geom.Path2D$Double cubicto:[311.0, 590.6623, 309.20914, 592.4531, 307.0, 592.4531] cubicto:[304.79086, 592.4531, 303.0, 590.6623, 303.0, 588.4531] cubicto:[303.0, 586.24396, 304.79086, 584.4531, 307.0, 584.4531] cubicto:[309.20914, 584.4531, 311.0, 586.24396, 311.0, 588.4531] close:[309.20914, 584.4531, 311.0, 586.24396, 311.0, 588.4531] moveto:[0.0, 0.0, 311.0, 586.24396, 311.0, 588.4531]
-draw java.awt.geom.Path2D$Double cubicto:[311.0, 590.6623, 309.20914, 592.4531, 307.0, 592.4531] cubicto:[304.79086, 592.4531, 303.0, 590.6623, 303.0, 588.4531] cubicto:[303.0, 586.24396, 304.79086, 584.4531, 307.0, 584.4531] cubicto:[309.20914, 584.4531, 311.0, 586.24396, 311.0, 588.4531] close:[309.20914, 584.4531, 311.0, 586.24396, 311.0, 588.4531] moveto:[0.0, 0.0, 311.0, 586.24396, 311.0, 588.4531]
-drawString 'Row1' 315.0 592.9707
-fill java.awt.geom.Path2D$Double cubicto:[361.0, 590.6623, 359.20914, 592.4531, 357.0, 592.4531] cubicto:[354.79086, 592.4531, 353.0, 590.6623, 353.0, 588.4531] cubicto:[353.0, 586.24396, 354.79086, 584.4531, 357.0, 584.4531] cubicto:[359.20914, 584.4531, 361.0, 586.24396, 361.0, 588.4531] close:[359.20914, 584.4531, 361.0, 586.24396, 361.0, 588.4531] moveto:[0.0, 0.0, 361.0, 586.24396, 361.0, 588.4531]
-draw java.awt.geom.Path2D$Double cubicto:[361.0, 590.6623, 359.20914, 592.4531, 357.0, 592.4531] cubicto:[354.79086, 592.4531, 353.0, 590.6623, 353.0, 588.4531] cubicto:[353.0, 586.24396, 354.79086, 584.4531, 357.0, 584.4531] cubicto:[359.20914, 584.4531, 361.0, 586.24396, 361.0, 588.4531] close:[359.20914, 584.4531, 361.0, 586.24396, 361.0, 588.4531] moveto:[0.0, 0.0, 361.0, 586.24396, 361.0, 588.4531]
-drawString 'Row4' 365.0 592.9707
-fill java.awt.geom.Path2D$Double cubicto:[411.0, 590.6623, 409.20914, 592.4531, 407.0, 592.4531] cubicto:[404.79086, 592.4531, 403.0, 590.6623, 403.0, 588.4531] cubicto:[403.0, 586.24396, 404.79086, 584.4531, 407.0, 584.4531] cubicto:[409.20914, 584.4531, 411.0, 586.24396, 411.0, 588.4531] close:[409.20914, 584.4531, 411.0, 586.24396, 411.0, 588.4531] moveto:[0.0, 0.0, 411.0, 586.24396, 411.0, 588.4531]
-draw java.awt.geom.Path2D$Double cubicto:[411.0, 590.6623, 409.20914, 592.4531, 407.0, 592.4531] cubicto:[404.79086, 592.4531, 403.0, 590.6623, 403.0, 588.4531] cubicto:[403.0, 586.24396, 404.79086, 584.4531, 407.0, 584.4531] cubicto:[409.20914, 584.4531, 411.0, 586.24396, 411.0, 588.4531] close:[409.20914, 584.4531, 411.0, 586.24396, 411.0, 588.4531] moveto:[0.0, 0.0, 411.0, 586.24396, 411.0, 588.4531]
-drawString 'Row2' 415.0 592.9707
-fill java.awt.geom.Path2D$Double cubicto:[461.0, 590.6623, 459.20914, 592.4531, 457.0, 592.4531] cubicto:[454.79086, 592.4531, 453.0, 590.6623, 453.0, 588.4531] cubicto:[453.0, 586.24396, 454.79086, 584.4531, 457.0, 584.4531] cubicto:[459.20914, 584.4531, 461.0, 586.24396, 461.0, 588.4531] close:[459.20914, 584.4531, 461.0, 586.24396, 461.0, 588.4531] moveto:[0.0, 0.0, 461.0, 586.24396, 461.0, 588.4531]
-draw java.awt.geom.Path2D$Double cubicto:[461.0, 590.6623, 459.20914, 592.4531, 457.0, 592.4531] cubicto:[454.79086, 592.4531, 453.0, 590.6623, 453.0, 588.4531] cubicto:[453.0, 586.24396, 454.79086, 584.4531, 457.0, 584.4531] cubicto:[459.20914, 584.4531, 461.0, 586.24396, 461.0, 588.4531] close:[459.20914, 584.4531, 461.0, 586.24396, 461.0, 588.4531] moveto:[0.0, 0.0, 461.0, 586.24396, 461.0, 588.4531]
-drawString 'Row3' 465.0 592.9707
-fill java.awt.Rectangle[x=57,y=29,width=735,height=501]
-draw java.awt.geom.Line2D$Double 57.0 530.0 792.0 530.0
-drawString '800' 46.5 546.06445
-draw java.awt.geom.Line2D$Double 57.0 532.0 57.0 530.0
-drawString '1,000' 74.90909 546.06445
-draw java.awt.geom.Line2D$Double 90.40908813476562 532.0 90.40908813476562 530.0
-drawString '1,200' 108.318184 546.06445
-draw java.awt.geom.Line2D$Double 123.81818389892578 532.0 123.81818389892578 530.0
-drawString '1,400' 141.72728 546.06445
-draw java.awt.geom.Line2D$Double 157.22727966308594 532.0 157.22727966308594 530.0
-drawString '1,600' 175.13637 546.06445
-draw java.awt.geom.Line2D$Double 190.63636779785156 532.0 190.63636779785156 530.0
-drawString '1,800' 208.54546 546.06445
-draw java.awt.geom.Line2D$Double 224.0454559326172 532.0 224.0454559326172 530.0
-drawString '2,000' 241.95456 546.06445
-draw java.awt.geom.Line2D$Double 257.4545593261719 532.0 257.4545593261719 530.0
-drawString '2,200' 275.36365 546.06445
-draw java.awt.geom.Line2D$Double 290.8636474609375 532.0 290.8636474609375 530.0
-drawString '2,400' 308.77274 546.06445
-draw java.awt.geom.Line2D$Double 324.2727355957031 532.0 324.2727355957031 530.0
-drawString '2,600' 342.18182 546.06445
-draw java.awt.geom.Line2D$Double 357.68182373046875 532.0 357.68182373046875 530.0
-drawString '2,800' 375.5909 546.06445
-draw java.awt.geom.Line2D$Double 391.0909118652344 532.0 391.0909118652344 530.0
-drawString '3,000' 409.0 546.06445
-draw java.awt.geom.Line2D$Double 424.5 532.0 424.5 530.0
-drawString '3,200' 442.4091 546.06445
-draw java.awt.geom.Line2D$Double 457.9090881347656 532.0 457.9090881347656 530.0
-drawString '3,400' 475.81818 546.06445
-draw java.awt.geom.Line2D$Double 491.31817626953125 532.0 491.31817626953125 530.0
-drawString '3,600' 509.2273 546.06445
-draw java.awt.geom.Line2D$Double 524.727294921875 532.0 524.727294921875 530.0
-drawString '3,800' 542.63635 546.06445
-draw java.awt.geom.Line2D$Double 558.1363525390625 532.0 558.1363525390625 530.0
-drawString '4,000' 576.0455 546.06445
-draw java.awt.geom.Line2D$Double 591.5454711914062 532.0 591.5454711914062 530.0
-drawString '4,200' 609.4545 546.06445
-draw java.awt.geom.Line2D$Double 624.9545288085938 532.0 624.9545288085938 530.0
-drawString '4,400' 642.86365 546.06445
-draw java.awt.geom.Line2D$Double 658.3636474609375 532.0 658.3636474609375 530.0
-drawString '4,600' 676.2727 546.06445
-draw java.awt.geom.Line2D$Double 691.772705078125 532.0 691.772705078125 530.0
-drawString '4,800' 709.6818 546.06445
-draw java.awt.geom.Line2D$Double 725.1818237304688 532.0 725.1818237304688 530.0
-drawString '5,000' 743.0909 546.06445
-draw java.awt.geom.Line2D$Double 758.5908813476562 532.0 758.5908813476562 530.0
-drawString '5,200' 776.5 546.06445
-draw java.awt.geom.Line2D$Double 792.0 532.0 792.0 530.0
-drawString 'Y' 419.5 566.16895
-draw java.awt.geom.Line2D$Double 57.0 29.0 57.0 530.0
-drawString '0.8' 34.0 534.5176
-draw java.awt.geom.Line2D$Double 55.0 530.0 57.0 530.0
-drawString '1.0' 34.0 511.74484
-draw java.awt.geom.Line2D$Double 55.0 507.2272644042969 57.0 507.2272644042969
-drawString '1.2' 34.0 488.97214
-draw java.awt.geom.Line2D$Double 55.0 484.4545593261719 57.0 484.4545593261719
-drawString '1.4' 34.0 466.1994
-draw java.awt.geom.Line2D$Double 55.0 461.68182373046875 57.0 461.68182373046875
-drawString '1.6' 34.0 443.42667
-draw java.awt.geom.Line2D$Double 55.0 438.9090881347656 57.0 438.9090881347656
-drawString '1.8' 34.0 420.65393
-draw java.awt.geom.Line2D$Double 55.0 416.1363525390625 57.0 416.1363525390625
-drawString '2.0' 34.0 397.88123
-draw java.awt.geom.Line2D$Double 55.0 393.3636474609375 57.0 393.3636474609375
-drawString '2.2' 34.0 375.1085
-draw java.awt.geom.Line2D$Double 55.0 370.5909118652344 57.0 370.5909118652344
-drawString '2.4' 34.0 352.33575
-draw java.awt.geom.Line2D$Double 55.0 347.81817626953125 57.0 347.81817626953125
-drawString '2.6' 34.0 329.56302
-draw java.awt.geom.Line2D$Double 55.0 325.0454406738281 57.0 325.0454406738281
-drawString '2.8' 34.0 306.7903
-draw java.awt.geom.Line2D$Double 55.0 302.2727355957031 57.0 302.2727355957031
-drawString '3.0' 34.0 284.01758
-draw java.awt.geom.Line2D$Double 55.0 279.5 57.0 279.5
-drawString '3.2' 34.0 261.24484
-draw java.awt.geom.Line2D$Double 55.0 256.7272644042969 57.0 256.7272644042969
-drawString '3.4' 34.0 238.47212
-draw java.awt.geom.Line2D$Double 55.0 233.9545440673828 57.0 233.9545440673828
-drawString '3.6' 34.0 215.6994
-draw java.awt.geom.Line2D$Double 55.0 211.18182373046875 57.0 211.18182373046875
-drawString '3.8' 34.0 192.92667
-draw java.awt.geom.Line2D$Double 55.0 188.40908813476562 57.0 188.40908813476562
-drawString '4.0' 34.0 170.15395
-draw java.awt.geom.Line2D$Double 55.0 165.63636779785156 57.0 165.63636779785156
-drawString '4.2' 34.0 147.38121
-draw java.awt.geom.Line2D$Double 55.0 142.86363220214844 57.0 142.86363220214844
-drawString '4.4' 34.0 124.60849
-draw java.awt.geom.Line2D$Double 55.0 120.09091186523438 57.0 120.09091186523438
-drawString '4.6' 34.0 101.83576
-draw java.awt.geom.Line2D$Double 55.0 97.31818389892578 57.0 97.31818389892578
-drawString '4.8' 34.0 79.063034
-draw java.awt.geom.Line2D$Double 55.0 74.54545593261719 57.0 74.54545593261719
-drawString '5.0' 34.0 56.290306
-draw java.awt.geom.Line2D$Double 55.0 51.772727966308594 57.0 51.772727966308594
-drawString '5.2' 34.0 33.51758
-draw java.awt.geom.Line2D$Double 55.0 29.0 57.0 29.0
-drawString 'X' 15.6953125 284.7705
-clip java.awt.Rectangle[x=57,y=29,width=735,height=501]
-draw java.awt.geom.Line2D$Double 57.0 530.0 792.0 530.0
-draw java.awt.geom.Line2D$Double 57.0 507.22727272727275 792.0 507.22727272727275
-draw java.awt.geom.Line2D$Double 57.0 484.45454545454544 792.0 484.45454545454544
-draw java.awt.geom.Line2D$Double 57.0 461.6818181818182 792.0 461.6818181818182
-draw java.awt.geom.Line2D$Double 57.0 438.9090909090909 792.0 438.9090909090909
-draw java.awt.geom.Line2D$Double 57.0 416.1363636363636 792.0 416.1363636363636
-draw java.awt.geom.Line2D$Double 57.0 393.3636363636364 792.0 393.3636363636364
-draw java.awt.geom.Line2D$Double 57.0 370.5909090909091 792.0 370.5909090909091
-draw java.awt.geom.Line2D$Double 57.0 347.81818181818176 792.0 347.81818181818176
-draw java.awt.geom.Line2D$Double 57.0 325.04545454545456 792.0 325.04545454545456
-draw java.awt.geom.Line2D$Double 57.0 302.2727272727273 792.0 302.2727272727273
-draw java.awt.geom.Line2D$Double 57.0 279.5 792.0 279.5
-draw java.awt.geom.Line2D$Double 57.0 256.7272727272727 792.0 256.7272727272727
-draw java.awt.geom.Line2D$Double 57.0 233.95454545454544 792.0 233.95454545454544
-draw java.awt.geom.Line2D$Double 57.0 211.18181818181813 792.0 211.18181818181813
-draw java.awt.geom.Line2D$Double 57.0 188.40909090909093 792.0 188.40909090909093
-draw java.awt.geom.Line2D$Double 57.0 165.63636363636363 792.0 165.63636363636363
-draw java.awt.geom.Line2D$Double 57.0 142.86363636363637 792.0 142.86363636363637
-draw java.awt.geom.Line2D$Double 57.0 120.09090909090907 792.0 120.09090909090907
-draw java.awt.geom.Line2D$Double 57.0 97.31818181818176 792.0 97.31818181818176
-draw java.awt.geom.Line2D$Double 57.0 74.54545454545456 792.0 74.54545454545456
-draw java.awt.geom.Line2D$Double 57.0 51.77272727272731 792.0 51.77272727272731
-draw java.awt.geom.Line2D$Double 57.0 29.0 792.0 29.0
-draw java.awt.geom.Line2D$Double 57.0 29.0 57.0 530.0
-draw java.awt.geom.Line2D$Double 90.4090909090909 29.0 90.4090909090909 530.0
-draw java.awt.geom.Line2D$Double 123.81818181818181 29.0 123.81818181818181 530.0
-draw java.awt.geom.Line2D$Double 157.22727272727272 29.0 157.22727272727272 530.0
-draw java.awt.geom.Line2D$Double 190.63636363636363 29.0 190.63636363636363 530.0
-draw java.awt.geom.Line2D$Double 224.04545454545453 29.0 224.04545454545453 530.0
-draw java.awt.geom.Line2D$Double 257.45454545454544 29.0 257.45454545454544 530.0
-draw java.awt.geom.Line2D$Double 290.8636363636364 29.0 290.8636363636364 530.0
-draw java.awt.geom.Line2D$Double 324.27272727272725 29.0 324.27272727272725 530.0
-draw java.awt.geom.Line2D$Double 357.6818181818182 29.0 357.6818181818182 530.0
-draw java.awt.geom.Line2D$Double 391.09090909090907 29.0 391.09090909090907 530.0
-draw java.awt.geom.Line2D$Double 424.5 29.0 424.5 530.0
-draw java.awt.geom.Line2D$Double 457.9090909090909 29.0 457.9090909090909 530.0
-draw java.awt.geom.Line2D$Double 491.3181818181818 29.0 491.3181818181818 530.0
-draw java.awt.geom.Line2D$Double 524.7272727272727 29.0 524.7272727272727 530.0
-draw java.awt.geom.Line2D$Double 558.1363636363636 29.0 558.1363636363636 530.0
-draw java.awt.geom.Line2D$Double 591.5454545454545 29.0 591.5454545454545 530.0
-draw java.awt.geom.Line2D$Double 624.9545454545455 29.0 624.9545454545455 530.0
-draw java.awt.geom.Line2D$Double 658.3636363636364 29.0 658.3636363636364 530.0
-draw java.awt.geom.Line2D$Double 691.7727272727273 29.0 691.7727272727273 530.0
-draw java.awt.geom.Line2D$Double 725.1818181818181 29.0 725.1818181818181 530.0
-draw java.awt.geom.Line2D$Double 758.5909090909091 29.0 758.5909090909091 530.0
-draw java.awt.geom.Line2D$Double 792.0 29.0 792.0 530.0
+clip java.awt.Rectangle
+fill java.awt.Rectangle
+drawString 'bubble4'
+fill java.awt.geom.Rectangle2D$Double
+fill java.awt.geom.Path2D$Double
+draw java.awt.geom.Path2D$Double
+drawString 'Row1'
+fill java.awt.geom.Path2D$Double
+draw java.awt.geom.Path2D$Double
+drawString 'Row4'
+fill java.awt.geom.Path2D$Double
+draw java.awt.geom.Path2D$Double
+drawString 'Row2'
+fill java.awt.geom.Path2D$Double
+draw java.awt.geom.Path2D$Double
+drawString 'Row3'
+fill java.awt.Rectangle
+draw java.awt.geom.Line2D$Double
+drawString '800'
+draw java.awt.geom.Line2D$Double
+drawString '1,000'
+draw java.awt.geom.Line2D$Double
+drawString '1,200'
+draw java.awt.geom.Line2D$Double
+drawString '1,400'
+draw java.awt.geom.Line2D$Double
+drawString '1,600'
+draw java.awt.geom.Line2D$Double
+drawString '1,800'
+draw java.awt.geom.Line2D$Double
+drawString '2,000'
+draw java.awt.geom.Line2D$Double
+drawString '2,200'
+draw java.awt.geom.Line2D$Double
+drawString '2,400'
+draw java.awt.geom.Line2D$Double
+drawString '2,600'
+draw java.awt.geom.Line2D$Double
+drawString '2,800'
+draw java.awt.geom.Line2D$Double
+drawString '3,000'
+draw java.awt.geom.Line2D$Double
+drawString '3,200'
+draw java.awt.geom.Line2D$Double
+drawString '3,400'
+draw java.awt.geom.Line2D$Double
+drawString '3,600'
+draw java.awt.geom.Line2D$Double
+drawString '3,800'
+draw java.awt.geom.Line2D$Double
+drawString '4,000'
+draw java.awt.geom.Line2D$Double
+drawString '4,200'
+draw java.awt.geom.Line2D$Double
+drawString '4,400'
+draw java.awt.geom.Line2D$Double
+drawString '4,600'
+draw java.awt.geom.Line2D$Double
+drawString '4,800'
+draw java.awt.geom.Line2D$Double
+drawString '5,000'
+draw java.awt.geom.Line2D$Double
+drawString '5,200'
+draw java.awt.geom.Line2D$Double
+drawString 'Y'
+draw java.awt.geom.Line2D$Double
+drawString '0.8'
+draw java.awt.geom.Line2D$Double
+drawString '1.0'
+draw java.awt.geom.Line2D$Double
+drawString '1.2'
+draw java.awt.geom.Line2D$Double
+drawString '1.4'
+draw java.awt.geom.Line2D$Double
+drawString '1.6'
+draw java.awt.geom.Line2D$Double
+drawString '1.8'
+draw java.awt.geom.Line2D$Double
+drawString '2.0'
+draw java.awt.geom.Line2D$Double
+drawString '2.2'
+draw java.awt.geom.Line2D$Double
+drawString '2.4'
+draw java.awt.geom.Line2D$Double
+drawString '2.6'
+draw java.awt.geom.Line2D$Double
+drawString '2.8'
+draw java.awt.geom.Line2D$Double
+drawString '3.0'
+draw java.awt.geom.Line2D$Double
+drawString '3.2'
+draw java.awt.geom.Line2D$Double
+drawString '3.4'
+draw java.awt.geom.Line2D$Double
+drawString '3.6'
+draw java.awt.geom.Line2D$Double
+drawString '3.8'
+draw java.awt.geom.Line2D$Double
+drawString '4.0'
+draw java.awt.geom.Line2D$Double
+drawString '4.2'
+draw java.awt.geom.Line2D$Double
+drawString '4.4'
+draw java.awt.geom.Line2D$Double
+drawString '4.6'
+draw java.awt.geom.Line2D$Double
+drawString '4.8'
+draw java.awt.geom.Line2D$Double
+drawString '5.0'
+draw java.awt.geom.Line2D$Double
+drawString '5.2'
+draw java.awt.geom.Line2D$Double
+drawString 'X'
+clip java.awt.Rectangle
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
+draw java.awt.geom.Line2D$Double
 fill java.awt.geom.Ellipse2D$Double@c3a8beeb
 draw java.awt.geom.Ellipse2D$Double@c3a8beeb
 fill java.awt.geom.Ellipse2D$Double@daf04164

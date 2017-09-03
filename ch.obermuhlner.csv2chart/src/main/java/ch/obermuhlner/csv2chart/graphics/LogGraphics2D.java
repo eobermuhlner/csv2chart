@@ -38,10 +38,13 @@ import java.util.Map;
 
 public class LogGraphics2D extends Graphics2D {
 
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 
-	private PrintWriter out;
+	private final boolean logCoordinates;
+	
+	private final PrintWriter out;
+	
 	private Font font;
 	private Paint paint;
 	private Stroke stroke;
@@ -53,8 +56,14 @@ public class LogGraphics2D extends Graphics2D {
 	private Composite composite;
 
 	public LogGraphics2D(int width, int height, Writer writer) {
+		this(width, height, false, writer);
+	}
+	
+	public LogGraphics2D(int width, int height, boolean logCoordinates, Writer writer) {
 		this.width = width;
 		this.height = height;
+		
+		this.logCoordinates = logCoordinates;
 		
 		this.out = new PrintWriter(writer);
 	}
@@ -87,27 +96,47 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public void drawString(String str, int x, int y) {
-		out.println("drawString '" + str + "' " + x + " " + y);
+		out.print("drawString '" + str + "'");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawString(String str, float x, float y) {
-		out.println("drawString '" + str + "' " + x + " " + y);
+		out.print("drawString '" + str + "'");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, int x, int y) {
-		out.println("drawString '" + iterator + "' " + x + " " + y);
+		out.print("drawString '" + iterator + "'");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, float x, float y) {
-		out.println("drawString '" + iterator + "' " + x + " " + y);
+		out.print("drawString '" + iterator + "'");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawGlyphVector(GlyphVector g, float x, float y) {
-		out.println("drawGlyphVector '" + g + "' " + x + " " + y);
+		out.print("drawGlyphVector '" + g + "'");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y);
+		}
+		out.println();
 	}
 
 	@Override
@@ -117,14 +146,13 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public boolean hit(Rectangle rect, Shape shape, boolean onStroke) {
-		out.println("hit " + rect + " " + toString(shape) + " " + onStroke);
+		out.println("hit " + toString(rect) + " " + toString(shape) + " " + onStroke);
 		return true;
 	}
 
 	@Override
 	public GraphicsConfiguration getDeviceConfiguration() {
-		// TODO Auto-generated method stub
-		return null;
+		return new LogGraphicsConfiguration();
 	}
 
 	@Override
@@ -251,7 +279,7 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public void clip(Shape shape) {
-		out.println("clip " + shape);
+		out.println("clip " + toString(shape));
 	}
 
 	@Override
@@ -334,102 +362,178 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public void copyArea(int x, int y, int width, int height, int dx, int dy) {
-		out.println("copyArea " + x + " " + y + " " + width + " " + height + " " + dx + " " + dy);
+		out.print("copyArea");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height + " " + dx + " " + dy);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawLine(int x1, int y1, int x2, int y2) {
-		out.println("drawLine " + x1 + " " + y1 + " " + x2 + " " + y2);
+		out.print("drawLine");
+		if (logCoordinates) {
+			out.print(" " + x1 + " " + y1 + " " + x2 + " " + y2);
+		}
+		out.println();
 	}
 
 	@Override
 	public void fillRect(int x, int y, int width, int height) {
-		out.println("fillRect " + x + " " + y + " " + width + " " + height);
+		out.print("fillRect");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height);
+		}
+		out.println();
 	}
 
 	@Override
 	public void clearRect(int x, int y, int width, int height) {
-		out.println("clearRect " + x + " " + y + " " + width + " " + height);
+		out.print("clearRect");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-		out.println("drawRoundRect " + x + " " + y + " " + width + " " + height + " " + arcWidth + " " + arcHeight);
+		out.print("drawRoundRect");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height + " " + arcWidth + " " + arcHeight);
+		}
+		out.println();
 	}
 
 	@Override
 	public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-		out.println("fillRoundRect " + x + " " + y + " " + width + " " + height + " " + arcWidth + " " + arcHeight);
+		out.print("fillRoundRect");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height + " " + arcWidth + " " + arcHeight);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawOval(int x, int y, int width, int height) {
-		out.println("drawOval " + x + " " + y + " " + width + " " + height);
+		out.print("drawOval");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height);
+		}
+		out.println();
 	}
 
 	@Override
 	public void fillOval(int x, int y, int width, int height) {
-		out.println("fillOval " + x + " " + y + " " + width + " " + height);
+		out.print("fillOval");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-		out.println("drawArc " + x + " " + y + " " + width + " " + height + " " + startAngle + " " + arcAngle);
+		out.print("drawArc");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height + " " + startAngle + " " + arcAngle);
+		}
+		out.println();
 	}
 
 	@Override
 	public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-		out.println("fillArc " + x + " " + y + " " + width + " " + height + " " + startAngle + " " + arcAngle);
+		out.print("fillArc");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height + " " + startAngle + " " + arcAngle);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawPolyline(int[] xPoints, int[] yPoints, int nPoints) {
-		out.println("drawPolyline " + Arrays.toString(xPoints) + " " + Arrays.toString(xPoints) + " " + nPoints);
+		out.print("drawPolyline");
+		if (logCoordinates) {
+			out.print(" " + Arrays.toString(xPoints) + " " + Arrays.toString(xPoints) + " " + nPoints);
+		}
+		out.println();
 	}
 
 	@Override
 	public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		out.println("drawPolygon " + Arrays.toString(xPoints) + " " + Arrays.toString(xPoints) + " " + nPoints);
+		out.print("drawPolygon");
+		if (logCoordinates) {
+			out.print(" " + Arrays.toString(xPoints) + " " + Arrays.toString(xPoints) + " " + nPoints);
+		}
+		out.println();
 	}
 
 	@Override
 	public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		out.println("fillPolygon " + Arrays.toString(xPoints) + " " + Arrays.toString(xPoints) + " " + nPoints);
+		out.print("fillPolygon");
+		if (logCoordinates) {
+			out.print(" " + Arrays.toString(xPoints) + " " + Arrays.toString(xPoints) + " " + nPoints);
+		}
+		out.println();
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-		out.println("drawImage img " + x + " " + y + " ");
+		out.print("drawImage");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " ");
+		}
+		out.println();
 		return true;
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
-		out.println("drawImage img " + x + " " + y + " " + width + " " + height);
+		out.print("drawImage");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height);
+		}
+		out.println();
 		return true;
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, Color bgcolor, ImageObserver observer) {
-		out.println("drawImage img " + x + " " + y + " " + bgcolor);
+		out.print("drawImage");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + bgcolor);
+		}
+		out.println();
 		return true;
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height, Color bgcolor, ImageObserver observer) {
-		out.println("drawImage img " + x + " " + y + " " + width + " " + height + " " + bgcolor);
+		out.print("drawImage");
+		if (logCoordinates) {
+			out.print(" " + x + " " + y + " " + width + " " + height + " " + bgcolor);
+		}
+		out.println();
 		return true;
 	}
 
 	@Override
 	public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2, ImageObserver observer) {
-		out.println("drawImage img " + dx1 + " " + dy1 + " " + dx2 + " " + dy2 + " " + sx1 + " " + sy1 + " " + sx2 + " " + sy2);
+		out.print("drawImage");
+		if (logCoordinates) {
+			out.print(" " + dx1 + " " + dy1 + " " + dx2 + " " + dy2 + " " + sx1 + " " + sy1 + " " + sx2 + " " + sy2);
+		}
+		out.println();
 		return true;
 	}
 
 	@Override
 	public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2, Color bgcolor, ImageObserver observer) {
-		out.println("drawImage img " + dx1 + " " + dy1 + " " + dx2 + " " + dy2 + " " + sx1 + " " + sy1 + " " + sx2 + " " + sy2 + " " + bgcolor);
+		out.print("drawImage");
+		if (logCoordinates) {
+			out.print(" " + dx1 + " " + dy1 + " " + dx2 + " " + dy2 + " " + sx1 + " " + sy1 + " " + sx2 + " " + sy2 + " " + bgcolor);
+		}
+		out.println();
 		return true;
 	}
 
@@ -443,42 +547,58 @@ public class LogGraphics2D extends Graphics2D {
 		
 		if (shape instanceof Rectangle) {
 			Rectangle that = (Rectangle) shape;
-			result.append(that);
+			result.append(shape.getClass().getName());
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+			}
 		} else if (shape instanceof Line2D.Double) {
 			Line2D.Double that = (Line2D.Double) shape;
 			result.append(shape.getClass().getName());
-			result.append(" ");
-			result.append(that.x1);
-			result.append(" ");
-			result.append(that.y1);
-			result.append(" ");
-			result.append(that.x2);
-			result.append(" ");
-			result.append(that.y2);
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x1);
+				result.append(" ");
+				result.append(that.y1);
+				result.append(" ");
+				result.append(that.x2);
+				result.append(" ");
+				result.append(that.y2);
+			}
 		} else if (shape instanceof Rectangle2D.Double) {
 			Rectangle2D.Double that = (Rectangle2D.Double) shape;
 			result.append(shape.getClass().getName());
-			result.append(" ");
-			result.append(that.x);
-			result.append(" ");
-			result.append(that.y);
-			result.append(" ");
-			result.append(that.width);
-			result.append(" ");
-			result.append(that.height);
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+			}
 		} else if (shape instanceof Path2D.Double) {
 			Path2D.Double that = (Path2D.Double) shape;
 			result.append(shape.getClass().getName());
-			PathIterator pathIterator = that.getPathIterator(null);
-			float[] coords = new float[6];
-			while (!pathIterator.isDone()) {
-				pathIterator.next();
-				int segment = pathIterator.currentSegment(coords);
-				
-				result.append(" ");
-				result.append(convertPathIteratorSegmentToString(segment));
-				result.append(":");
-				result.append(Arrays.toString(coords));
+			if (logCoordinates) {
+				PathIterator pathIterator = that.getPathIterator(null);
+				float[] coords = new float[6];
+				while (!pathIterator.isDone()) {
+					pathIterator.next();
+					int segment = pathIterator.currentSegment(coords);
+					
+					result.append(" ");
+					result.append(convertPathIteratorSegmentToString(segment));
+					result.append(":");
+					result.append(Arrays.toString(coords));
+				}
 			}
 		} else {
 			result.append(String.valueOf(shape));
@@ -504,7 +624,6 @@ public class LogGraphics2D extends Graphics2D {
 		
 		return String.valueOf(segment);
 	}
-
 
 	private class LogGraphicsConfiguration extends GraphicsConfiguration {
 

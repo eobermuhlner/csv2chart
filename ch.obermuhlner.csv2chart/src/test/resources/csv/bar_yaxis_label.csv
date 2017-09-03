@@ -1,0 +1,6 @@
+# csv2chart.chart=bar
+# csv2chart.y-axis=Y-Axis
+#
+RowHeader,Col1,Col2
+Row1,1,2
+Row2,3,4

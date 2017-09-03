@@ -33,7 +33,6 @@ public class ApplicationRegressionTest {
 	}
 	
 	@Test
-	@Ignore("Created image is device dependent. Reference image was created on Windows 10. Run at your own risk.")
 	public void testReferenceChartsPng() throws IOException {
 		if (isRunningOnSystemWithCorrectReferenceImages()) {
 			assertReferenceCharts(ImageFormat.PNG);

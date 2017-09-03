@@ -13,13 +13,17 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ApplicationRegressionTest {
 
 	private static final String OS_NAME_FOR_REFERENCE_IMAGES = "Windows 10";
 
+	@Test
+	public void testHelp() {
+		runCsv2Chart();
+	}
+	
 	@Test
 	public void testReferenceChartsLog() throws IOException {
 		assertReferenceCharts(ImageFormat.LOG);

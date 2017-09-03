@@ -72,145 +72,27 @@ public class Application {
 				1, (args, parameters) -> {
 			loadProperties(new File(args.get(0)), parameters);
 		});
-		argumentHandler.addOption("out-dir",
-				"directory",
-				"Output directory.",
+
+		argumentHandler.addOption("property",
+				"key=value",
+				"Set the specified property.\n",
 				1, (args, parameters) -> {
-			parameters.outDir= args.get(0);
+					parameters.setParameterKeyValue(args.get(0));
 		});
-		argumentHandler.addOption("out-prefix",
-				"fileprefix",
-				"Prefix for output chart files",
-				1, (args, parameters) -> {
-			parameters.outPrefix = args.get(0);
-		});
-		argumentHandler.addOption("out-postfix",
-				"filepostfix",
-				"Postfix for output chart files",
-				1, (args, parameters) -> {
-			parameters.outPostfix = args.get(0);
-		});
-		argumentHandler.addOption("chart", 
-				"charttype",
-				"The chart type to generate.\n"
-				+ "Supported types: auto, line, bar, xyline, pie, bubble\n"
-				+ "Default: 'auto'",
-				1, (args, parameters) -> {
-			parameters.chart = args.get(0);
-		});
-		argumentHandler.addOption("title",
-				"text",
-				"Text to appear as title in the chart.", 1, (args, parameters) -> {
-			parameters.title = args.get(0);
-		});
-		argumentHandler.addOption("no-header-column",
-				"",
-				"When specified the first column is not interpreted as headers", 0, (args, parameters) -> {
-			parameters.headerColumn = false;
-		});
-		argumentHandler.addOption("no-header-row",
-				"",
-				"When specified the first row is not interpreted as headers", 0, (args, parameters) -> {
-			parameters.headerRow = false;
-		});
-		argumentHandler.addOption("header-column",
-				"",
-				"When specified the first column is interpreted as headers", 0, (args, parameters) -> {
-			parameters.headerColumn = true;
-		});
-		argumentHandler.addOption("header-row",
-				"",
-				"When specified the first row is interpreted as headers", 0, (args, parameters) -> {
-			parameters.headerRow = true;
-		});
-		argumentHandler.addOption("x-axis",
-				"text",
-				"Text to appear as x-axis label.",
-				1, (args, parameters) -> {
-			parameters.xAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("y-axis",
-				"text",
-				"Text to appear as y-axis label.",
-				1, (args, parameters) -> {
-			parameters.yAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("z-axis",
-				"text",
-				"Text to appear as z-axis label.",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("x-axis-column",
-				"numeric",
-				"Index of the column used as x-axis.",
-				1, (args, parameters) -> {
-			parameters.xAxisColumn = Integer.parseInt(args.get(0));
-		});
-		argumentHandler.addOption("y-axis-column",
-				"numeric",
-				"Index of the column used as y-axis.",
-				1, (args, parameters) -> {
-			parameters.yAxisColumn = Integer.parseInt(args.get(0));
-		});
-		argumentHandler.addOption("scale-min-value",
-				"numeric",
-				"Minimum value of the color scale.",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("scale-mid-value",
-				"numeric",
-				"Mid value of the color scale.",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("scale-max-value",
-				"numeric",
-				"Maximum value of the color scale.",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("scale-min-color",
-				"color",
-				"Minimum color of the color scale as a hex value (RRGGBB).",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("scale-mid-color",
-				"color",
-				"Mid color of the color scale as a hex value (RRGGBB).",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("scale-max-color",
-				"color",
-				"Maximum color of the color scale as a hex value (RRGGBB).",
-				1, (args, parameters) -> {
-			parameters.zAxisLabel = args.get(0);
-		});
-		argumentHandler.addOption("width",
-				"pixels",
-				"The width of the generated charts in pixels.\n"
-				+ "Default: 800",
-				1, (args, parameters) -> {
-			parameters.width = Integer.parseInt(args.get(0));
-		});
-		argumentHandler.addOption("height",
-				"pixels",
-				"The height of the generated charts in pixels.\n"
-				+ "Default: 600",
-				1, (args, parameters) -> {
-			parameters.height = Integer.parseInt(args.get(0));
-		});
-		argumentHandler.addOption("format",
-				"image-format",
-				"The image file format of the generated image.\n"
-				+ "Supported: svg, png, jpg\n"
-				+ "Default: svg",
-				1, (args, parameters) -> {
-			parameters.imageFormat = ImageFormat.valueOf(args.get(0));
-		});
+		
+		for (Parameter parameter : Parameters.getAllCommandLineOptions()) {
+			String description = parameter.description() + "\n"
+					+ "In properties files and csv comments this value can be set by using the key '" + parameter.name() + "'.";
+			argumentHandler.addOption(
+					parameter.optionName(),
+					parameter.optionArgumentDescription(),
+					description,
+					1,
+					(args, parameters) -> {
+						parameters.setParameter(parameter.name(), args.get(0));
+			});
+		}
+		
 	}
 	
 	public static void main(String[] args) {
@@ -270,6 +152,7 @@ public class Application {
 		System.out.println("       title=Sales - Sections");
 		System.out.println("       chart=pie");
 		System.out.println();
+		System.out.println("OPTIONS");
 
 		for (String option : argumentHandler.getOptions()) {
 			System.out.println("    --" + option + " " + argumentHandler.getOptionArgumentDescription(option));
@@ -280,6 +163,22 @@ public class Application {
 			}
 			System.out.println();
 		}
+
+		System.out.println();
+		System.out.println("PROPERTIES");
+		System.out.println("   The following properties can be set in the properties file or as comments in the input files.");
+		System.out.println();
+
+		for (Parameter parameter : Parameters.getAllParameters()) {
+			System.out.println("   " + parameter.name());
+			String description = parameter.description();
+			String[] lines = description.split("\n");
+			for (String line : lines) {
+				System.out.println("        " + line);
+			}
+			System.out.println();
+		}
+		
 	}
 	
 	private static void loadProperties(File file, Parameters parameters) {

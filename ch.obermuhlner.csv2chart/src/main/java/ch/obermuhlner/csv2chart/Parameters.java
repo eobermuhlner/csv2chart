@@ -2,58 +2,158 @@ package ch.obermuhlner.csv2chart;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Parameters implements Cloneable {
 
+	@Parameter(
+			name = "out.dir",
+			description = "The output directory.\n"
+					+ "Default: same directory as the input file",
+			optionName = "out-dir",
+			optionArgumentDescription = "path")
 	public String outDir = null;
 	
+	@Parameter(
+			name = "out.prefix",
+			description = ""
+					+ "Prefix for output chart files.\n"
+					+ "Default: ''",
+			optionName = "out-prefix",
+			optionArgumentDescription = "text")
 	public String outPrefix = "";
+	@Parameter(
+			name = "out.postfix",
+			description = ""
+					+ "Postfix for output chart files.\n"
+					+ "Default: ''",
+			optionName = "out-postfix",
+			optionArgumentDescription = "text")
 	public String outPostfix = "";
-	
+
+	@Parameter(
+			name = "out.format",
+			description = ""
+					+ "Format of output chart files.\n"
+					+ "Supported formats: svg, png, jpg\n"
+					+ "Default: svg",
+			optionName = "format",
+			optionArgumentDescription = "format")
+	public ImageFormat imageFormat = ImageFormat.SVG;
+
+	@Parameter(
+			name = "chart",
+			description = ""
+					+ "The chart type to generate.\n"
+					+ "Supported types: auto, bar, line, xyline, pie, bubble, scatter, heat\n"
+					+ "Default: auto")
 	public String chart = "auto";
 	
+	@Parameter(
+			name = "title",
+			description = ""
+					+ "Text to appear as title in the chart.\n"
+					+ "Default: basename of the input file")
 	public String title = null;
 	
-	@Option(name = "header-row")
+	@Parameter(
+			name = "header-row",
+			description = "DEPRECATED")
+	@Deprecated
 	public boolean headerRow = true;
-	@Option(name = "header-column")
+
+	@Parameter(
+			name = "header-column",
+			description = "DEPRECATED")
+	@Deprecated
 	public boolean headerColumn = true;
 	
-	@Option(name = "x-axis")
+	@Parameter(
+			name = "x-axis",
+			description = "Text to appear as label on the x-axis.")
 	public String xAxisLabel;
-	@Option(name = "y-axis")
+	@Parameter(
+			name = "y-axis",
+			description = "Text to appear as label on the y-axis.")
 	public String yAxisLabel;
-	@Option(name = "z-axis")
+	@Parameter(
+			name = "z-axis",
+			description = "Text to appear as label on the z-axis.")
 	public String zAxisLabel;
 
-	@Option(name = "x-axis-column")
-	public Integer xAxisColumn;
-	@Option(name = "y-axis-column")
-	public Integer yAxisColumn;
-
+	@Deprecated
 	public Boolean crowdedLegend;
 	
-	@Option(name = "scale-min-value")
+	@Parameter(
+			name = "scale-min-value",
+			description = ""
+					+ "Minimum value of the color scale.")
 	public Double colorScaleMinValue = null;
-	@Option(name = "scale-mid-value")
+	@Parameter(
+			name = "scale-mid-value",
+			description = ""
+					+ "Mid value of the color scale.")
 	public Double colorScaleMidValue = null;
-	@Option(name = "scale-max-value")
+	@Parameter(
+			name = "scale-max-value",
+			description = ""
+					+ "Maximum value of the color scale.")
 	public Double colorScaleMaxValue = null;
 
-	@Option(name = "scale-min-color")
+	@Parameter(
+			name = "scale-min-color",
+			description = ""
+					+ "Minimum color of the color scale as a hex value (RRGGBB).")
 	public Color colorScaleMinColor = null;
-	@Option(name = "scale-mid-color")
+	@Parameter(
+			name = "scale-mid-color",
+			description = ""
+					+ "Mid color of the color scale as a hex value (RRGGBB).")
 	public Color colorScaleMidColor = null;
-	@Option(name = "scale-max-color")
+	@Parameter(
+			name = "scale-max-color",
+			description = ""
+					+ "Maximum color of the color scale as a hex value (RRGGBB).")
 	public Color colorScaleMaxColor = null;
-	@Option(name = "scale-default-color")
+	@Parameter(
+			name = "scale-default-color",
+			description = ""
+					+ "Default color of the color scale used for non-existing values.")
 	public Color colorScaleDefaultColor = null;
 
+	@Parameter(
+			name = "out.width",
+			description = ""
+					+ "The width of the generated charts in pixels.\n"
+					+ "Default: 800",
+			optionName = "width",
+			optionArgumentDescription = "pixels")
 	public int width = 800;
+	@Parameter(
+			name = "out.height",
+			description = ""
+					+ "The height of the generated charts in pixels.\n"
+					+ "Default: 600",
+			optionName = "height",
+			optionArgumentDescription = "pixels")
 	public int height = 600;
 	
-	@Option(name = "format")
-	ImageFormat imageFormat = ImageFormat.SVG;
+	public void setParameterKeyValue(String keyValue) {
+		int assignmentIndex = keyValue.indexOf("=");
+		if (assignmentIndex < 0) {
+			throw new RuntimeException("Missing '=': " + keyValue);
+		}
+		if (assignmentIndex == 0) {
+			throw new RuntimeException("Missing key: " + keyValue);
+		}
+		
+		String key = keyValue.substring(0, assignmentIndex);
+		String value = keyValue.substring(assignmentIndex + 1);
+		setParameter(key, value);
+	}
 
 	public void setParameter(String name, Object value) {
 		try {
@@ -78,13 +178,30 @@ public class Parameters implements Cloneable {
 	
 	private Field findField(String name) throws NoSuchFieldException, SecurityException {
 		for (Field field : Parameters.class.getFields()) {
-			Option option = field.getAnnotation(Option.class);
+			Parameter option = field.getAnnotation(Parameter.class);
 			if (option != null && name.equals(option.name())) {
 				return field;
 			}
 		}
 		
 		return Parameters.class.getField(name);
+	}
+	
+	public static List<Parameter> getAllParameters() {
+		return Arrays.stream(Parameters.class.getFields())
+			.map(field -> field.getAnnotation(Parameter.class))
+			.filter(parameter -> parameter != null)
+			.sorted(Comparator.comparing(Parameter::name))
+			.collect(Collectors.toList());
+	}
+	
+	public static List<Parameter> getAllCommandLineOptions() {
+		return Arrays.stream(Parameters.class.getFields())
+			.map(field -> field.getAnnotation(Parameter.class))
+			.filter(parameter -> parameter != null)
+			.filter(parameter -> !parameter.optionName().equals(""))
+			.sorted(Comparator.comparing(Parameter::optionName))
+			.collect(Collectors.toList());
 	}
 	
 	public Parameters copy() {

@@ -3,10 +3,10 @@ fill java.awt.Rectangle
 drawString 'pie'
 fill java.awt.geom.Rectangle2D$Double
 clip java.awt.geom.Rectangle2D$Double
-fill java.awt.geom.Arc2D$Double@5edccde8
-draw java.awt.geom.Arc2D$Double@5edccde8
-fill java.awt.geom.Arc2D$Double@579a0de8
-draw java.awt.geom.Arc2D$Double@579a0de8
+fill java.awt.geom.Arc2D$Double
+draw java.awt.geom.Arc2D$Double
+fill java.awt.geom.Arc2D$Double
+draw java.awt.geom.Arc2D$Double
 draw java.awt.geom.Line2D$Double
 draw java.awt.geom.Line2D$Double
 draw java.awt.geom.Line2D$Double

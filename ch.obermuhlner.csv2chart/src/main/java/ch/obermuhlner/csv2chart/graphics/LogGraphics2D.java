@@ -18,6 +18,8 @@ import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -544,10 +546,11 @@ public class LogGraphics2D extends Graphics2D {
 
 	private String toString(Shape shape) {
 		StringBuilder result = new StringBuilder();
-		
+
+		result.append(shape.getClass().getName());
+
 		if (shape instanceof Rectangle) {
 			Rectangle that = (Rectangle) shape;
-			result.append(shape.getClass().getName());
 			if (logCoordinates) {
 				result.append(" ");
 				result.append(that.x);
@@ -560,7 +563,18 @@ public class LogGraphics2D extends Graphics2D {
 			}
 		} else if (shape instanceof Line2D.Double) {
 			Line2D.Double that = (Line2D.Double) shape;
-			result.append(shape.getClass().getName());
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x1);
+				result.append(" ");
+				result.append(that.y1);
+				result.append(" ");
+				result.append(that.x2);
+				result.append(" ");
+				result.append(that.y2);
+			}
+		} else if (shape instanceof Line2D.Float) {
+			Line2D.Float that = (Line2D.Float) shape;
 			if (logCoordinates) {
 				result.append(" ");
 				result.append(that.x1);
@@ -573,7 +587,6 @@ public class LogGraphics2D extends Graphics2D {
 			}
 		} else if (shape instanceof Rectangle2D.Double) {
 			Rectangle2D.Double that = (Rectangle2D.Double) shape;
-			result.append(shape.getClass().getName());
 			if (logCoordinates) {
 				result.append(" ");
 				result.append(that.x);
@@ -584,9 +597,91 @@ public class LogGraphics2D extends Graphics2D {
 				result.append(" ");
 				result.append(that.height);
 			}
+		} else if (shape instanceof Rectangle2D.Float) {
+			Rectangle2D.Float that = (Rectangle2D.Float) shape;
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+			}
+		} else if (shape instanceof Ellipse2D.Double) {
+			Ellipse2D.Double that = (Ellipse2D.Double) shape;
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+			}
+		} else if (shape instanceof Ellipse2D.Float) {
+			Ellipse2D.Float that = (Ellipse2D.Float) shape;
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+			}
+		} else if (shape instanceof Arc2D.Double) {
+			Arc2D.Double that = (Arc2D.Double) shape;
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+				result.append(" ");
+				result.append(that.start);
+				result.append(" ");
+				result.append(that.extent);
+			}
+		} else if (shape instanceof Arc2D.Float) {
+			Arc2D.Float that = (Arc2D.Float) shape;
+			if (logCoordinates) {
+				result.append(" ");
+				result.append(that.x);
+				result.append(" ");
+				result.append(that.y);
+				result.append(" ");
+				result.append(that.width);
+				result.append(" ");
+				result.append(that.height);
+				result.append(" ");
+				result.append(that.start);
+				result.append(" ");
+				result.append(that.extent);
+			}
 		} else if (shape instanceof Path2D.Double) {
 			Path2D.Double that = (Path2D.Double) shape;
-			result.append(shape.getClass().getName());
+			if (logCoordinates) {
+				PathIterator pathIterator = that.getPathIterator(null);
+				float[] coords = new float[6];
+				while (!pathIterator.isDone()) {
+					pathIterator.next();
+					int segment = pathIterator.currentSegment(coords);
+					
+					result.append(" ");
+					result.append(convertPathIteratorSegmentToString(segment));
+					result.append(":");
+					result.append(Arrays.toString(coords));
+				}
+			}
+		} else if (shape instanceof Path2D.Float) {
+			Path2D.Float that = (Path2D.Float) shape;
 			if (logCoordinates) {
 				PathIterator pathIterator = that.getPathIterator(null);
 				float[] coords = new float[6];
@@ -601,7 +696,7 @@ public class LogGraphics2D extends Graphics2D {
 				}
 			}
 		} else {
-			result.append(String.valueOf(shape));
+			result.append(":UNKNOWN");
 		}
 		
 		return result.toString();

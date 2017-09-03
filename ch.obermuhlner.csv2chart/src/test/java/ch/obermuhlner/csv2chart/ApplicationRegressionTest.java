@@ -13,37 +13,61 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
-public class ApplicationTest {
+public class ApplicationRegressionTest {
 
-	private static final ImageFormat IMAGE_FORMAT = ImageFormat.LOG;
+	private static final String OS_NAME_FOR_REFERENCE_IMAGES = "Windows 10";
+
+	@Test
+	public void testReferenceChartsLog() throws IOException {
+		assertReferenceCharts(ImageFormat.LOG);
+	}
+
+	@Test
+	public void testReferenceChartsSvg() throws IOException {
+		if (isRunningOnSystemWithCorrectReferenceImages()) {
+			assertReferenceCharts(ImageFormat.SVG);
+		}
+	}
 	
 	@Test
-	public void testReferenceCharts() throws IOException {
+	@Ignore("Created image is device dependent. Reference image was created on Windows 10. Run at your own risk.")
+	public void testReferenceChartsPng() throws IOException {
+		if (isRunningOnSystemWithCorrectReferenceImages()) {
+			assertReferenceCharts(ImageFormat.PNG);
+		}
+	}
+
+	private boolean isRunningOnSystemWithCorrectReferenceImages() {
+		return OS_NAME_FOR_REFERENCE_IMAGES.equals(System.getProperty("os.name"));
+	}
+
+	public void assertReferenceCharts(ImageFormat imageFormat) throws IOException {
 		Files.list(Paths.get("src/test/resources/csv"))
 			.map(path -> path.toFile().getName())
 			.filter(name -> name.endsWith(".csv"))
 			.map(name -> name.substring(0, name.length() - ".csv".length()))
 			.forEach(name -> {
 				try {
-					assertCsv2Chart(name);
+					assertCsv2Chart(name, imageFormat);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
 			});
 	}
 
-	private void assertCsv2Chart(String baseFilename) throws IOException {
+	private void assertCsv2Chart(String baseFilename, ImageFormat imageFormat) throws IOException {
 		runCsv2Chart(
 				"--out-dir", "src/test/resources/out_images",
-				"--format", IMAGE_FORMAT.toString(),
+				"--format", imageFormat.toString(),
 				"src/test/resources/csv/" + baseFilename + ".csv");
 
 		assertImageEquals(
-				IMAGE_FORMAT,
-				new File("src/test/resources/ref_images/" + baseFilename + "." + IMAGE_FORMAT.getExtension()),
-				new File("src/test/resources/out_images/" + baseFilename + "." + IMAGE_FORMAT.getExtension()));
+				imageFormat,
+				new File("src/test/resources/ref_images/" + baseFilename + "." + imageFormat.getExtension()),
+				new File("src/test/resources/out_images/" + baseFilename + "." + imageFormat.getExtension()));
 	}
 	
 	private void runCsv2Chart(String...args) {
@@ -53,7 +77,7 @@ public class ApplicationTest {
 	private void assertImageEquals(ImageFormat imageFormat, File expectedImageFile, File actualImageFile) throws IOException {
 		if (imageFormat.equals(ImageFormat.SVG)) {
 			assertSvgImageEquals(expectedImageFile, actualImageFile);
-		} if (imageFormat.equals(ImageFormat.LOG)) {
+		} else if (imageFormat.equals(ImageFormat.LOG)) {
 			assertLogImageEquals(expectedImageFile, actualImageFile);
 		} else {
 			assertBitmapImageEquals(expectedImageFile, actualImageFile);

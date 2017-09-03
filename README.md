@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/eobermuhlner/csv2chart.svg?branch=master)](https://travis-ci.org/eobermuhlner/csv2chart)
+[![Code Coverage](https://img.shields.io/codecov/c/github/eobermuhlner/csv2chart.svg)](https://codecov.io/gh/eobermuhlner/csv2chart)
+
 # csv2chart
 
 A simple command line tool to convert csv files into charts.

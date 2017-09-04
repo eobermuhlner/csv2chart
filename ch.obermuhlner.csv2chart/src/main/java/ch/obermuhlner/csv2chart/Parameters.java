@@ -5,10 +5,21 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Parameters implements Cloneable {
 
+	@Parameter(
+			name = "locale",
+			description = "The locale used for formatting values.\n"
+					+ "The format is: language_country\n"
+					+ "For example: en_US for US english.\n"
+					+ "Default: system locale",
+			optionName = "locale",
+			optionArgumentDescription = "locale")
+	public Locale locale = null;
+	
 	@Parameter(
 			name = "out.dir",
 			description = "The output directory.\n"
@@ -169,13 +180,15 @@ public class Parameters implements Cloneable {
 				value = Double.parseDouble(String.valueOf(value));
 			} else if (fieldType == ImageFormat.class) {
 				value = ImageFormat.valueOf(String.valueOf(value).toUpperCase());
+			} else if (fieldType == Locale.class) {
+				value = Locale.forLanguageTag(String.valueOf(value));
 			}
 			field.set(this, value);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private Field findField(String name) throws NoSuchFieldException, SecurityException {
 		for (Field field : Parameters.class.getFields()) {
 			Parameter option = field.getAnnotation(Parameter.class);

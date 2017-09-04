@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -96,6 +97,8 @@ public class Application {
 	}
 	
 	public static void main(String[] args) {
+		Locale defaultLocale = Locale.getDefault();
+		
 		CsvDataModelLoader dataModelLoader = new CsvDataModelLoader();
 
 		Parameters globalParameters = new Parameters();
@@ -122,6 +125,12 @@ public class Application {
 			parameters.title = baseFilename;
 			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
 			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
+			
+			if (parameters.locale == null) {
+				Locale.setDefault(defaultLocale);
+			} else {
+				Locale.setDefault(parameters.locale);
+			}
 			
 			DataModel dataModel = dataModelLoader.load(path.toFile(), parameters);
 			

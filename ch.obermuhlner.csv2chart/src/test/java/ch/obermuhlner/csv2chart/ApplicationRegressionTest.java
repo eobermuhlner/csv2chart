@@ -63,6 +63,7 @@ public class ApplicationRegressionTest {
 
 	private void assertCsv2Chart(String baseFilename, ImageFormat imageFormat) throws IOException {
 		runCsv2Chart(
+				"--locale", "en_US",
 				"--out-dir", "src/test/resources/out_images",
 				"--format", imageFormat.toString(),
 				"src/test/resources/csv/" + baseFilename + ".csv");

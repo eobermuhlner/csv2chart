@@ -27,6 +27,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.BubbleXYItemLabelGenerator;
+import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.MultiplePiePlot;
 import org.jfree.chart.plot.PieLabelLinkStyle;
@@ -39,7 +40,6 @@ import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYBubbleRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.LegendTitle;
-import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUnits;
@@ -277,23 +277,31 @@ public class Application {
 			for (int seriesIndex = 0; seriesIndex < xyPlot.getSeriesCount(); seriesIndex++) {
 				xyPlot.getRenderer().setSeriesStroke(seriesIndex, new BasicStroke(3.0f));
 				
-				XYItemRenderer renderer = xyPlot.getRenderer();
-				if (renderer instanceof XYBubbleRenderer) {
-					XYBubbleRenderer xyBubbleRenderer = (XYBubbleRenderer) renderer;
-
-					if (parameters.valueLabels) {
+				if (Boolean.TRUE.equals(parameters.valueLabels)) {
+					XYItemRenderer renderer = xyPlot.getRenderer();
+					if (renderer instanceof XYBubbleRenderer) {
+						XYBubbleRenderer xyBubbleRenderer = (XYBubbleRenderer) renderer;
+	
 						xyBubbleRenderer.setSeriesItemLabelGenerator(seriesIndex, new BubbleXYItemLabelGenerator() {
 							private static final long serialVersionUID = 1L;
-
+							
 							@Override
 							public String generateLabel(XYDataset dataset, int series, int item) {
-								DefaultXYZDataset xyzDataset = (DefaultXYZDataset) dataset;
-								return String.valueOf(xyzDataset.getSeriesKey(series));
+								return String.valueOf(dataset.getSeriesKey(series));
 							}
 						});
-						xyBubbleRenderer.setSeriesItemLabelsVisible(seriesIndex, true);
-						xyBubbleRenderer.setSeriesItemLabelPaint(seriesIndex, gray);
+					} else {
+						renderer.setSeriesItemLabelGenerator(seriesIndex, new StandardXYItemLabelGenerator() {
+							private static final long serialVersionUID = 1L;
+	
+							@Override
+							public String generateLabel(XYDataset dataset, int series, int item) {
+								return String.valueOf(dataset.getSeriesKey(series));
+							}
+						});
 					}
+					renderer.setSeriesItemLabelsVisible(seriesIndex, true);
+					renderer.setSeriesItemLabelPaint(seriesIndex, gray);
 				}
 			}
 		} else if (plot instanceof PiePlot) {

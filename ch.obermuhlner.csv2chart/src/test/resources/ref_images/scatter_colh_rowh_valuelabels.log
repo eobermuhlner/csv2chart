@@ -1,13 +1,6 @@
 clip java.awt.Rectangle
 fill java.awt.Rectangle
-drawString 'scatter_colh_rowh'
-fill java.awt.geom.Rectangle2D$Double
-fill java.awt.geom.Path2D$Double
-draw java.awt.geom.Path2D$Double
-drawString 'Row1'
-fill java.awt.geom.Path2D$Double
-draw java.awt.geom.Path2D$Double
-drawString 'Row2'
+drawString 'scatter_colh_rowh_valuelabels'
 fill java.awt.Rectangle
 draw java.awt.geom.Line2D$Double
 drawString '0.9'
@@ -151,5 +144,7 @@ draw java.awt.geom.Line2D$Double
 draw java.awt.geom.Line2D$Double
 fill java.awt.geom.Path2D$Double
 draw java.awt.geom.Path2D$Double
+drawString 'Row2'
 fill java.awt.geom.Path2D$Double
 draw java.awt.geom.Path2D$Double
+drawString 'Row1'

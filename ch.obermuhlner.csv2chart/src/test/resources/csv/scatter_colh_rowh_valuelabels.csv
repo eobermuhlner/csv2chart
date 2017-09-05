@@ -1,0 +1,6 @@
+# csv2chart.chart=scatter
+# csv2chart.value-labels=true
+#
+RowHeader,Col1,Col2
+Row1,1,2
+Row2,3,4

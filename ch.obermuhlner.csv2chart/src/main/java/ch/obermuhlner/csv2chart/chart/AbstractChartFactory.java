@@ -1,7 +1,9 @@
 package ch.obermuhlner.csv2chart.chart;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -43,8 +45,9 @@ public abstract class AbstractChartFactory implements ChartFactory {
 	}
 	
 	protected XYDataset createXYDataset(DataModel data, Parameters parameters) {
-		List<XYSeries> xySeries = new ArrayList<>();
+		Map<String, XYSeries> seriesMap = new HashMap<>();
 		
+		DataVector categoryVector = data.getCategory();
 		List<DataVector> valueVectors = data.getValues();
 
 		DataVector xValueVector = valueVectors.get(0);
@@ -53,21 +56,28 @@ public abstract class AbstractChartFactory implements ChartFactory {
 			parameters.xAxisLabel = xValueVector.getFirstHeader();
 		}
 		
+		if (parameters.yAxisLabel == null && valueVectors.size() == 2) {
+			parameters.yAxisLabel = valueVectors.get(1).getFirstHeader();
+		}
+
 		for (int i = 1; i < valueVectors.size(); i++) {
 			DataVector yValueVector = valueVectors.get(i);
-			String seriesName = yValueVector.getFirstHeader();
+			
+			String seriesName = null;
+			if (seriesName == null) {
+				seriesName = yValueVector.getFirstHeader();
+			}
 			if (seriesName == null) {
 				seriesName = "#" + i;
 			}
 
-			if (parameters.yAxisLabel == null) {
-				parameters.yAxisLabel = yValueVector.getFirstHeader();
-			}
-
-			XYSeries series = new XYSeries(seriesName);
-			xySeries.add(series);
-			
 			for (int valueIndex = 0; valueIndex < yValueVector.getValueCount(); valueIndex++) {
+				if (categoryVector != null) {
+					seriesName = categoryVector.getStringValue(valueIndex);
+				}
+				
+				XYSeries series = seriesMap.computeIfAbsent(seriesName, key -> new XYSeries(key));
+
 				Double x = xValueVector.getDoubleValue(valueIndex);
 				Double y = yValueVector.getDoubleValue(valueIndex);
 				if (x != null && y != null) {
@@ -75,9 +85,9 @@ public abstract class AbstractChartFactory implements ChartFactory {
 				}
 			}
 		}
-				
+
 		XYSeriesCollection dataset = new XYSeriesCollection();
-		for (XYSeries series : xySeries) {
+		for (XYSeries series : seriesMap.values()) {
 			dataset.addSeries(series);
 		}
 		return dataset;

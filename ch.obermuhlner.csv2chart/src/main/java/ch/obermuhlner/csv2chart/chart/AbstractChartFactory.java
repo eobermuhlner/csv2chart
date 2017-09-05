@@ -1,6 +1,5 @@
 package ch.obermuhlner.csv2chart.chart;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +58,7 @@ public abstract class AbstractChartFactory implements ChartFactory {
 		if (parameters.yAxisLabel == null && valueVectors.size() == 2) {
 			parameters.yAxisLabel = valueVectors.get(1).getFirstHeader();
 		}
-
+		
 		for (int i = 1; i < valueVectors.size(); i++) {
 			DataVector yValueVector = valueVectors.get(i);
 			
@@ -83,6 +82,13 @@ public abstract class AbstractChartFactory implements ChartFactory {
 				if (x != null && y != null) {
 					series.add(x, y);
 				}
+			}
+		}
+
+		if (parameters.legend == null) {
+			parameters.legend = seriesMap.size() > 1;
+			if (Boolean.TRUE.equals(parameters.valueLabels)) {
+				parameters.legend = false;
 			}
 		}
 
@@ -154,7 +160,12 @@ public abstract class AbstractChartFactory implements ChartFactory {
 		if (parameters.valueLabels == null) {
 			parameters.valueLabels = valueVectors.size() > parameters.autoValueLabelsThreshold;
 		}
-
+		if (parameters.legend == null) {
+			if (Boolean.TRUE.equals(parameters.valueLabels)) {
+				parameters.legend = false;
+			}
+		}
+		
 		return dataset;
 	}
 

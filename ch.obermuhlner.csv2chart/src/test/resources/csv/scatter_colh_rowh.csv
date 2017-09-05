@@ -1,5 +1,9 @@
 # csv2chart.chart=scatter
 #
-RowHeader,Col1,Col2
+# X column are the values on the x-axis
+# Y column are the values on the y-axis
+# Each pair of x,y values MUST be a dot.
+#
+RowHeader,X,Y
 Row1,1,2
 Row2,3,4

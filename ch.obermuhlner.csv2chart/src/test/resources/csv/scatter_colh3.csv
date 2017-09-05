@@ -1,5 +1,10 @@
 # csv2chart.chart=scatter
 #
-Col1,Col2,Col3
+# X column are the values on the x-axis
+# Y1 column are the first series of values on the y-axis
+# Y2 column are the second series of values on the y-axis
+# Each pair of x,y values MUST be a dot (1 x-value is shared with 2 y-values).
+#
+X,Y1,Y2
 1,2,3
 3,4,5

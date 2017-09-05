@@ -109,7 +109,13 @@ public class Parameters implements Cloneable {
 			description = "Labels appear next to the values where possible.\n"
 					+ "Default: Dynamically determined by the parameter 'value-labels-threshold'")
 	public Boolean valueLabels;
-	
+
+	@Parameter(
+			name = "legend",
+			description = "Shows a legend for the value categories where necessary.\n"
+					+ "Default: Dynamically determined (generally true)")
+	public Boolean legend;
+
 	@Parameter(
 			name = "scale-min-value",
 			description = ""

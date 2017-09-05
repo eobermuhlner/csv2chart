@@ -71,16 +71,18 @@ public class Parameters implements Cloneable {
 	public String title = null;
 	
 	@Parameter(
-			name = "header-row",
-			description = "DEPRECATED")
-	@Deprecated
-	public boolean headerRow = true;
+			name = "matrix-x-values",
+			description = ""
+					+ "Specifies whether the first row of matrix values is used as values on the x-axis.\n"
+					+ "Default: true")
+	public boolean matrixXValues = true;
 
 	@Parameter(
-			name = "header-column",
-			description = "DEPRECATED")
-	@Deprecated
-	public boolean headerColumn = true;
+			name = "matrix-y-values",
+			description = ""
+					+ "Specifies whether the first row of matrix values is used as values on the x-axis.\n"
+					+ "Default: true")
+	public boolean matrixYValues = true;
 	
 	@Parameter(
 			name = "x-axis",

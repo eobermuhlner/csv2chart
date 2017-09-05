@@ -153,8 +153,8 @@ public abstract class AbstractChartFactory implements ChartFactory {
 		
 		List<DataVector> valuesVector = data.getValues();
 		
-		boolean useXAxisValues = parameters.headerColumn;
-		boolean useYAxisValues = parameters.headerRow;
+		boolean useXAxisValues = parameters.matrixYValues;
+		boolean useYAxisValues = parameters.matrixXValues;
 		
 		double[] xAxisValues = new double[valuesVector.size() - 1]; 
 		if (useXAxisValues) {

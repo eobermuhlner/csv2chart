@@ -95,8 +95,18 @@ public class Parameters implements Cloneable {
 			description = "Text to appear as label on the z-axis.")
 	public String zAxisLabel;
 
-	@Deprecated
-	public Boolean crowdedLegend;
+	@Parameter(
+			name = "value-labels-threshold",
+			description = ""
+					+ "Threshold of value labels count to switch from a separate legend to value labels.\n"
+					+ "Default: 5")
+	public int autoValueLabelsThreshold = 5;
+	
+	@Parameter(
+			name = "value-labels",
+			description = "Labels appear next to the values where possible.\n"
+					+ "Default: Dynamically determined by the parameter 'value-labels-threshold'")
+	public Boolean valueLabels;
 	
 	@Parameter(
 			name = "scale-min-value",

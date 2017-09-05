@@ -35,7 +35,7 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		plot.setRenderer(renderer);
 		plot.setOrientation(PlotOrientation.HORIZONTAL);
 
-		boolean legend = parameters.crowdedLegend != true;
+		boolean legend = !Boolean.TRUE.equals(parameters.valueLabels);
 		JFreeChart chart = new JFreeChart(parameters.title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
 		return chart;
 	}
@@ -81,8 +81,8 @@ public class BubbleChartFactory extends AbstractChartFactory {
 		if (parameters.yAxisLabel == null) {
 			parameters.yAxisLabel = yValues.getFirstHeader();
 		}
-		if (parameters.crowdedLegend == null) {
-			parameters.crowdedLegend = mapSeriesToValues.size() > 10;
+		if (parameters.valueLabels == null) {
+			parameters.valueLabels = mapSeriesToValues.size() > parameters.autoValueLabelsThreshold;
 		}
 
 		return dataset;

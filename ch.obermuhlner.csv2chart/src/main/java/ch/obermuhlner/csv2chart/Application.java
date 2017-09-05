@@ -281,7 +281,7 @@ public class Application {
 				if (renderer instanceof XYBubbleRenderer) {
 					XYBubbleRenderer xyBubbleRenderer = (XYBubbleRenderer) renderer;
 
-					if (parameters.crowdedLegend) {
+					if (parameters.valueLabels) {
 						xyBubbleRenderer.setSeriesItemLabelGenerator(seriesIndex, new BubbleXYItemLabelGenerator() {
 							private static final long serialVersionUID = 1L;
 

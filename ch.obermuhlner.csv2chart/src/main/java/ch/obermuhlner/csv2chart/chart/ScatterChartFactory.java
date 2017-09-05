@@ -30,7 +30,7 @@ public class ScatterChartFactory extends AbstractChartFactory {
 		plot.setRenderer(renderer);
 		plot.setOrientation(orientation);
 		
-		boolean legend = !Boolean.TRUE.equals(parameters.crowdedLegend);
+		boolean legend = !Boolean.TRUE.equals(parameters.valueLabels);
 		JFreeChart chart = new JFreeChart(parameters.title, JFreeChart.DEFAULT_TITLE_FONT, plot, legend);
 		return chart;
 	}

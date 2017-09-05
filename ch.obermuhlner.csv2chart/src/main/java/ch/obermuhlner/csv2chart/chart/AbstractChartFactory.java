@@ -141,8 +141,8 @@ public abstract class AbstractChartFactory implements ChartFactory {
 		if (parameters.zAxisLabel == null) {
 			parameters.zAxisLabel = zAxisName;
 		}
-		if (parameters.crowdedLegend == null) {
-			parameters.crowdedLegend = valueVectors.size() > 10 + 2;
+		if (parameters.valueLabels == null) {
+			parameters.valueLabels = valueVectors.size() > parameters.autoValueLabelsThreshold;
 		}
 
 		return dataset;

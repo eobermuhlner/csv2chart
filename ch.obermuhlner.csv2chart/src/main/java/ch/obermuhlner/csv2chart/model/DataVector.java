@@ -47,7 +47,7 @@ public class DataVector {
 	
 	public Double getDoubleValue(int index) {
 		String string = getStringValue(index);
-		if (string == null) {
+		if (string == null || string.equals("")) {
 			return null;
 		}
 		

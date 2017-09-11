@@ -23,7 +23,7 @@ import ch.obermuhlner.csv2chart.model.DataModel;
 public class HeatChartFactory extends AbstractChartFactory {
 
 	private static final Color PASTEL_BLUE = new Color(0x2166ac);
-	private static final Color PASTEL_YELLOW = new Color(0xffffbf);
+	private static final Color PASTEL_YELLOW = new Color(0xffffef);
 	private static final Color PASTEL_RED = new Color(0xb2182b);
 	
 

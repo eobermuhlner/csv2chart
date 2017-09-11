@@ -235,8 +235,10 @@ public abstract class AbstractChartFactory implements ChartFactory {
 				yValues[index] = yAxisValues[yIndex];
 				zValues[index] = value;
 				
-				minValue = Math.min(minValue, value);
-				maxValue = Math.max(maxValue, value);
+				if (!Double.isNaN(value) && Double.isFinite(value)) {
+					minValue = Math.min(minValue, value);
+					maxValue = Math.max(maxValue, value);
+				}
 				
 				index++;
 			}

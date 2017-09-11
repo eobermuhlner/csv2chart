@@ -70,7 +70,7 @@ public class DataVector {
 		Double aggregated = null; 
 		for (int i = 0; i < values.size(); i++) {
 			Double value = getDoubleValue(i);
-			if (value != null) {
+			if (value != null && !Double.isNaN(value) && Double.isFinite(value)) {
 				if (aggregated == null) {
 					aggregated = value;
 				} else {

@@ -188,6 +188,15 @@ public abstract class AbstractChartFactory implements ChartFactory {
 			}
 		}
 		
+		double xAxisMinDelta = Double.MAX_VALUE;
+		for (int i = 1; i < xAxisValues.length; i++) {
+			double delta = Math.abs(xAxisValues[i] - xAxisValues[i - 1]);
+			xAxisMinDelta = Math.min(xAxisMinDelta, delta);
+		}
+		if (xAxisMinDelta != Double.MAX_VALUE) {
+			parameters.xAxisMinDelta = xAxisMinDelta;
+		}
+		
 		double[] yAxisValues = new double[valuesVector.get(0).getValueCount() - 1];
 		if (useYAxisValues) {
 			DataVector yAxisVector = valuesVector.get(0);
@@ -199,7 +208,16 @@ public abstract class AbstractChartFactory implements ChartFactory {
 				yAxisValues[i] = i;
 			}
 		}
-		
+
+		double yAxisMinDelta = Double.MAX_VALUE;
+		for (int i = 1; i < yAxisValues.length; i++) {
+			double delta = Math.abs(yAxisValues[i] - yAxisValues[i - 1]);
+			yAxisMinDelta = Math.min(yAxisMinDelta, delta);
+		}
+		if (yAxisMinDelta != Double.MAX_VALUE) {
+			parameters.yAxisMinDelta = yAxisMinDelta;
+		}
+
 		int n = xAxisValues.length * yAxisValues.length;
 		double[] xValues = new double[n];
 		double[] yValues = new double[n];

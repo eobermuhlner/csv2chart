@@ -87,6 +87,12 @@ public class HeatChartFactory extends AbstractChartFactory {
 					parameters.colorScaleDefaultColor);
 		}
 
+		if (parameters.xAxisMinDelta != null) {
+			renderer.setBlockHeight(parameters.xAxisMinDelta);
+		}
+		if (parameters.yAxisMinDelta != null) {
+			renderer.setBlockWidth(parameters.yAxisMinDelta);
+		}
 		renderer.setPaintScale(paintScale);
 		plot.setRenderer(renderer);
 		plot.setOrientation(PlotOrientation.HORIZONTAL);

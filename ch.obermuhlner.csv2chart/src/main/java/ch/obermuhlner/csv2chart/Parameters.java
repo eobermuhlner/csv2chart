@@ -97,6 +97,9 @@ public class Parameters implements Cloneable {
 			description = "Text to appear as label on the z-axis.")
 	public String zAxisLabel;
 
+	public Double xAxisMinDelta;
+	public Double yAxisMinDelta;
+	
 	@Parameter(
 			name = "value-labels-threshold",
 			description = ""

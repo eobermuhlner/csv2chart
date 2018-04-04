@@ -99,7 +99,7 @@ public class HeatChartFactory extends AbstractChartFactory {
 
 		JFreeChart chart = new JFreeChart(parameters.title, JFreeChart.DEFAULT_TITLE_FONT, plot, false);
 
-		boolean legend = true;
+		boolean legend = Parameters.withDefault(parameters.legend, true);
 		if (legend) {
 			NumberAxis scaleAxis = new NumberAxis(parameters.zAxisLabel);
 	        scaleAxis.setAxisLinePaint(Color.WHITE);

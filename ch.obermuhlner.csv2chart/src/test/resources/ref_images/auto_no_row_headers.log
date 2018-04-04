@@ -1,9 +1,6 @@
 clip java.awt.Rectangle
 fill java.awt.Rectangle
 drawString 'auto_no_row_headers'
-fill java.awt.geom.Rectangle2D$Double
-draw java.awt.geom.Path2D$Double
-drawString 'Col2'
 fill java.awt.Rectangle
 draw java.awt.geom.Line2D$Double
 drawString '0.9'

@@ -237,6 +237,13 @@ public class Parameters implements Cloneable {
 			.sorted(Comparator.comparing(Parameter::optionName))
 			.collect(Collectors.toList());
 	}
+
+	public static <T> T withDefault(T value, T defaultValue) {
+		if (value == null) {
+			return defaultValue;
+		}
+		return value;
+	}
 	
 	public Parameters copy() {
 		try {

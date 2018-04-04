@@ -1,6 +1,7 @@
 package ch.obermuhlner.csv2chart.chart;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 
 import ch.obermuhlner.csv2chart.Parameters;
@@ -15,8 +16,10 @@ public class LineChartFactory extends AbstractChartFactory {
 		if (parameters.xAxisLabel == null) {
 			parameters.xAxisLabel = dataModel.getCategory().getFirstHeader();
 		}
-		
-		JFreeChart chart = org.jfree.chart.ChartFactory.createLineChart(parameters.title, parameters.xAxisLabel, parameters.yAxisLabel, categoryDataset);
+
+		boolean legend = Parameters.withDefault(parameters.legend, true);
+
+		JFreeChart chart = org.jfree.chart.ChartFactory.createLineChart(parameters.title, parameters.xAxisLabel, parameters.yAxisLabel, categoryDataset, PlotOrientation.VERTICAL, legend, true, false);
 		return chart;
 	}
 }

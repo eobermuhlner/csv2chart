@@ -22,7 +22,8 @@ public class PieChartFactory extends AbstractChartFactory {
 		} else {
 			CategoryDataset categoryDataset = createCategoryDataset(dataModel, parameters);
 
-			JFreeChart chart = org.jfree.chart.ChartFactory.createMultiplePieChart(parameters.title, categoryDataset, TableOrder.BY_COLUMN, false, false, false);
+			boolean legend = Parameters.withDefault(parameters.legend, false);
+			JFreeChart chart = org.jfree.chart.ChartFactory.createMultiplePieChart(parameters.title, categoryDataset, TableOrder.BY_COLUMN, legend, false, false);
 			return chart;
 		}
 	}

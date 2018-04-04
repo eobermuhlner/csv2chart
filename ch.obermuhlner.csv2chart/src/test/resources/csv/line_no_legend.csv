@@ -1,0 +1,6 @@
+# csv2chart.chart=line
+# csv2chart.legend=false
+#
+RowHeader,Col1,Col2
+Row1,1,2
+Row2,3,4

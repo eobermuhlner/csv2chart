@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ApplicationRegressionTest {
@@ -25,22 +26,19 @@ public class ApplicationRegressionTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testReferenceChartsLog() throws IOException {
 		assertReferenceCharts(ImageFormat.LOG);
 	}
 
 	@Test
 	public void testReferenceChartsSvg() throws IOException {
-		if (isRunningOnSystemWithCorrectReferenceImages()) {
-			assertReferenceCharts(ImageFormat.SVG);
-		}
+		assertReferenceCharts(ImageFormat.SVG);
 	}
 	
 	@Test
 	public void testReferenceChartsPng() throws IOException {
-		if (isRunningOnSystemWithCorrectReferenceImages()) {
-			assertReferenceCharts(ImageFormat.PNG);
-		}
+		assertReferenceCharts(ImageFormat.PNG);
 	}
 
 	private boolean isRunningOnSystemWithCorrectReferenceImages() {
@@ -68,10 +66,12 @@ public class ApplicationRegressionTest {
 				"--format", imageFormat.toString(),
 				"src/test/resources/csv/" + baseFilename + ".csv");
 
-		assertImageEquals(
-				imageFormat,
-				new File("src/test/resources/ref_images/" + baseFilename + "." + imageFormat.getExtension()),
-				new File("src/test/resources/out_images/" + baseFilename + "." + imageFormat.getExtension()));
+		if (isRunningOnSystemWithCorrectReferenceImages()) {
+			assertImageEquals(
+			   imageFormat,
+			   new File("src/test/resources/ref_images/" + baseFilename + "." + imageFormat.getExtension()),
+			   new File("src/test/resources/out_images/" + baseFilename + "." + imageFormat.getExtension()));
+		}
 	}
 	
 	private void runCsv2Chart(String...args) {

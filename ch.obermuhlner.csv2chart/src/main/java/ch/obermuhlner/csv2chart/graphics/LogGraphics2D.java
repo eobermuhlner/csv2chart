@@ -37,6 +37,7 @@ import java.text.AttributedCharacterIterator;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class LogGraphics2D extends Graphics2D {
 
@@ -179,68 +180,56 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public Object getRenderingHint(Key hintKey) {
-		// TODO Auto-generated method stub
-		return null;
+		return renderingHint.get(hintKey);
 	}
 
 	@Override
 	public void setRenderingHints(Map<?, ?> hints) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void addRenderingHints(Map<?, ?> hints) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public RenderingHints getRenderingHints() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void translate(int x, int y) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void translate(double tx, double ty) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void rotate(double theta) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void rotate(double theta, double x, double y) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void scale(double sx, double sy) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void shear(double shx, double shy) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void transform(AffineTransform Tx) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -291,7 +280,6 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public Graphics create() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -307,14 +295,12 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public void setPaintMode() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setXORMode(Color c1) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -334,32 +320,27 @@ public class LogGraphics2D extends Graphics2D {
 
 	@Override
 	public Rectangle getClipBounds() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void clipRect(int x, int y, int width, int height) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setClip(int x, int y, int width, int height) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public Shape getClip() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setClip(Shape clip) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -724,7 +705,6 @@ public class LogGraphics2D extends Graphics2D {
 
 		@Override
 		public GraphicsDevice getDevice() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -740,13 +720,11 @@ public class LogGraphics2D extends Graphics2D {
 
 		@Override
 		public AffineTransform getDefaultTransform() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public AffineTransform getNormalizingTransform() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 

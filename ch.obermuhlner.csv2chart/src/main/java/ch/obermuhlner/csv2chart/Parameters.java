@@ -146,6 +146,14 @@ public class Parameters implements Cloneable {
 	public double dataColorBrightness = 0.9;
 
 	@Parameter(
+			name = "data-color-alpha",
+			description = ""
+					+ "Alpha value of data colors.\n"
+					+ "Supported values: 0.0 - 1.0\n"
+					+ "Default: 0.8")
+	public double dataColorAlpha = 0.8;
+
+	@Parameter(
 			name = "scale-min-value",
 			description = ""
 					+ "Minimum value of the color scale.")

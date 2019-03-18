@@ -345,6 +345,8 @@ public class Application {
 		Paint[] paints = new Paint[n];
 		boolean[] wheelPaints = new boolean[n];
 
+		int alpha = (int) (parameters.dataColorAlpha * 255.0f + 0.5f) << 24;
+
 		int paintIndex = 0;
 		int wheelStep = 3;
 		while (paintIndex < n) {
@@ -352,7 +354,9 @@ public class Application {
 			for (int angle = 0; angle < n; angle+=step) {
 				if (!wheelPaints[angle]) {
 					float hue = ((float) angle) / n;
-					Paint paint = Color.getHSBColor(hue, (float) parameters.dataColorSaturation, (float) parameters.dataColorBrightness);
+					int rgb = 0xffffff & Color.HSBtoRGB(hue, (float) parameters.dataColorSaturation, (float) parameters.dataColorBrightness);
+					int argb = alpha | rgb;
+					Paint paint = new Color(argb, true);
 					wheelPaints[angle] = true;
 					paints[paintIndex++] = paint;
 				}

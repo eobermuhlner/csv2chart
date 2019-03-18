@@ -1,9 +1,6 @@
 package ch.obermuhlner.csv2chart;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,11 +13,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.Properties;
 
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -28,12 +23,7 @@ import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.labels.BubbleXYItemLabelGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.MultiplePiePlot;
-import org.jfree.chart.plot.PieLabelLinkStyle;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.plot.Plot;
-import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
@@ -136,12 +126,12 @@ public class Application {
 			
 			ChartFactory chartFactory = createChartFactory(parameters);
 			JFreeChart chart = chartFactory.createChart(dataModel, parameters);
-			modifyTheme(chart, parameters);
+			modifyTheme(chart, dataModel, parameters);
 			
 			saveChartImage(chart, baseFilename, parameters);
 		}		
 	}
-	
+
 	private static void printHelp() {
 		System.out.println("NAME");
 		System.out.println("    csv2chart - create chart from csv file");
@@ -226,7 +216,7 @@ public class Application {
 		}
 	}
 
-	private static void modifyTheme(JFreeChart chart, Parameters parameters) {
+	private static void modifyTheme(JFreeChart chart, DataModel dataModel, Parameters parameters) {
 		String fontName = "Helvetica";
 		
 		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
@@ -234,7 +224,16 @@ public class Application {
 		chart.setTextAntiAlias(true);
 		chart.setAntiAlias(true);
 
+		DrawingSupplier drawingSupplier = new DefaultDrawingSupplier(
+				createColors(parameters),
+				DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE,
+				DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE,
+				DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE,
+				DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
+				DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE);
+
 		//theme.setTitlePaint(Color.decode("#4572a7"));
+		theme.setDrawingSupplier(drawingSupplier);
 		theme.setExtraLargeFont(new Font(fontName, Font.BOLD, 18)); // title
 		theme.setLargeFont(new Font(fontName, Font.BOLD, 14)); // axis-title
 		theme.setRegularFont(new Font(fontName, Font.PLAIN, 12));
@@ -316,6 +315,52 @@ public class Application {
 		if (legend != null) {
 			legend.setFrame(BlockBorder.NONE);
 		}
+	}
+
+	private static Paint[] createColors(Parameters parameters) {
+		switch (parameters.dataColors) {
+			case WHEEL:
+				return createWheelColors(parameters);
+			case RANDOM:
+				return createRandomColors(parameters);
+		}
+		throw new IllegalArgumentException("Unknown DataColors: " + parameters.dataColors);
+	}
+
+	private static Paint[] createRandomColors(Parameters parameters) {
+		int n = 100;
+
+		Random random = new Random(1);
+		Paint[] paints = new Paint[n];
+
+		for (int i = 0; i < n; i++) {
+			paints[i] = Color.getHSBColor(random.nextFloat(), (float) parameters.dataColorSaturation, (float) parameters.dataColorBrightness);
+		}
+
+		return paints;
+	}
+
+	private static Paint[] createWheelColors(Parameters parameters) {
+		int n = 360;
+		Paint[] paints = new Paint[n];
+		boolean[] wheelPaints = new boolean[n];
+
+		int paintIndex = 0;
+		int wheelStep = 3;
+		while (paintIndex < n) {
+			int step = n / wheelStep;
+			for (int angle = 0; angle < n; angle+=step) {
+				if (!wheelPaints[angle]) {
+					float hue = ((float) angle) / n;
+					Paint paint = Color.getHSBColor(hue, (float) parameters.dataColorSaturation, (float) parameters.dataColorBrightness);
+					wheelPaints[angle] = true;
+					paints[paintIndex++] = paint;
+				}
+			}
+			wheelStep += wheelStep;
+		}
+
+		return paints;
 	}
 
 	private static void setPiePlotStyle(PiePlot piePlot) {

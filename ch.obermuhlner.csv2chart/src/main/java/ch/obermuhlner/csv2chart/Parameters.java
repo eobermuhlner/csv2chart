@@ -109,15 +109,41 @@ public class Parameters implements Cloneable {
 	
 	@Parameter(
 			name = "value-labels",
-			description = "Labels appear next to the values where possible.\n"
+			description = ""
+					+ "Labels appear next to the values where possible.\n"
 					+ "Default: Dynamically determined by the parameter 'value-labels-threshold'")
 	public Boolean valueLabels;
 
 	@Parameter(
 			name = "legend",
-			description = "Shows a legend for the value categories where necessary.\n"
+			description = ""
+					+ "Shows a legend for the value categories where necessary.\n"
 					+ "Default: Dynamically determined (generally true)")
 	public Boolean legend;
+
+	@Parameter(
+			name = "data-colors",
+			description = ""
+					+ "Color scheme to render data.\n"
+					+ "Supported schemes: wheel, random\n"
+					+ "Default: wheel")
+	public DataColors dataColors = DataColors.WHEEL;
+
+	@Parameter(
+			name = "data-color-saturation",
+			description = ""
+					+ "Saturation of data colors.\n"
+					+ "Supported values: 0.0 - 1.0\n"
+					+ "Default: 0.7")
+	public double dataColorSaturation = 0.7;
+
+	@Parameter(
+			name = "data-color-brightness",
+			description = ""
+					+ "Brightness of data colors.\n"
+					+ "Supported values: 0.0 - 1.0\n"
+					+ "Default: 0.9")
+	public double dataColorBrightness = 0.9;
 
 	@Parameter(
 			name = "scale-min-value",

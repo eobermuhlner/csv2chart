@@ -122,6 +122,16 @@ public class Parameters implements Cloneable {
 	public Boolean legend;
 
 	@Parameter(
+			name = "color-theme",
+			description = ""
+					+ "Color theme.\n"
+					+ "Supported schemes: light, dark\n"
+					+ "Default: light",
+			optionName = "color-theme",
+			optionArgumentDescription = "theme")
+	public ColorTheme colorTheme = ColorTheme.LIGHT;
+
+	@Parameter(
 			name = "data-colors",
 			description = ""
 					+ "Color scheme to render data.\n"
@@ -235,6 +245,10 @@ public class Parameters implements Cloneable {
 				value = Double.parseDouble(String.valueOf(value));
 			} else if (fieldType == ImageFormat.class) {
 				value = ImageFormat.valueOf(String.valueOf(value).toUpperCase());
+			} else if (fieldType == ColorTheme.class) {
+				value = ColorTheme.valueOf(String.valueOf(value).toUpperCase());
+			} else if (fieldType == DataColors.class) {
+				value = DataColors.valueOf(String.valueOf(value).toUpperCase());
 			} else if (fieldType == Locale.class) {
 				value = Locale.forLanguageTag(String.valueOf(value));
 			}

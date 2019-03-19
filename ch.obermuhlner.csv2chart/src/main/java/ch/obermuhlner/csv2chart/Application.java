@@ -52,6 +52,7 @@ import ch.obermuhlner.csv2chart.model.csv.CsvDataModelLoader;
 public class Application {
 
 	private static Color gray = Color.decode("#666666");
+    private static Color midGray = Color.decode("#888888");
 	private static Color lightGray = Color.decode("#C0C0C0");
 
 	private static final ArgumentHandler<Parameters> argumentHandler = new ArgumentHandler<>();
@@ -219,8 +220,6 @@ public class Application {
 	private static void modifyTheme(JFreeChart chart, DataModel dataModel, Parameters parameters) {
 		String fontName = "Helvetica";
 		
-		StandardChartTheme theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
-
 		chart.setTextAntiAlias(true);
 		chart.setAntiAlias(true);
 
@@ -232,18 +231,14 @@ public class Application {
 				DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE,
 				DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE);
 
-		//theme.setTitlePaint(Color.decode("#4572a7"));
+        StandardChartTheme theme = createTheme(parameters);
+
 		theme.setDrawingSupplier(drawingSupplier);
 		theme.setExtraLargeFont(new Font(fontName, Font.BOLD, 18)); // title
 		theme.setLargeFont(new Font(fontName, Font.BOLD, 14)); // axis-title
 		theme.setRegularFont(new Font(fontName, Font.PLAIN, 12));
-		theme.setRangeGridlinePaint(lightGray);
-		theme.setPlotBackgroundPaint(Color.white);
-		theme.setChartBackgroundPaint(Color.white);
-		theme.setGridBandPaint(Color.red);
 		theme.setAxisOffset(new RectangleInsets(0, 0, 0, 0));
 		theme.setBarPainter(new StandardBarPainter());
-		theme.setAxisLabelPaint(gray);
 		theme.apply(chart);
 
 		Plot plot = chart.getPlot();
@@ -253,9 +248,17 @@ public class Application {
 			categoryPlot.getRangeAxis().setAxisLineVisible(false);
 			categoryPlot.getRangeAxis().setTickMarksVisible(false);
 			categoryPlot.setRangeGridlineStroke(new BasicStroke());
-			categoryPlot.getRangeAxis().setTickLabelPaint(gray);
-			categoryPlot.getDomainAxis().setTickLabelPaint(gray);
-			
+			switch(parameters.colorTheme) {
+                case LIGHT:
+                    categoryPlot.getRangeAxis().setTickLabelPaint(gray);
+                    categoryPlot.getDomainAxis().setTickLabelPaint(gray);
+                    break;
+                case DARK:
+                    categoryPlot.getRangeAxis().setTickLabelPaint(lightGray);
+                    categoryPlot.getDomainAxis().setTickLabelPaint(lightGray);
+                    break;
+            }
+
 			for (int i = 0; i < categoryPlot.getCategories().size(); i++) {
 				categoryPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
 			}
@@ -263,11 +266,7 @@ public class Application {
 			CategoryItemRenderer renderer = categoryPlot.getRenderer();
 			if (renderer instanceof BarRenderer) {
 				BarRenderer barRenderer = (BarRenderer) categoryPlot.getRenderer();
-				barRenderer.setShadowVisible(true);
-				barRenderer.setShadowXOffset(2);
-				barRenderer.setShadowYOffset(0);
-				barRenderer.setShadowPaint(lightGray);
-				barRenderer.setMaximumBarWidth(0.1);
+				barRenderer.setShadowVisible(false);
 			}
 		} else if (plot instanceof XYPlot) {
 			XYPlot xyPlot = (XYPlot) plot;
@@ -300,15 +299,22 @@ public class Application {
 						});
 					}
 					renderer.setSeriesItemLabelsVisible(seriesIndex, true);
-					renderer.setSeriesItemLabelPaint(seriesIndex, gray);
+                    switch (parameters.colorTheme) {
+                        case LIGHT:
+                            renderer.setSeriesItemLabelPaint(seriesIndex, midGray);
+                            break;
+                        case DARK:
+                            renderer.setSeriesItemLabelPaint(seriesIndex, midGray);
+                            break;
+                    }
 				}
 			}
 		} else if (plot instanceof PiePlot) {
 			PiePlot piePlot = (PiePlot) plot;
-			setPiePlotStyle(piePlot);
+			setPiePlotStyle(piePlot, parameters.colorTheme);
 		} else if (plot instanceof MultiplePiePlot) {
 			MultiplePiePlot multiplePiePlot = (MultiplePiePlot) plot;
-			setPiePlotStyle((PiePlot) multiplePiePlot.getPieChart().getPlot());
+			setPiePlotStyle((PiePlot) multiplePiePlot.getPieChart().getPlot(), parameters.colorTheme);
 		}
 	
 		LegendTitle legend = chart.getLegend();
@@ -317,7 +323,33 @@ public class Application {
 		}
 	}
 
-	private static Paint[] createColors(Parameters parameters) {
+    private static StandardChartTheme createTheme(Parameters parameters) {
+        StandardChartTheme theme;
+
+        switch (parameters.colorTheme) {
+            case LIGHT:
+                theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
+                theme.setRangeGridlinePaint(lightGray);
+                theme.setPlotBackgroundPaint(Color.white);
+                theme.setChartBackgroundPaint(Color.white);
+                theme.setGridBandPaint(Color.red);
+                theme.setAxisLabelPaint(gray);
+                break;
+            case DARK:
+                theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createDarknessTheme();
+                theme.setRangeGridlinePaint(Color.darkGray);
+                theme.setGridBandPaint(Color.red);
+                theme.setAxisLabelPaint(gray);
+                theme.setItemLabelPaint(lightGray);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown: " + parameters.colorTheme);
+        }
+
+        return theme;
+    }
+
+    private static Paint[] createColors(Parameters parameters) {
 		switch (parameters.dataColors) {
 			case WHEEL:
 				return createWheelColors(parameters);
@@ -367,7 +399,7 @@ public class Application {
 		return paints;
 	}
 
-	private static void setPiePlotStyle(PiePlot piePlot) {
+	private static void setPiePlotStyle(PiePlot piePlot, ColorTheme colorTheme) {
 		piePlot.setOutlineVisible(false);
 		piePlot.setShadowPaint(null);
 		
@@ -375,7 +407,16 @@ public class Application {
 		piePlot.setLabelShadowPaint(null);
 		piePlot.setLabelOutlinePaint(null);
 		piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);
-		piePlot.setLabelLinkPaint(gray);
+
+		switch(colorTheme) {
+            case LIGHT:
+                piePlot.setLabelPaint(Color.black);
+                break;
+            case DARK:
+                piePlot.setLabelPaint(lightGray);
+                break;
+        }
+        piePlot.setLabelLinkPaint(gray);
 	}
 
 	private static String baseFilename(String filename) {

@@ -71,8 +71,15 @@ public class Parameters implements Cloneable {
 					+ "Text to appear as title in the chart.\n"
 					+ "Default: basename of the input file")
 	public String title = null;
-	
-	@Parameter(
+
+    @Parameter(
+            name = "subtitle",
+            description = ""
+                    + "Text to appear as sub title in the chart.\n"
+                    + "Default: none")
+    public String subtitle = null;
+
+    @Parameter(
 			name = "matrix-x-values",
 			description = ""
 					+ "Specifies whether the first row of matrix values is used as values on the x-axis.\n"
@@ -213,10 +220,10 @@ public class Parameters implements Cloneable {
 			name = "theme",
 			description = ""
 					+ "Color theme.\n"
-					+ "Supported themes: light, dark\n"
+					+ "Supported themes: light, dark, lightSolarized, darkSolarized\n"
 					+ "Default: light",
 			optionName = "theme",
-			optionArgumentDescription = "theme")
+			optionArgumentDescription = "name")
 	public String theme = "light";
 
 	@Parameter(

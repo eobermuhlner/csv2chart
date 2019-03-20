@@ -22,6 +22,8 @@ import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.chart.renderer.xy.XYBubbleRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.title.Title;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUnits;
@@ -120,6 +122,9 @@ public class Application {
 			
 			ChartFactory chartFactory = createChartFactory(parameters);
 			JFreeChart chart = chartFactory.createChart(dataModel, parameters);
+			if (parameters.subtitle != null) {
+			    chart.setSubtitles(Arrays.asList(new TextTitle(parameters.subtitle)));
+            }
 			modifyTheme(chart, dataModel, parameters);
 			
 			saveChartImage(chart, baseFilename, parameters);
@@ -333,32 +338,6 @@ public class Application {
         } else {
             theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
         }
-
-        /*
-        if (true) {
-            theme.setGridBandPaint(Color.red);
-            theme.setGridBandAlternatePaint(Color.red);
-            theme.setTitlePaint(Color.red);
-            theme.setSubtitlePaint(Color.red);
-            theme.setLegendBackgroundPaint(Color.red);
-            theme.setLegendItemPaint(Color.red);
-            theme.setChartBackgroundPaint(Color.red);
-            theme.setPlotBackgroundPaint(Color.red);
-            theme.setPlotOutlinePaint(Color.red);
-            theme.setLabelLinkPaint(Color.red);
-            theme.setDomainGridlinePaint(Color.red);
-            theme.setRangeGridlinePaint(Color.red);
-            theme.setBaselinePaint(Color.red);
-            theme.setCrosshairPaint(Color.red);
-            theme.setAxisLabelPaint(Color.red);
-            theme.setTickLabelPaint(Color.red);
-            theme.setShadowPaint(Color.red);
-            theme.setItemLabelPaint(Color.red);
-            theme.setThermometerPaint(Color.red);
-            theme.setWallPaint(Color.red);
-            theme.setErrorIndicatorPaint(Color.red);
-        }
-        */
 
         theme.setTitlePaint(parameters.themeTitleColor);
         theme.setSubtitlePaint(parameters.themeSubtitleColor);

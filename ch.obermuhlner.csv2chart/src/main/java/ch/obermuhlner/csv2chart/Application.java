@@ -23,7 +23,6 @@ import org.jfree.chart.renderer.xy.XYBubbleRenderer;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
-import org.jfree.chart.title.Title;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUnits;
@@ -270,8 +269,8 @@ public class Application {
             categoryPlot.setDomainGridlinePaint(parameters.themeGridLineColor);
 			categoryPlot.getRangeAxis().setAxisLineVisible(false);
             categoryPlot.getRangeAxis().setTickMarksVisible(false);
-            categoryPlot.getDomainAxis().setAxisLinePaint(parameters.themeAxisTickColor);
-            categoryPlot.getDomainAxis().setTickMarkPaint(parameters.themeAxisTickColor);
+            categoryPlot.getDomainAxis().setAxisLinePaint(parameters.themeAxisLineColor);
+            categoryPlot.getDomainAxis().setTickMarkPaint(parameters.themeAxisLineColor);
             categoryPlot.getDomainAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
 
 			for (int i = 0; i < categoryPlot.getCategories().size(); i++) {
@@ -370,7 +369,7 @@ public class Application {
         theme.setChartBackgroundPaint(parameters.themeBackgroundColor);
         theme.setLegendBackgroundPaint(parameters.themeBackgroundColor);
 
-        theme.setLabelLinkPaint(parameters.themeAxisTickColor);
+        theme.setLabelLinkPaint(parameters.themeAxisLineColor);
 
         theme.setLegendItemPaint(parameters.themeLegendColor);
         theme.setItemLabelPaint(parameters.themeLabelColor);
@@ -439,7 +438,7 @@ public class Application {
 		piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);
 
         piePlot.setLabelPaint(parameters.themeAxisLabelColor);
-        piePlot.setLabelLinkPaint(parameters.themeAxisTickColor);
+        piePlot.setLabelLinkPaint(parameters.themeAxisLineColor);
 	}
 
 	private static String baseFilename(String filename) {

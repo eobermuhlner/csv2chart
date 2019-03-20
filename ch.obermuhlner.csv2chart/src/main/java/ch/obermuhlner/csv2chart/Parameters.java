@@ -257,10 +257,10 @@ public class Parameters implements Cloneable {
 	public Color themeLabelColor = Colors.gray50;
 
 	@Parameter(
-			name = "color.axis.tick",
+			name = "color.axis.line",
 			description = ""
-					+ "Color of the axis tick mark.")
-	public Color themeAxisTickColor = Colors.gray20;
+					+ "Color of the axis line.")
+	public Color themeAxisLineColor = Colors.gray20;
 
 	@Parameter(
 			name = "color.axis.label",

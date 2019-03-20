@@ -265,13 +265,13 @@ public class Application {
 		if (plot instanceof CategoryPlot) {
 			CategoryPlot categoryPlot = (CategoryPlot) plot;
 			categoryPlot.setOutlineVisible(false);
-			categoryPlot.getRangeAxis().setAxisLineVisible(false);
-			categoryPlot.getRangeAxis().setTickMarksVisible(false);
-			categoryPlot.setRangeGridlineStroke(new BasicStroke());
+            categoryPlot.setRangeGridlineStroke(new BasicStroke());
             categoryPlot.setRangeGridlinePaint(parameters.themeGridLineColor);
             categoryPlot.setDomainGridlinePaint(parameters.themeGridLineColor);
-
-            categoryPlot.getRangeAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
+			categoryPlot.getRangeAxis().setAxisLineVisible(false);
+            categoryPlot.getRangeAxis().setTickMarksVisible(false);
+            categoryPlot.getDomainAxis().setAxisLinePaint(parameters.themeAxisTickColor);
+            categoryPlot.getDomainAxis().setTickMarkPaint(parameters.themeAxisTickColor);
             categoryPlot.getDomainAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
 
 			for (int i = 0; i < categoryPlot.getCategories().size(); i++) {
@@ -337,6 +337,30 @@ public class Application {
             theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createDarknessTheme();
         } else {
             theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
+        }
+
+        if (true) {
+            theme.setGridBandPaint(Color.red);
+            theme.setGridBandAlternatePaint(Color.red);
+            theme.setTitlePaint(Color.red);
+            theme.setSubtitlePaint(Color.red);
+            theme.setLegendBackgroundPaint(Color.red);
+            theme.setLegendItemPaint(Color.red);
+            theme.setChartBackgroundPaint(Color.red);
+            theme.setPlotBackgroundPaint(Color.red);
+            theme.setPlotOutlinePaint(Color.red);
+            theme.setLabelLinkPaint(Color.red);
+            theme.setDomainGridlinePaint(Color.red);
+            theme.setRangeGridlinePaint(Color.red);
+            theme.setBaselinePaint(Color.red);
+            theme.setCrosshairPaint(Color.red);
+            theme.setAxisLabelPaint(Color.red);
+            theme.setTickLabelPaint(Color.red);
+            theme.setShadowPaint(Color.red);
+            theme.setItemLabelPaint(Color.red);
+            theme.setThermometerPaint(Color.red);
+            theme.setWallPaint(Color.red);
+            theme.setErrorIndicatorPaint(Color.red);
         }
 
         theme.setTitlePaint(parameters.themeTitleColor);

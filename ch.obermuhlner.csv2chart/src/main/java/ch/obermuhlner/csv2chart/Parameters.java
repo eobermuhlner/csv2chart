@@ -1,5 +1,7 @@
 package ch.obermuhlner.csv2chart;
 
+import ch.obermuhlner.csv2chart.graphics.Colors;
+
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -122,16 +124,6 @@ public class Parameters implements Cloneable {
 	public Boolean legend;
 
 	@Parameter(
-			name = "color-theme",
-			description = ""
-					+ "Color theme.\n"
-					+ "Supported schemes: light, dark\n"
-					+ "Default: light",
-			optionName = "color-theme",
-			optionArgumentDescription = "theme")
-	public ColorTheme colorTheme = ColorTheme.LIGHT;
-
-	@Parameter(
 			name = "data-colors",
 			description = ""
 					+ "Color scheme to render data.\n"
@@ -216,7 +208,71 @@ public class Parameters implements Cloneable {
 			optionName = "height",
 			optionArgumentDescription = "pixels")
 	public int height = 600;
-	
+
+	@Parameter(
+			name = "theme",
+			description = ""
+					+ "Color theme.\n"
+					+ "Supported themes: light, dark\n"
+					+ "Default: light",
+			optionName = "theme",
+			optionArgumentDescription = "theme")
+	public String theme = "light";
+
+	@Parameter(
+			name = "color.background",
+			description = ""
+					+ "Color of the background.")
+	public Color themeBackgroundColor = Color.white;
+
+	@Parameter(
+			name = "color.title",
+			description = ""
+					+ "Color of the title.")
+	public Color themeTitleColor = Color.black;
+
+	@Parameter(
+			name = "color.subtitle",
+			description = ""
+					+ "Color of the subtitle.")
+	public Color themeSubtitleColor = Color.black;
+
+	@Parameter(
+			name = "color.legend",
+			description = ""
+					+ "Color of the legend.")
+	public Color themeLegendColor = Color.black;
+
+	@Parameter(
+			name = "color.label",
+			description = ""
+					+ "Color of the text labels.")
+	public Color themeLabelColor = Colors.gray50;
+
+	@Parameter(
+			name = "color.axis.tick",
+			description = ""
+					+ "Color of the axis tick mark.")
+	public Color themeAxisTickColor = Colors.gray20;
+
+	@Parameter(
+			name = "color.axis.label",
+			description = ""
+					+ "Color of the axis labels.")
+	public Color themeAxisLabelColor = Colors.gray20;
+
+	@Parameter(
+			name = "color.grid.line",
+			description = ""
+					+ "Color of the grid lines.")
+	public Color themeGridLineColor = Colors.gray90;
+
+	@Parameter(
+			name = "color.grid.band",
+			description = ""
+					+ "Color of the grid band.")
+	public Color themeGridBandColor = Color.red;
+
 	public void setParameterKeyValue(String keyValue) {
 		int assignmentIndex = keyValue.indexOf("=");
 		if (assignmentIndex < 0) {
@@ -233,24 +289,25 @@ public class Parameters implements Cloneable {
 
 	public void setParameter(String name, Object value) {
 		try {
+			String string = String.valueOf(value);
 			Field field = findField(name);
 			Class<?> fieldType = field.getType();
 			if (fieldType == Integer.class || fieldType == int.class) {
-				value = Integer.parseInt(String.valueOf(value));
+				value = Integer.parseInt(string);
 			} else if (fieldType == Boolean.class || fieldType == boolean.class) {
-				value = Boolean.parseBoolean(String.valueOf(value));
+				value = Boolean.parseBoolean(string);
 			} else if (fieldType == Color.class) {
-				value = new Color(Integer.parseInt(String.valueOf(value), 16));
+				value = Colors.parseColor(string);
 			} else if (fieldType == Double.class || fieldType == double.class) {
-				value = Double.parseDouble(String.valueOf(value));
+				value = Double.parseDouble(string);
 			} else if (fieldType == ImageFormat.class) {
-				value = ImageFormat.valueOf(String.valueOf(value).toUpperCase());
+				value = ImageFormat.valueOf(string.toUpperCase());
 			} else if (fieldType == ColorTheme.class) {
-				value = ColorTheme.valueOf(String.valueOf(value).toUpperCase());
+				value = ColorTheme.valueOf(string.toUpperCase());
 			} else if (fieldType == DataColors.class) {
-				value = DataColors.valueOf(String.valueOf(value).toUpperCase());
+				value = DataColors.valueOf(string.toUpperCase());
 			} else if (fieldType == Locale.class) {
-				value = Locale.forLanguageTag(String.valueOf(value));
+				value = Locale.forLanguageTag(string);
 			}
 			field.set(this, value);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {

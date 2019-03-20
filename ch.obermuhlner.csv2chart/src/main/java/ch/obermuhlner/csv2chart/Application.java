@@ -1,22 +1,14 @@
 package ch.obermuhlner.csv2chart;
 
 import java.awt.*;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
 
+import ch.obermuhlner.csv2chart.graphics.Colors;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.StandardChartTheme;
@@ -50,10 +42,6 @@ import ch.obermuhlner.csv2chart.model.DataModel;
 import ch.obermuhlner.csv2chart.model.csv.CsvDataModelLoader;
 
 public class Application {
-
-	private static Color gray = Color.decode("#666666");
-    private static Color midGray = Color.decode("#888888");
-	private static Color lightGray = Color.decode("#C0C0C0");
 
 	private static final ArgumentHandler<Parameters> argumentHandler = new ArgumentHandler<>();
 	
@@ -114,9 +102,14 @@ public class Application {
 			}
 			String baseFilename = baseFilename(path.getFileName().toString());
 			parameters.title = baseFilename;
+
 			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
 			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
-			
+            loadThemeProperties(parameters.theme, parameters);
+            // load local properties files again, in case they overwrite some color theme fields
+            loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
+            loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
+
 			if (parameters.locale == null) {
 				Locale.setDefault(defaultLocale);
 			} else {
@@ -180,17 +173,39 @@ public class Application {
 		}
 		
 	}
-	
-	private static void loadProperties(File file, Parameters parameters) {
+
+    private static void loadThemeProperties(String theme, Parameters parameters) {
+        String themeProperties = theme + ".properties";
+        InputStream stream = Application.class.getResourceAsStream("/theme/" + themeProperties);
+        if (stream != null) {
+            try (Reader reader = new BufferedReader(new InputStreamReader(stream))) {
+                loadProperties(reader, parameters);
+            } catch (IOException ex) {
+                // ignore
+            }
+        }
+
+	    loadProperties(new File(themeProperties), parameters);
+    }
+
+    private static void loadProperties(File file, Parameters parameters) {
+        try (Reader reader = new BufferedReader(new FileReader(file))) {
+            loadProperties(reader, parameters);
+        } catch (IOException e) {
+            // ignore
+        }
+    }
+
+	private static void loadProperties(Reader reader, Parameters parameters) {
 		Properties properties = new Properties();
-		try (Reader reader = new BufferedReader(new FileReader(file))) {
+		try {
 			properties.load(reader);
 			for (Entry<Object, Object> entry : properties.entrySet()) {
 				parameters.setParameter(String.valueOf(entry.getKey()), entry.getValue());
 			}
-		} catch (IOException e) {
-			// ignore
-		}
+        } catch (IOException e) {
+            // ignore
+        }
 	}
 
 	private static ChartFactory createChartFactory(Parameters parameters) {
@@ -248,16 +263,11 @@ public class Application {
 			categoryPlot.getRangeAxis().setAxisLineVisible(false);
 			categoryPlot.getRangeAxis().setTickMarksVisible(false);
 			categoryPlot.setRangeGridlineStroke(new BasicStroke());
-			switch(parameters.colorTheme) {
-                case LIGHT:
-                    categoryPlot.getRangeAxis().setTickLabelPaint(gray);
-                    categoryPlot.getDomainAxis().setTickLabelPaint(gray);
-                    break;
-                case DARK:
-                    categoryPlot.getRangeAxis().setTickLabelPaint(lightGray);
-                    categoryPlot.getDomainAxis().setTickLabelPaint(lightGray);
-                    break;
-            }
+            categoryPlot.setRangeGridlinePaint(parameters.themeGridLineColor);
+            categoryPlot.setDomainGridlinePaint(parameters.themeGridLineColor);
+
+            categoryPlot.getRangeAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
+            categoryPlot.getDomainAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
 
 			for (int i = 0; i < categoryPlot.getCategories().size(); i++) {
 				categoryPlot.getRenderer().setSeriesStroke(i, new BasicStroke(3.0f));
@@ -299,22 +309,14 @@ public class Application {
 						});
 					}
 					renderer.setSeriesItemLabelsVisible(seriesIndex, true);
-                    switch (parameters.colorTheme) {
-                        case LIGHT:
-                            renderer.setSeriesItemLabelPaint(seriesIndex, midGray);
-                            break;
-                        case DARK:
-                            renderer.setSeriesItemLabelPaint(seriesIndex, midGray);
-                            break;
-                    }
 				}
 			}
 		} else if (plot instanceof PiePlot) {
 			PiePlot piePlot = (PiePlot) plot;
-			setPiePlotStyle(piePlot, parameters.colorTheme);
+			setPiePlotStyle(piePlot, parameters);
 		} else if (plot instanceof MultiplePiePlot) {
 			MultiplePiePlot multiplePiePlot = (MultiplePiePlot) plot;
-			setPiePlotStyle((PiePlot) multiplePiePlot.getPieChart().getPlot(), parameters.colorTheme);
+			setPiePlotStyle((PiePlot) multiplePiePlot.getPieChart().getPlot(), parameters);
 		}
 	
 		LegendTitle legend = chart.getLegend();
@@ -326,25 +328,54 @@ public class Application {
     private static StandardChartTheme createTheme(Parameters parameters) {
         StandardChartTheme theme;
 
-        switch (parameters.colorTheme) {
-            case LIGHT:
-                theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
-                theme.setRangeGridlinePaint(lightGray);
-                theme.setPlotBackgroundPaint(Color.white);
-                theme.setChartBackgroundPaint(Color.white);
-                theme.setGridBandPaint(Color.red);
-                theme.setAxisLabelPaint(gray);
-                break;
-            case DARK:
-                theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createDarknessTheme();
-                theme.setRangeGridlinePaint(Color.darkGray);
-                theme.setGridBandPaint(Color.red);
-                theme.setAxisLabelPaint(gray);
-                theme.setItemLabelPaint(lightGray);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown: " + parameters.colorTheme);
+        if (parameters.theme.startsWith("dark")) {
+            theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createDarknessTheme();
+        } else {
+            theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
         }
+
+        /*
+        if (true) {
+            theme.setGridBandPaint(Color.red);
+            theme.setGridBandAlternatePaint(Color.red);
+            theme.setTitlePaint(Color.red);
+            theme.setSubtitlePaint(Color.red);
+            theme.setLegendBackgroundPaint(Color.red);
+            theme.setLegendItemPaint(Color.red);
+            theme.setChartBackgroundPaint(Color.red);
+            theme.setPlotBackgroundPaint(Color.red);
+            theme.setPlotOutlinePaint(Color.red);
+            theme.setLabelLinkPaint(Color.red);
+            theme.setDomainGridlinePaint(Color.red);
+            theme.setRangeGridlinePaint(Color.red);
+            theme.setBaselinePaint(Color.red);
+            theme.setCrosshairPaint(Color.red);
+            theme.setAxisLabelPaint(Color.red);
+            theme.setTickLabelPaint(Color.red);
+            theme.setShadowPaint(Color.red);
+            theme.setItemLabelPaint(Color.red);
+            theme.setThermometerPaint(Color.red);
+            theme.setWallPaint(Color.red);
+            theme.setErrorIndicatorPaint(Color.red);
+        }
+        */
+
+        theme.setTitlePaint(parameters.themeTitleColor);
+        theme.setSubtitlePaint(parameters.themeSubtitleColor);
+
+        theme.setPlotBackgroundPaint(parameters.themeBackgroundColor);
+        theme.setChartBackgroundPaint(parameters.themeBackgroundColor);
+        theme.setLegendBackgroundPaint(parameters.themeBackgroundColor);
+
+        theme.setLabelLinkPaint(parameters.themeAxisTickColor);
+
+        theme.setLegendItemPaint(parameters.themeLegendColor);
+        theme.setItemLabelPaint(parameters.themeLabelColor);
+        theme.setAxisLabelPaint(parameters.themeAxisLabelColor);
+        theme.setTickLabelPaint(parameters.themeAxisLabelColor);
+        theme.setRangeGridlinePaint(parameters.themeGridLineColor);
+        theme.setDomainGridlinePaint(parameters.themeGridLineColor);
+        theme.setGridBandPaint(parameters.themeGridBandColor);
 
         return theme;
     }
@@ -365,8 +396,9 @@ public class Application {
 		Random random = new Random(1);
 		Paint[] paints = new Paint[n];
 
-		for (int i = 0; i < n; i++) {
-			paints[i] = Color.getHSBColor(random.nextFloat(), (float) parameters.dataColorSaturation, (float) parameters.dataColorBrightness);
+        for (int i = 0; i < n; i++) {
+            float hue = random.nextFloat();
+			paints[i] = Colors.ahsbToColor(parameters.dataColorAlpha, hue, parameters.dataColorSaturation, parameters.dataColorBrightness);
 		}
 
 		return paints;
@@ -377,8 +409,6 @@ public class Application {
 		Paint[] paints = new Paint[n];
 		boolean[] wheelPaints = new boolean[n];
 
-		int alpha = (int) (parameters.dataColorAlpha * 255.0f + 0.5f) << 24;
-
 		int paintIndex = 0;
 		int wheelStep = 3;
 		while (paintIndex < n) {
@@ -386,11 +416,8 @@ public class Application {
 			for (int angle = 0; angle < n; angle+=step) {
 				if (!wheelPaints[angle]) {
 					float hue = ((float) angle) / n;
-					int rgb = 0xffffff & Color.HSBtoRGB(hue, (float) parameters.dataColorSaturation, (float) parameters.dataColorBrightness);
-					int argb = alpha | rgb;
-					Paint paint = new Color(argb, true);
 					wheelPaints[angle] = true;
-					paints[paintIndex++] = paint;
+					paints[paintIndex++] = Colors.ahsbToColor(parameters.dataColorAlpha, hue, parameters.dataColorSaturation, parameters.dataColorBrightness);
 				}
 			}
 			wheelStep += wheelStep;
@@ -399,24 +426,17 @@ public class Application {
 		return paints;
 	}
 
-	private static void setPiePlotStyle(PiePlot piePlot, ColorTheme colorTheme) {
+	private static void setPiePlotStyle(PiePlot piePlot, Parameters parameters) {
 		piePlot.setOutlineVisible(false);
 		piePlot.setShadowPaint(null);
-		
+
 		piePlot.setLabelBackgroundPaint(null);
 		piePlot.setLabelShadowPaint(null);
 		piePlot.setLabelOutlinePaint(null);
 		piePlot.setLabelLinkStyle(PieLabelLinkStyle.STANDARD);
 
-		switch(colorTheme) {
-            case LIGHT:
-                piePlot.setLabelPaint(Color.black);
-                break;
-            case DARK:
-                piePlot.setLabelPaint(lightGray);
-                break;
-        }
-        piePlot.setLabelLinkPaint(gray);
+        piePlot.setLabelPaint(parameters.themeAxisLabelColor);
+        piePlot.setLabelLinkPaint(parameters.themeAxisTickColor);
 	}
 
 	private static String baseFilename(String filename) {

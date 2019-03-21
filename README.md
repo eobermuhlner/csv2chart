@@ -236,6 +236,51 @@ PROPERTIES
 ![Bubble Chart](ch.obermuhlner.csv2chart.example/data/Crime2005.png)
 
 
-### Dark Color Theme
+## Themes
 
-![Line Chart](ch.obermuhlner.csv2chart.example/data/DarkRevenue.png)
+Additionally to the light color theme shown in the examples above
+`csv2chart` supports several other default themes.
+
+### Dark Theme
+
+![Line Chart](ch.obermuhlner.csv2chart.example/data/RevenueDark.png)
+
+### Light Solarized Theme
+
+![Line Chart](ch.obermuhlner.csv2chart.example/data/RevenueLightSolarized.png)
+
+### Dark Solarized Theme
+
+![Line Chart](ch.obermuhlner.csv2chart.example/data/RevenueDarkSolarized.png)
+
+### Custom Theme
+
+It is simple to specify a custom theme by supplying the colors in a file named `custom.properties`:
+[custom.properties](ch.obermuhlner.csv2chart.example/data/custom.properties)
+```properties
+color.background=gray30
+
+color.title=blue
+color.subtitle=green
+
+color.legend=green
+color.label=yellow
+
+color.axis.line=orange
+color.axis.label=orange
+
+color.grid.line=gray40
+color.grid.band=pink
+```
+
+Now you can reference the custom properties files as a theme in the command line or the properties file that accompanies your csv file:
+[RevenueCustom.properties](ch.obermuhlner.csv2chart.example/data/RevenueCustom.properties)
+```properties
+chart=line
+subtitle=Using a custom theme
+theme=custom
+```
+
+![Line Chart](ch.obermuhlner.csv2chart.example/data/RevenueCustom.png)
+
+Alternatively you can specify the custom colors directly in your `RevenueCustom.properties` file.``

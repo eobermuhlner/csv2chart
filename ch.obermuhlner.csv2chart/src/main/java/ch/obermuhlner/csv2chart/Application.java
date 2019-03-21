@@ -470,9 +470,14 @@ public class Application {
 		Random random = new Random(1);
 		Paint[] paints = new Paint[n];
 
+		float alpha = (float) parameters.dataColorAlpha;
+        float centerSaturation = (float) parameters.dataColorSaturation;
+        float centerBrightness = (float) parameters.dataColorBrightness;
         for (int i = 0; i < n; i++) {
             float hue = random.nextFloat();
-			paints[i] = Colors.ahsbToColor(parameters.dataColorAlpha, hue, parameters.dataColorSaturation, parameters.dataColorBrightness);
+            float saturation = centerSaturation * (0.9f + random.nextFloat() * 0.2f);
+            float brightness = centerBrightness * (0.9f + random.nextFloat() * 0.2f);
+			paints[i] = Colors.ahsbToColor(alpha, hue, saturation, brightness);
 		}
 
 		return paints;

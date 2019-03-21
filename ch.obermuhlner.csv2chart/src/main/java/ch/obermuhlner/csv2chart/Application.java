@@ -51,7 +51,7 @@ public class Application {
 				"filename",
 				"Loads the specified properties file.",
 				1, (args, parameters) -> {
-			loadProperties(new File(args.get(0)), parameters);
+			loadProperties(new File(args.get(0)), parameters, true);
 		});
 
 		argumentHandler.addOption("property",
@@ -77,6 +77,16 @@ public class Application {
 	}
 	
 	public static void main(String[] args) {
+	    try {
+	        run(args);
+        } catch (Exception ex) {
+	        ex.printStackTrace();
+	        System.out.println("Error: " + ex.getMessage());
+	        System.exit(1);
+        }
+    }
+
+    public static void run(String[] args) {
 		Locale defaultLocale = Locale.getDefault();
 		
 		CsvDataModelLoader dataModelLoader = new CsvDataModelLoader();
@@ -104,12 +114,12 @@ public class Application {
 			String baseFilename = baseFilename(path.getFileName().toString());
 			parameters.title = baseFilename;
 
-			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
-			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
+			loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters, false);
+			loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters, false);
             loadThemeProperties(parameters.theme, parameters);
             // load local properties files again, in case they overwrite some color theme fields
-            loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters);
-            loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters);
+            loadProperties(baseParent.resolve("csv2chart.properties").toFile(), parameters, false);
+            loadProperties(baseParent.resolve(baseFilename + ".properties").toFile(), parameters, false);
 
 			if (parameters.locale == null) {
 				Locale.setDefault(defaultLocale);
@@ -175,7 +185,6 @@ public class Application {
 			}
 			System.out.println();
 		}
-		
 	}
 
     private static void loadThemeProperties(String theme, Parameters parameters) {
@@ -184,31 +193,33 @@ public class Application {
         if (stream != null) {
             try (Reader reader = new BufferedReader(new InputStreamReader(stream))) {
                 loadProperties(reader, parameters);
+                return;
             } catch (IOException ex) {
-                // ignore
+                throw new RuntimeException("Failed to load internal theme: " + theme, ex);
             }
         }
 
-	    loadProperties(new File(themeProperties), parameters);
+        loadProperties(new File(themeProperties), parameters, true);
     }
 
-    private static void loadProperties(File file, Parameters parameters) {
+    private static void loadProperties(File file, Parameters parameters, boolean mandatory) {
         try (Reader reader = new BufferedReader(new FileReader(file))) {
             loadProperties(reader, parameters);
-        } catch (IOException e) {
-            // ignore
+        } catch (FileNotFoundException ex) {
+            if (mandatory) {
+                throw new RuntimeException("Theme file not found: " + file, ex);
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException("Failed to load file theme: " + file, ex);
         }
     }
 
-	private static void loadProperties(Reader reader, Parameters parameters) {
+	private static void loadProperties(Reader reader, Parameters parameters) throws IOException {
 		Properties properties = new Properties();
-		try {
-			properties.load(reader);
-			for (Entry<Object, Object> entry : properties.entrySet()) {
-				parameters.setParameter(String.valueOf(entry.getKey()), entry.getValue());
-			}
-        } catch (IOException e) {
-            // ignore
+
+        properties.load(reader);
+        for (Entry<Object, Object> entry : properties.entrySet()) {
+            parameters.setParameter(String.valueOf(entry.getKey()), entry.getValue());
         }
 	}
 
@@ -396,13 +407,61 @@ public class Application {
     }
 
     private static Paint[] createColors(Parameters parameters) {
-		switch (parameters.dataColors) {
-			case WHEEL:
-				return createWheelColors(parameters);
-			case RANDOM:
-				return createRandomColors(parameters);
-		}
-		throw new IllegalArgumentException("Unknown DataColors: " + parameters.dataColors);
+        String dataColors = parameters.dataColors;
+        if (dataColors.equals("wheel")) {
+            return createWheelColors(parameters);
+        }
+        if (dataColors.equals("random")) {
+            return createRandomColors(parameters);
+        }
+
+        String dataColorsProperties = dataColors + ".properties";
+        Paint[] result = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(dataColorsProperties)))) {
+            result = createColors(reader);
+        } catch (IOException exception) {
+            // ignore
+        }
+
+        if (result == null) {
+            InputStream stream = Application.class.getResourceAsStream("/data-colors/" + dataColorsProperties);
+            if (stream != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
+                    result = createColors(reader);
+                } catch (IOException exception) {
+                    // ignore
+                }
+            }
+        }
+
+        if (result == null) {
+            throw new RuntimeException("No data-color properties found: " + dataColors);
+        }
+
+        return result;
+    }
+
+
+    private static Paint[] createColors(BufferedReader reader) throws IOException {
+        List<Paint> result = new ArrayList<>();
+
+        String line = reader.readLine();
+        while (line != null) {
+            if (!line.startsWith("#")) {
+                Color color = Colors.parseColor(line);
+                if (color != null) {
+                    result.add(color);
+                }
+            }
+
+            line = reader.readLine();
+        }
+
+        if (!result.isEmpty()) {
+            return result.toArray(new Paint[0]);
+        }
+
+        return null;
 	}
 
 	private static Paint[] createRandomColors(Parameters parameters) {

@@ -135,8 +135,10 @@ public class Parameters implements Cloneable {
 			description = ""
 					+ "Color scheme to render data.\n"
 					+ "Supported schemes: wheel, random\n"
-					+ "Default: wheel")
-	public DataColors dataColors = DataColors.WHEEL;
+					+ "Default: wheel",
+            optionName = "data-colors",
+            optionArgumentDescription = "name")
+	public String dataColors = "wheel";
 
 	@Parameter(
 			name = "data-color-saturation",
@@ -335,8 +337,6 @@ public class Parameters implements Cloneable {
 				value = ImageFormat.valueOf(string.toUpperCase());
 			} else if (fieldType == ColorTheme.class) {
 				value = ColorTheme.valueOf(string.toUpperCase());
-			} else if (fieldType == DataColors.class) {
-				value = DataColors.valueOf(string.toUpperCase());
 			} else if (fieldType == Locale.class) {
 				value = Locale.forLanguageTag(string);
 			}

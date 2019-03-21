@@ -48,6 +48,8 @@ public class Colors {
     public static Color solarizedContentLightest = solarizedBrCyan;
 
     static {
+        namedColors.put("null", null);
+
         namedColors.put("black", Color.black);
         namedColors.put("blue", Color.blue);
         namedColors.put("cyan", Color.cyan);
@@ -70,39 +72,40 @@ public class Colors {
         namedColors.put("gray70", gray70);
         namedColors.put("gray80", gray80);
         namedColors.put("gray90", gray90);
-        namedColors.put("solarizedBackgroundDarkest", solarizedBackgroundDarkest);
-        namedColors.put("solarizedBackgroundDark", solarizedBackgroundDark);
-        namedColors.put("solarizedBackgroundLight", solarizedBackgroundLight);
-        namedColors.put("solarizedBackgroundLightest", solarizedBackgroundLightest);
-        namedColors.put("solarizedContentDarkest", solarizedContentDarkest);
-        namedColors.put("solarizedContentDark", solarizedContentDark);
-        namedColors.put("solarizedContentLight", solarizedContentLight);
-        namedColors.put("solarizedContentLightest", solarizedContentLightest);
-        namedColors.put("solarizedYellow", solarizedYellow);
-        namedColors.put("solarizedOrange", solarizedOrange);
-        namedColors.put("solarizedRed", solarizedRed);
-        namedColors.put("solarizedMagenta", solarizedMagenta);
-        namedColors.put("solarizedViolet", solarizedViolet);
-        namedColors.put("solarizedBlue", solarizedBlue);
-        namedColors.put("solarizedCyan", solarizedCyan);
-        namedColors.put("solarizedGreen", solarizedGreen);
+        namedColors.put("solarizedbackgrounddarkest", solarizedBackgroundDarkest);
+        namedColors.put("solarizedbackgrounddark", solarizedBackgroundDark);
+        namedColors.put("solarizedbackgroundlight", solarizedBackgroundLight);
+        namedColors.put("solarizedbackgroundlightest", solarizedBackgroundLightest);
+        namedColors.put("solarizedcontentdarkest", solarizedContentDarkest);
+        namedColors.put("solarizedcontentdark", solarizedContentDark);
+        namedColors.put("solarizedcontentlight", solarizedContentLight);
+        namedColors.put("solarizedcontentlightest", solarizedContentLightest);
+        namedColors.put("solarizedyellow", solarizedYellow);
+        namedColors.put("solarizedorange", solarizedOrange);
+        namedColors.put("solarizedred", solarizedRed);
+        namedColors.put("solarizedmagenta", solarizedMagenta);
+        namedColors.put("solarizedviolet", solarizedViolet);
+        namedColors.put("solarizedblue", solarizedBlue);
+        namedColors.put("solarizedcyan", solarizedCyan);
+        namedColors.put("solarizedgreen", solarizedGreen);
     }
 
     public static Color parseColor(String string) {
-        Color color = namedColors.get(string);
+        string = string.toLowerCase();
+
+        if (namedColors.containsKey(string)) {
+            return namedColors.get(string);
+        }
 
         if (string.equals("random")) {
-            color = new Color(random.nextInt(0x1000000));
+            return new Color(random.nextInt(0x1000000));
         }
 
-        if (color == null) {
-            color = new Color(Integer.parseInt(string, 16));
+        try {
+            return new Color(Integer.parseInt(string, 16));
+        } catch (NumberFormatException ex) {
+            return null;
         }
-
-        if (color == null) {
-            color = Color.red;
-        }
-        return color;
     }
 
     public static Color hsbToColor(double hue, double saturation, double brightness) {

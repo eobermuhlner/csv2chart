@@ -257,10 +257,22 @@ public class Parameters implements Cloneable {
 	public Color themeLabelColor = Colors.gray50;
 
 	@Parameter(
+			name = "visible.range.axis.line",
+			description = ""
+					+ "Controls whether the range axis is visible.")
+	public boolean themeRangeAxisLineVisible = false;
+
+	@Parameter(
+			name = "visible.domain.axis.line",
+			description = ""
+					+ "Controls whether the domain axis is visible.")
+	public boolean themeDomainAxisLineVisible = true;
+
+	@Parameter(
 			name = "color.axis.line",
 			description = ""
 					+ "Color of the axis line.")
-	public Color themeAxisLineColor = Colors.gray20;
+	public Color themeAxisLineColor = Colors.gray30;
 
 	@Parameter(
 			name = "color.axis.label",
@@ -269,10 +281,22 @@ public class Parameters implements Cloneable {
 	public Color themeAxisLabelColor = Colors.gray20;
 
 	@Parameter(
+			name = "visible.range.grid.line",
+			description = ""
+					+ "Controls whether the range grid line is visible.")
+	public boolean themeRangeGridLineVisible = true;
+
+	@Parameter(
+			name = "visible.domain.grid.line",
+			description = ""
+					+ "Controls whether the domain grid line is visible.")
+	public boolean themeDomainGridLineVisible = false;
+
+	@Parameter(
 			name = "color.grid.line",
 			description = ""
 					+ "Color of the grid lines.")
-	public Color themeGridLineColor = Colors.gray90;
+	public Color themeGridLineColor = Colors.gray80;
 
 	@Parameter(
 			name = "color.grid.band",

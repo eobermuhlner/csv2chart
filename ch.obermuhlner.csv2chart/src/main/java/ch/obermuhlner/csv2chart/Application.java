@@ -264,11 +264,22 @@ public class Application {
 		if (plot instanceof CategoryPlot) {
 			CategoryPlot categoryPlot = (CategoryPlot) plot;
 			categoryPlot.setOutlineVisible(false);
+
+			categoryPlot.setRangeGridlinesVisible(parameters.themeRangeGridLineVisible);
             categoryPlot.setRangeGridlineStroke(new BasicStroke());
             categoryPlot.setRangeGridlinePaint(parameters.themeGridLineColor);
+            categoryPlot.setDomainGridlinesVisible(parameters.themeDomainGridLineVisible);
+            categoryPlot.setDomainGridlineStroke(new BasicStroke());
             categoryPlot.setDomainGridlinePaint(parameters.themeGridLineColor);
-			categoryPlot.getRangeAxis().setAxisLineVisible(false);
-            categoryPlot.getRangeAxis().setTickMarksVisible(false);
+
+			categoryPlot.getRangeAxis().setAxisLineVisible(parameters.themeRangeAxisLineVisible);
+            categoryPlot.getRangeAxis().setTickMarksVisible(parameters.themeRangeAxisLineVisible);
+            categoryPlot.getRangeAxis().setAxisLinePaint(parameters.themeAxisLineColor);
+            categoryPlot.getRangeAxis().setTickMarkPaint(parameters.themeAxisLineColor);
+            categoryPlot.getRangeAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
+
+            categoryPlot.getDomainAxis().setAxisLineVisible(parameters.themeDomainAxisLineVisible);
+            categoryPlot.getDomainAxis().setTickMarksVisible(parameters.themeDomainAxisLineVisible);
             categoryPlot.getDomainAxis().setAxisLinePaint(parameters.themeAxisLineColor);
             categoryPlot.getDomainAxis().setTickMarkPaint(parameters.themeAxisLineColor);
             categoryPlot.getDomainAxis().setTickLabelPaint(parameters.themeAxisLabelColor);
@@ -338,6 +349,7 @@ public class Application {
             theme = (StandardChartTheme) org.jfree.chart.StandardChartTheme.createJFreeTheme();
         }
 
+        /*
         if (true) {
             theme.setGridBandPaint(Color.red);
             theme.setGridBandAlternatePaint(Color.red);
@@ -361,6 +373,7 @@ public class Application {
             theme.setWallPaint(Color.red);
             theme.setErrorIndicatorPaint(Color.red);
         }
+        */
 
         theme.setTitlePaint(parameters.themeTitleColor);
         theme.setSubtitlePaint(parameters.themeSubtitleColor);

@@ -4,7 +4,7 @@ apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 
 group = 'ch.obermuhlner'
-version = '0.0.1'
+version = '0.1.0'
 
 mainClassName = 'ch.obermuhlner.csv2chart.Application'
 applicationName = 'csv2chart'

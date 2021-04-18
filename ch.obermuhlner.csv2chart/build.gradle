@@ -15,11 +15,11 @@ repositories {
 }
 
 dependencies {
-	compile group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
-	compile group: 'org.jfree', name: 'jcommon', version: '1.0.24'
-	compile group: 'org.jfree', name: 'jfreesvg', version: '3.2'
+	implementation group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
+    implementation group: 'org.jfree', name: 'jcommon', version: '1.0.24'
+    implementation group: 'org.jfree', name: 'jfreesvg', version: '3.2'
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 test {

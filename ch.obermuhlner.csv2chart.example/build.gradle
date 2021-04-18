@@ -6,6 +6,6 @@ repositories {
 }
 
 dependencies {
-	//compile group: 'ch.obermuhlner', name: 'csv2chart', version: '0.0.1'
-	compile project(':ch.obermuhlner.csv2chart')
+	//implementation group: 'ch.obermuhlner', name: 'csv2chart', version: '0.0.1'
+	implementation project(':ch.obermuhlner.csv2chart')
 }

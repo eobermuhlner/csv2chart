@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -19,6 +21,8 @@ import org.junit.Test;
 public class ApplicationRegressionTest {
 
 	private static final String OS_NAME_FOR_REFERENCE_IMAGES = "Windows 10";
+
+	private static final boolean IGNORE_FAILING_PNG_TESTS = false;
 
 	@Test
 	public void testHelp() {
@@ -92,7 +96,27 @@ public class ApplicationRegressionTest {
 		String expectedSvg = cleanupSvg(new String(Files.readAllBytes(expectedImageFile.toPath())));
 		String actualSvg = cleanupSvg(new String(Files.readAllBytes(actualImageFile.toPath())));
 
-		assertEquals("SVG file content: " + expectedImageFile + " != " + actualImageFile, expectedSvg, actualSvg);
+		List<String> expectedContent = splitLines(expectedSvg);
+		List<String> actualContent = splitLines(actualSvg);
+
+		assertAllLines("SVG File content: " + expectedImageFile + " != " + actualImageFile, expectedContent, actualContent);
+	}
+
+	private List<String> splitLines(String string) {
+		List<String> lines = new ArrayList<>();
+
+		int beginIndex = 0;
+		int endIndex = string.indexOf('\n', beginIndex);
+		while (endIndex >= 0 && endIndex < string.length()) {
+			lines.add(string.substring(beginIndex, endIndex));
+			beginIndex = endIndex + 1;
+			endIndex = string.indexOf('\n', beginIndex);
+		}
+		if (beginIndex < string.length()) {
+			lines.add(string.substring(beginIndex));
+		}
+
+		return lines;
 	}
 
 	private void assertLogImageEquals(File expectedImageFile, File actualImageFile) throws IOException {
@@ -115,9 +139,12 @@ public class ApplicationRegressionTest {
 
 	private String cleanupSvg(String svg) {
 		// Example for random string in generated svg: 1704036023229044clip-0
-		
+
+
 		svg = svg.replaceAll("[0-9]*clip-[0-9]*", "randomclip");
-		
+		svg = svg.replaceAll(Pattern.quote(">"), "\n");
+		svg = svg.replaceAll(Pattern.quote("\r"), "");
+
 		return svg;
 	}
 
@@ -149,7 +176,13 @@ public class ApplicationRegressionTest {
 			File parentFile = actualImageFile.getParentFile();
 			File diffFile = new File(parentFile, "DIFF_" + actualImageFile.getName());
 			ImageIO.write(diffImage, "png", diffFile);
-			fail("Difference in image: " + diffCount + " pixels: " + actualImageFile + "\nSee difference in: " + diffFile);
+
+			String message = "Difference in image: " + diffCount + " pixels: " + actualImageFile + "\nSee difference in: " + diffFile;
+			if (IGNORE_FAILING_PNG_TESTS) {
+				System.out.println(message);
+			} else {
+				fail(message);
+			}
 		}
 	}
 

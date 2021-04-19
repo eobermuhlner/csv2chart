@@ -9,3 +9,9 @@ dependencies {
 	//implementation group: 'ch.obermuhlner', name: 'csv2chart', version: '0.0.1'
 	implementation project(':ch.obermuhlner.csv2chart')
 }
+
+compileJava   {
+	sourceCompatibility = '1.8'
+	targetCompatibility = '1.8'
+}
+

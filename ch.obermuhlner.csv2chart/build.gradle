@@ -14,6 +14,11 @@ repositories {
     mavenCentral()
 }
 
+compileJava   {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
 dependencies {
 	implementation group: 'org.jfree', name: 'jfreechart', version: '1.0.19'
     implementation group: 'org.jfree', name: 'jcommon', version: '1.0.24'

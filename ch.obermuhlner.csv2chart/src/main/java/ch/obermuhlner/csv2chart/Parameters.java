@@ -58,6 +58,15 @@ public class Parameters implements Cloneable {
 	public ImageFormat imageFormat = ImageFormat.SVG;
 
 	@Parameter(
+			name = "in.strip",
+			description = ""
+					+ "Strip extra quotes from input files.\n"
+					+ "Default: false",
+			optionName = "strip",
+			optionArgumentDescription = "strip")
+	public boolean strip = false;
+
+	@Parameter(
 			name = "chart",
 			description = ""
 					+ "The chart type to generate.\n"

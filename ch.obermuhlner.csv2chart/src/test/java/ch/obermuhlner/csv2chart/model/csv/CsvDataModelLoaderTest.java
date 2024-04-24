@@ -109,4 +109,26 @@ public class CsvDataModelLoaderTest {
 		assertEquals(new DataVector(Arrays.asList("Columns", "Col1"), Arrays.asList("1.1", "2.1")), dataModel.getValues().get(0));
 		assertEquals(new DataVector(Arrays.asList("Columns", "Col2"), Arrays.asList("1.2", "2.2")), dataModel.getValues().get(1));
 	}
+
+	@Test
+	public void testLoad_Quoted_HeaderRow() {
+		CsvDataModelLoader dataModelLoader = new CsvDataModelLoader();
+
+		Matrix<String> matrix = new Matrix<>();
+
+		int row = 0;
+		matrix.setRow(row++, "\"Col1\"", "\"Col2\"");
+		matrix.setRow(row++, "\"1.1\"", "\"1.2\"");
+		matrix.setRow(row++, "\"2.1\"", "\"2.2\"");
+
+		Parameters parameters = new Parameters();
+		parameters.strip = true;
+		DataModel dataModel = dataModelLoader.load(matrix, parameters);
+
+		assertEquals(null, dataModel.getCategory());
+
+		assertEquals(2, dataModel.getValues().size());
+		assertEquals(new DataVector(Arrays.asList("Col1"), Arrays.asList("1.1", "2.1")), dataModel.getValues().get(0));
+		assertEquals(new DataVector(Arrays.asList("Col2"), Arrays.asList("1.2", "2.2")), dataModel.getValues().get(1));
+	}
 }

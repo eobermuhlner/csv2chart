@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ch.obermuhlner.csv2chart.Parameters;
 import ch.obermuhlner.csv2chart.model.DataModel;
@@ -19,6 +21,8 @@ public class CsvDataModelLoader {
 
 	private final String separator;
 	private final String comment;
+	private final Pattern stripMatcher;
+	private boolean strip = false;
 
 	public CsvDataModelLoader() {
 		this(",", "#");
@@ -27,6 +31,7 @@ public class CsvDataModelLoader {
 	public CsvDataModelLoader(String separator, String comment) {
 		this.separator = separator;
 		this.comment = comment;
+		this.stripMatcher = Pattern.compile("^\"(.*)\"$");
 	}
 	
 	public DataModel load(File file, Parameters parameters) {
@@ -35,6 +40,7 @@ public class CsvDataModelLoader {
 	}
 		
 	public DataModel load(Matrix<String> matrix, Parameters parameters) {
+		strip = parameters.strip;
 		int headerRowCount = countHeaderRows(matrix);
 		int valueRowCount = matrix.getHeight() - headerRowCount;
 
@@ -59,11 +65,31 @@ public class CsvDataModelLoader {
 		List<String> values = new ArrayList<>();
 
 		for (int y = 0; y < headerRowCount; y++) {
-			headers.add(matrix.get(x, y));
+			String source = matrix.get(x,y);
+			if (strip) {
+				Matcher m = stripMatcher.matcher(source);
+				if (m.find()) {
+					headers.add(m.group(1));
+				} else {
+					headers.add(source);
+				}
+			} else {
+				headers.add(source);
+			}
 		}
 
 		for (int y = headerRowCount; y < matrix.getHeight(); y++) {
-			values.add(matrix.get(x, y));
+			String source = matrix.get(x,y);
+			if (strip) {
+				Matcher m = stripMatcher.matcher(source);
+				if (m.find()) {
+					values.add(m.group(1));
+				} else {
+					values.add(source);
+				}
+			} else {
+				values.add(source);
+			}
 		}
 		
 		return new DataVector(headers, values);
@@ -132,7 +158,7 @@ public class CsvDataModelLoader {
 		}
 	}
 
-	private static boolean containsDoubles(Matrix<String> matrix, int x, int y, int width, int height) {
+	private boolean containsDoubles(Matrix<String> matrix, int x, int y, int width, int height) {
 		for (int iy = y; iy < y+height; iy++) {
 			for (int ix = x; ix < x+width; ix++) {
 				String value = matrix.get(ix, iy);
@@ -144,8 +170,15 @@ public class CsvDataModelLoader {
 		return false;
 	}
 	
-	private static boolean isDouble(String string) {
+	private boolean isDouble(String string) {
 		try {
+			if (strip) {
+				Matcher m = stripMatcher.matcher(string);
+				if (m.find()) {
+					Double.parseDouble(m.group(1));
+					return true;
+				}
+			}
 			Double.parseDouble(string);
 			return true;
 		} catch (NumberFormatException e) {
